@@ -1,7 +1,7 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { sequelize } from '../database';
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../database.js';
 
-export const Notificaciones = sequelize.define('notificaciones',{
+export const Notificaciones = sequelize.define('notificaciones', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -11,17 +11,15 @@ export const Notificaciones = sequelize.define('notificaciones',{
         type: DataTypes.DATEONLY
     },
     hora: {
-        type: DataTypes.TIME,
-        allowNull: false
+        type: DataTypes.TIME
     },
     msg: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.STRING
     },
     estado: {
         type: DataTypes.STRING
     },
     grado: {
-        type: DataTypes.TINYINT
+        type: DataTypes.INTEGER
     }
 });

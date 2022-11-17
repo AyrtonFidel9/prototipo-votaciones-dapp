@@ -1,7 +1,7 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { sequelize } from '../database';
-import { Socios } from './Socios.model';
-import { Elecciones } from './elecciones.model';
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../database.js';
+import { Socios } from './Socios.model.js';
+import { Elecciones } from './elecciones.model.js';
 
 export const Agencias = sequelize.define('agencias',{
     id: {
@@ -18,22 +18,18 @@ export const Agencias = sequelize.define('agencias',{
     }
 });
 
-Agencias.hasMany(Socios, {
+Agencias.hasMany( Socios, {
     foreignKey: 'idAgencia',
     sourceKey: 'id'
 });
 
-Socios.belongsTo(Agencias, {
-    foreignKey: 'idAgencia',
-    targetKey: 'id'
-});
+Socios.belongsTo( Agencias );
 
-Agencias.hasMany(Elecciones, {
+Agencias.hasMany( Elecciones, {
     foreignKey: 'idAgencia',
     sourceKey: 'id'
 });
 
-Elecciones.belongsTo(Agencias, {
-    foreignKey: 'idAgencia',
-    targetKey: 'id'
-});
+Elecciones.belongsTo( Agencias );
+
+// export default Agencias;

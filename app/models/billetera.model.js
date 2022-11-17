@@ -1,5 +1,5 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { sequelize } from '../database';
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../database.js';
 
 export const Billetera = sequelize.define('billetera',{
     address: {
@@ -10,3 +10,5 @@ export const Billetera = sequelize.define('billetera',{
         type: DataTypes.JSON,
     }
 });
+
+

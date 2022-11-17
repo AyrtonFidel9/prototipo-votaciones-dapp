@@ -1,6 +1,6 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { sequelize } from '../database';
-import { Notificaciones } from './notificaciones.model';
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../database.js';
+import { Notificaciones } from './notificaciones.model.js';
 
 export const Cuenta = sequelize.define('cuenta',{
     id: {

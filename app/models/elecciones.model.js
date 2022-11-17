@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../database';
-import { Listas } from './listas.model';
+import { sequelize } from '../database.js';
+import { Listas } from './listas.model.js';
 
 export const Elecciones = sequelize.define('elecciones',{
     id: {
@@ -15,7 +15,7 @@ export const Elecciones = sequelize.define('elecciones',{
         type: DataTypes.TIME
     },
     duracion: {
-        type: DataTypes.TINYINT
+        type: DataTypes.INTEGER
     }
 });
 

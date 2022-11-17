@@ -1,6 +1,6 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
-import { sequelize } from '../database';
-import { Listas } from './listas.model';
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../database.js';
+import { Listas } from './listas.model.js';
 
 export const Inscripciones = sequelize.define('inscrpciones',{
     id: {

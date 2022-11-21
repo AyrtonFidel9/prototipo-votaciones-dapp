@@ -15,9 +15,13 @@ export const Inscripciones = sequelize.define('inscrpciones',{
         type: DataTypes.BLOB,
         allowNull: false
     },
-    estao: {
-        type: DataTypes.STRING,
-        allowNull: false
+    estado: {
+        type: DataTypes.ENUM,
+        values: [
+            'online',
+            'offline',
+        ],
+        defaultValue: 'online'
     }
 })
 

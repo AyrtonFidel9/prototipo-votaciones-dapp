@@ -1,8 +1,9 @@
 import app from './app.js';
 import { sequelize } from './database.js';
 import PORT from './config.js';
-import './models/index.js'
-
+import './models/index.js';
+import { cors } from 'cors';
+import { body-parser } form 'body-parser';
 
 
 async function main() {

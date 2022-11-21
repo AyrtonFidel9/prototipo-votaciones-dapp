@@ -17,9 +17,20 @@ export const Notificaciones = sequelize.define('notificaciones', {
         type: DataTypes.STRING
     },
     estado: {
-        type: DataTypes.STRING
+        type: DataTypes.ENUM,
+        values: [
+            'online',
+            'offline',
+        ],
+        defaultValue: 'online'
     },
     grado: {
-        type: DataTypes.INTEGER
+        type: DataTypes.ENUM,
+        values : [
+            '1',
+            '2',
+            '3'
+        ],
+        defaultValue: '1'
     }
 });

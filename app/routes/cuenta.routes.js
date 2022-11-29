@@ -3,7 +3,9 @@ import { iniciarSesion } from '../controllers/index.js';
 
 const routerCuenta = express.Router();
 
-router.route('/iniciar-sesion')
-    .post(iniciarSesion(res,req));
+routerCuenta.route('/iniciar-sesion')
+    .post(function(res,req){
+        iniciarSesion(res,req);
+    });
 
 export default routerCuenta;

@@ -1,5 +1,5 @@
-import { secret } from '../../config/auth.config.js';
-import { Cuenta } from '../../models';
+import { Cuenta } from '../../models/index.js';
+import { secret } from '../../config/index.js';
 import { Sequelize, Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';

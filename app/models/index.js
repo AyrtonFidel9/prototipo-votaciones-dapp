@@ -5,5 +5,5 @@ export * from "./elecciones.model.js";
 export * from "./inscipcion.model.js";
 export * from "./listas.model.js";
 export * from "./notificaciones.model.js";
-export * from "./Socios.model.js";
+export * from "./socios.model.js";
 

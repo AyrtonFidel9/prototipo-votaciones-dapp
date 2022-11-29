@@ -1,10 +1,8 @@
 import express from 'express';
-import { cors } from 'cors';
-import { bodyParser } from 'body-parser';
-//import routes from "routes";
-// other imports
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import routes from './routes/index.js';
 
-// initialize express server
 const app = express();
 
 const corsOptions = {
@@ -15,7 +13,5 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.json());
 
-
-
-//app.use("/", routes);	
+app.use("/", routes);	
 export default app;

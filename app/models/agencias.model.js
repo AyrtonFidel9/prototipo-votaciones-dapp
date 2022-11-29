@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
-import { Socios } from './Socios.model.js';
+import { Socios } from './socios.model.js';
 import { Elecciones } from './elecciones.model.js';
 
 export const Agencias = sequelize.define('agencias',{
@@ -15,6 +15,14 @@ export const Agencias = sequelize.define('agencias',{
     ubicacion: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    numRepresentantes: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    numGanadores: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     }
 });
 

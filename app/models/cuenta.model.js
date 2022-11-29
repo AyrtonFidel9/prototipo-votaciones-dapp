@@ -9,7 +9,13 @@ export const Cuenta = sequelize.define('cuenta',{
         autoIncrement: true
     },
     rol: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM({
+            values:[
+                'socio',
+                'admin',
+                'PresidenteJGE' 
+            ],
+        }),
     },
     usuario: {
         type: DataTypes.STRING,

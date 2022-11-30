@@ -11,9 +11,9 @@ export const Cuenta = sequelize.define('cuenta',{
     rol: {
         type: DataTypes.ENUM({
             values:[
-                'socio',
-                'admin',
-                'PresidenteJGE' 
+                'ROLE_SOCIO',
+                'ROLE_ADMIN',
+                'ROLE_JGE' 
             ],
         }),
     },
@@ -21,7 +21,7 @@ export const Cuenta = sequelize.define('cuenta',{
         type: DataTypes.STRING,
         allowNull: false
     },
-    pass: {
+    password: {
         type: DataTypes.STRING,
         allowNull: false
     }

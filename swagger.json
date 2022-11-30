@@ -1,0 +1,26 @@
+    {
+        "swagger": "2.0",
+        "info": {
+            "version": "1.0.0",
+            "title": "Sistema de votaciones",
+            "description": "Sistema de votaciones API",
+            "license": {
+                "name": "MIT",
+                "url": "https://opensource.org/licenses/MIT"
+            }
+        },
+        "host": "localhost:8080",
+        "basePath": "/",
+        "tags": [
+            {
+                "name": "Cuentas",
+                "description": "API para gestionar las cuentas de los socios"
+            },
+            {
+                "name": "Socios"
+            }
+        ],
+        "schemes": ["http"],
+        "consumes": ["application/json"],
+        "produces": ["application/json"]
+    }

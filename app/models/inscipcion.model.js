@@ -8,7 +8,7 @@ export const Inscripciones = sequelize.define('inscrpciones',{
         primaryKey: true,
         autoIncrement: true
     },
-    formulacio: {
+    formulario: {
         type: DataTypes.BLOB,
     },
     declaracion: {

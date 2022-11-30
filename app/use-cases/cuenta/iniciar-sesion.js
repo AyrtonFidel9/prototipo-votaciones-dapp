@@ -4,33 +4,40 @@ import { Sequelize, Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-export default function iniciarSesion(req, res){
-    Cuenta.findOne({
+export default function iniciarSesion(usuario, password){
+    return Cuenta.findOne({
         where: {
-            usuario: req.body.usuario,
+            usuario: usuario,
         }
     }).then( user =>{
         if(!user)
-            return res.status(404).send({
-                message: 'Cuenta no encontrada!!'
-            });
-
-        const passIsValid = bcrypt.compareSync(req.body.pass,Cuenta.pass);
+            return {
+                status: 404,
+                message: 'Cuenta no encontrada!!',
+                accessToken: null,
+            };
+        const passIsValid = bcrypt.compareSync(password,user.password);
         
         if(!passIsValid)
-            return res.status(401).send({
+            return {
+                status: 401,
                 message: 'Contraseña incorrecta',
                 accessToken: null,
-            });
+            };
 
         const token = jwt.sign(
-            {id: Cuenta.id, rol: Cuenta.rol},
+            {id: user.id, rol: user.rol, usuario: user.usuario},
             secret,
-            {exporesIn: 14400},
+            {expiresIn: 14400},
         );
-
+        
         const authorities = [];
-        console.log(user);
+        authorities.push(user.rol);
 
+        return {
+            status: 200,
+            message: 'Inicio de sesión correcto!!',
+            accessToken: token,
+        }
     });
 }

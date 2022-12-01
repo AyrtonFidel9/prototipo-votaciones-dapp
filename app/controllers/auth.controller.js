@@ -1,5 +1,6 @@
 import { iniciarSesion } from "../use-cases/cuenta/index.js";
 
+
 async function iniciarSesionController (req, res) {
     const {
         usuario,
@@ -20,6 +21,10 @@ async function iniciarSesionController (req, res) {
     res.status(status).send({
         message: message
     });
+}
+
+function registrarCuentaController(req, res){
+
 }
 
 export default Object.freeze({

@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
 
 const swaggerDocument  = JSON.parse(
-    await readFile(new URL('../swagger.json', import.meta.url)));
+    await readFile(new URL('../swagger.yaml', import.meta.url)));
 
 const app = express();
 

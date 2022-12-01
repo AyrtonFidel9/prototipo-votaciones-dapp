@@ -4,8 +4,9 @@ import bodyParser from 'body-parser';
 import routes from './routes/index.js';
 import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
+import YAML from 'js-yaml';
 
-const swaggerDocument  = JSON.parse(
+const swaggerDocument  = YAML.load(
     await readFile(new URL('../swagger.yaml', import.meta.url)));
 
 const app = express();

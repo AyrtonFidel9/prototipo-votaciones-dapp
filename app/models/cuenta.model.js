@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
 import { Notificaciones } from './notificaciones.model.js';
+import { Recuperacion } from './recuperacion.model.js';
 
 export const Cuenta = sequelize.define('cuenta',{
     id: {
@@ -24,6 +25,17 @@ export const Cuenta = sequelize.define('cuenta',{
     password: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    ipCliente:{
+        type: DataTypes.STRING,
+        validate: {
+            isIP: true
+        },
+        allowNull: false,
+    },
+    ultimoAcceso:{
+        type: DataTypes.DATE,
+        allowNull: false,
     }
 });
 
@@ -33,6 +45,16 @@ Cuenta.hasMany(Notificaciones, {
 });
 
 Notificaciones.belongsTo(Cuenta, {
+    foreignKey: 'idCuenta',
+    targetKey: 'id'
+});
+
+Cuenta.hasMany(Recuperacion, {
+    foreignKey: 'idCuenta',
+    sourceKey: 'id'
+});
+
+Recuperacion.belongsTo(Cuenta, {
     foreignKey: 'idCuenta',
     targetKey: 'id'
 });

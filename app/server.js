@@ -39,6 +39,8 @@ async function main() {
             usuario: "Jane92",
             password: pass, 
             rol: "ROLE_ADMIN",
+            ultimoAcceso: '2022-12-10',
+            ipCliente: '192.192.10.12',
             idSocio: socio.id,
         });
         

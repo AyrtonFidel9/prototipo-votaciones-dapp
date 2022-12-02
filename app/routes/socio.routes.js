@@ -1,11 +1,11 @@
 import express from 'express';
 import multer from 'multer';
 
-const routerSocios = express.Router();
+const routerAgencia = express.Router();
 
 /*
 routerSocios.use(multer({
     dest: 'app/public/images'
 }).single())*/
 
-export default routerSocios;
+export default routerAgencia;

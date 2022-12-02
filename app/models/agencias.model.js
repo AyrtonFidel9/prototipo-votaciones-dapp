@@ -11,18 +11,49 @@ export const Agencias = sequelize.define('agencias',{
     },
     nombre: {
         type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+        },
+        unique:{
+            arg: true,
+            msg: 'El nombre de la agencia ya existe'
+        },
     },
     ubicacion: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            }
+        },
     },
     numRepresentantes: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            isNumeric: {
+                msg: 'Solo se admiten números'
+            }
+        },
     },
     numGanadores: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            isNumeric: {
+                msg: 'Solo se admiten números'
+            }
+        },
     }
 });
 

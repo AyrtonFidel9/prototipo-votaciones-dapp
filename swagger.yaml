@@ -9,6 +9,9 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.1
+schemes:
+  - http
+  - https
 servers:
   - url: http://localhost:8080/api/v1
 tags:
@@ -79,7 +82,6 @@ paths:
                 $ref: '#/components/schemas/cuentas'
         '405':
           description: Datos invalidos
-  
   /cuentas/{id}:
     get:
       tags:
@@ -297,6 +299,27 @@ paths:
           description: Invalid username supplied
         '404':
           description: User not found
+  /agencia/registrar:
+    post:
+      security:
+        - BearerAuth: [] 
+      tags:
+        - agencias
+      summary: 'Ingresar una agencia'
+      description: 'Endpoint para ingresar una agencia en el sistema'
+      operationId: CU-01
+      requestBody:
+        description: 'Registrar una agencia formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Agencia' 
+      responses:
+        '200':
+          description: Agencia agregada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
 components:
   schemas:
     InicioSesion:
@@ -382,6 +405,21 @@ components:
           description: User Status
           format: int32
           example: 1
+    Agencia:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: San Andrés
+        ubicacion:
+          type: string
+          example: Cesar Naveda y Chiriboga
+        representantes: 
+          type: integer
+          example: 10
+        ganadores: 
+          type: integer
+          example: 5
     Error:
       type: object
       properties:
@@ -400,3 +438,19 @@ components:
         message:
           type: string
           example: Su rol le impide realizar la presente operación
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  security: [
+    {
+      "Bearer": []
+    },
+    {
+      "BasicAuth": []
+    }
+  ]

@@ -18,9 +18,9 @@ async function iniciarSesionController (req, res) {
             token: accessToken
         });
 
-    res.status(status).send({
+    /*res.status(status).send({
         message: message
-    });
+    });*/
 }
 
 function registrarCuentaController(req, res){

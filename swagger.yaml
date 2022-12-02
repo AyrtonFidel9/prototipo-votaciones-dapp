@@ -320,6 +320,37 @@ paths:
           description: Agencia agregada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /agencia/{agenciaId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - agencias
+      summary: 'Buscar una agencia por id'
+      description: 'Endpoint para buscar una agencia por id en la base de datos, tabla AGENCIA'
+      operationId: CU-02
+      parameters:
+        - in: path
+          name: agenciaId
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
 components:
   schemas:
     InicioSesion:

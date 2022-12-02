@@ -1,4 +1,4 @@
-import { ingresarAgencia } from "../use-cases/agencias/index.js";
+import { ingresarAgencia, buscarAgencia } from "../use-cases/agencias/index.js";
 
 const ingresarAgenciaController = async (req, res) => {
     const {
@@ -26,6 +26,19 @@ const ingresarAgenciaController = async (req, res) => {
     });
 }
 
+const buscarAgenciaController = (req, res) => {
+    const { agenciaId } = req.params;
+    
+    const search = buscarAgencia(agenciaId);
+
+    search.then(resp => {
+        res.status(resp.status).send({
+            message: resp.message
+        })
+    });
+}
+
 export default Object.freeze({
     ingresarAgencia: ingresarAgenciaController,
+    buscarAgencia: buscarAgenciaController,
 });

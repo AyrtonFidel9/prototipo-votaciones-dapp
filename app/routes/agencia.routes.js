@@ -23,4 +23,12 @@ routerAgencia.route('/registrar')
         AgenciaController.ingresarAgencia(req,res);
     });
 
+routerAgencia.route('/:agenciaId')
+    .get([authJwt.verifyToken,
+        authJwt.isAdmin
+    ],
+    (req, res) => {
+        AgenciaController.buscarAgencia(req,res);
+    });
+
 export default routerAgencia;

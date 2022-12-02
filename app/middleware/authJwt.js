@@ -6,10 +6,15 @@ const verifyToken = (req, res, next) =>{
     //const token = req.headers['x-access-token'];
     //console.log(req.headers)
 
+    if(!req.headers['authorization'])
+        return res.status(400).send({
+            message: 'El token no ha sido proveído'
+        });
+
+
     const bearer = req.headers['authorization'].split(' ');
     const token = bearer[1];
 
-    console.log(token);
 
     if(!token)
         return res.status(406).send({

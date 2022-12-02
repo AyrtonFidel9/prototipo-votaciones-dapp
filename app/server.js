@@ -34,12 +34,15 @@ async function main() {
 
         const salt = bcrypt.genSaltSync(10);
         const pass = await bcrypt.hash('1234',salt);
+        const date = new Date();
 
         const cuenta = await Cuenta.create({ 
             usuario: "Jane92",
             password: pass, 
             rol: "ROLE_ADMIN",
             idSocio: socio.id,
+            ipCliente: '172.45.10.1',
+            ultimoAcceso: date
         });
         
         console.log(cuenta.password);

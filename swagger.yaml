@@ -16,8 +16,10 @@ tags:
     description: Todo sobre las cuentas
   - name: usuarios
     description: Todo sobre los cuentas
-  - name: user
-    description: Operations about user
+  - name: socios
+    description: Operaciones para socios
+  - name: agencias
+    description: Operaciones para agencias
 paths:
   /cuentas:
     put:
@@ -172,7 +174,7 @@ paths:
           description: inicio de sesión correcto, token generado
           headers:
             X-Rate-Limit:
-              description: calls per hour allowed by the user
+              description: calls per hour allowed by the cuenta
               schema:
                 type: integer
                 format: int32
@@ -210,13 +212,13 @@ paths:
                   message:
                     type: string
                     example: El Usuario proporcionado es incorrecto
-  /user/logout:
-    get:
+  /socios/registrar:
+    post:
       tags:
-        - user
-      summary: Logs out current logged in user session
+        - socios
+      summary: Registrar un socio
       description: ''
-      operationId: logoutUser
+      operationId: regitrarSocio
       parameters: []
       responses:
         default:

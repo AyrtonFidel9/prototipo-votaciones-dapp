@@ -11,30 +11,52 @@ export const Socios = sequelize.define('socios',{
     },
     nombres: {
         type: DataTypes.STRING,
+        notEmpty: {
+            msg: 'No se admiten campos vacíos'
+        }
     },
     apellidos: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        notEmpty: {
+            msg: 'No se admiten campos vacíos'
+        }
     },
     cedula: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        isNumeric: {
+            msg: 'Solo se admiten números'
+        }
     },
     codigo: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER.UNSIGNED,
+        notEmpty: {
+            msg: 'No se admiten campos vacíos'
+        }
     },
     imagen: {
-        type: DataTypes.BLOB
+        type: DataTypes.BLOB,
+        allowNull: true,
     },
     estado: {
-        type: DataTypes.BOOLEAN
+        type: DataTypes.BOOLEAN,
+        notEmpty: {
+            msg: 'No se admiten campos vacíos'
+        }
     },
     email: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        isEmail: {
+            msg: 'Los datos del campo email no corresponden a un correo electrónico'
+        }
     },
     celular: {
         type: DataTypes.STRING,
-        defaultValue: '0999999999'
+        defaultValue: '0999999999',
+        isNumeric: {
+            msg: 'Solo se admiten números'
+        }
     }
 }, {
     freezeTableName: true

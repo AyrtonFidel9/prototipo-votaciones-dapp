@@ -9,7 +9,8 @@ export default function ingresarSocio(
     imagen,
     estado,
     email,
-    celular
+    celular,
+    idAgencia,
 ){
     return Socios.create({
         nombres: nombres,
@@ -22,5 +23,6 @@ export default function ingresarSocio(
         estado: estado,
         email: email,
         celular: celular,
+        idAgencia: idAgencia,
     })
 }

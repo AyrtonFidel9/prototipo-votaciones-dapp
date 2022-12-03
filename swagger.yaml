@@ -390,7 +390,7 @@ paths:
         - agencias
       summary: 'Actualizar una agencia por ID'
       description: 'Endpoint para actualizar una agencia por id en la base de datos, tabla AGENCIA'
-      operationId: CU-03
+      operationId: CU-04
       parameters:
         - in: path
           name: agenciaId

@@ -1,8 +1,12 @@
 import Sequelize from 'sequelize';
 
-export const sequelize = new Sequelize('vote-coac', 'postgres', 'postgres', {
-    host: '172.19.152.30',
-    dialect: 'postgres',
-},
+export const sequelize = new Sequelize(
+    'vote-coac', // nombre de la base de datos 
+    'postgres', // usuario
+    'postgres', // contraseña
+    {
+        host: '172.26.241.131', //ip del servidor
+        dialect: 'postgres', //nombre del gestor de base de datos - SQL
+    },
 );
 

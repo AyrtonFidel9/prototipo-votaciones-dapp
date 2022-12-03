@@ -12,7 +12,7 @@ async function main() {
     try {
         await sequelize.sync ({force: true})
         app.listen(PORT, ()=>{
-            console. log ("Server is listening on port", PORT);
+            console.log("Server is listening on port", PORT);
         });
         const agencia = await Agencias.create({
             nombre: 'La Matriz',

@@ -351,6 +351,66 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
+  /agencia/delete/{agenciaId}:
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - agencias
+      summary: 'Eliminar una agencia por id'
+      description: 'Endpoint para eliminar una agencia por id en la base de datos, tabla AGENCIA'
+      operationId: CU-03
+      parameters:
+        - in: path
+          name: agenciaId
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos eliminados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /agencia/update/{agenciaId}:
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - agencias
+      summary: 'Actualizar una agencia por ID'
+      description: 'Endpoint para actualizar una agencia por id en la base de datos, tabla AGENCIA'
+      operationId: CU-03
+      parameters:
+        - in: path
+          name: agenciaId
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      requestBody:
+        description: 'Actualizar una agencia formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Agencia' 
+      responses:
+        '200':
+          description: Agencia actualizada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+
 components:
   schemas:
     InicioSesion:

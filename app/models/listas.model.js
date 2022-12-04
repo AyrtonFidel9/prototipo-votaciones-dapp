@@ -17,3 +17,4 @@ export const Listas = sequelize.define('listas',{
         type: DataTypes.SMALLINT
     }
 });
+

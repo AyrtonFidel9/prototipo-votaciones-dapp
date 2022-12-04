@@ -1,36 +1,32 @@
 import * as db from '../../models/index.js';
-import { Elecciones } from db.Elecciones
-import { findOne } from '../agencias/index.js'
-
+import { Listas } from db.Listas
 
 export const create = (req, res) => {
     // Validate request
-    const id = req.params.id;
-    id = req.body.idAgencia;
-    if (!findOne(id, res)) {
+    if (!req.body.idBilletera) {
       res.status(400).send({
         message: "Content can not be empty!"
       });
       return;
     }
   
-    // Create a eleccion
-    const eleccion = {
-      dia: req.body.dia,
-      hora: req.body.hora,
-      duracion: req.body.duracion,
-      idAgencia: req.body.idAgencia,
+    // Create a lista
+    const lista = {
+      nombre: req.body.nombre,
+      imagen: req.body.imagen,
+      ethCantVot: req.body.ethCantVot,
+      idBilletera: req.body.idBilletera,
     };
   
-    // Save eleccion in the database
-    Elecciones.create(eleccion)
+    // Save lista in the database
+    Listas.create(lista)
       .then(data => {
         res.send(data);
       })
       .catch(err => {
         res.status(500).send({
           message:
-            err.message || "Some error occurred while creating the eleccion."
+            err.message || "Some error occurred while creating the lista."
         });
       });
   };

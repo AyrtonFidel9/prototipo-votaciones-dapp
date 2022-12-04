@@ -10,7 +10,7 @@ export default async function ingresarSocio(
     email,
     celular,
     idAgencia}
-){
+){ 
 
     try{
         const socio = await Socios.create({

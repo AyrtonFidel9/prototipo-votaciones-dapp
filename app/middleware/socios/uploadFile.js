@@ -17,6 +17,7 @@ const imageTypesFilter = (req, file, cb) => {
 
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
+        req.body.imagen = `${Date.now()}-${file.originalname}`;
         cb(null, `${Date.now()}-${file.originalname}`, req);
     },
     destination: path.join(__dirname, '/app/public/images'),

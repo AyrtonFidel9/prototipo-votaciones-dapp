@@ -1,9 +1,12 @@
 import { buscarAgencia } from "../use-cases/agencias/index.js";
+
 import { 
     ingresarSocio,
-    buscarSocio
+    buscarSocio,
+    actualizarSocio
 } from "../use-cases/socios/index.js";
 import fs from 'fs';
+
 
 const ingresarSocioController = (req, res) => {
 
@@ -52,6 +55,47 @@ const ingresarSocioController = (req, res) => {
     });
 }
 
+const actualizarSocioController = (req, res) => {
+
+    const { idSocio } = req.params;
+
+    function searchSocio (id){
+        return new Promise((res, rej)=>{
+            const buscar = buscarSocio(id);
+            res(buscar);
+        });
+    }
+
+    function updateSocio(id, oldImage, newSocio){
+        return new Promise((res, rej)=>{
+            const updated = actualizarSocio(
+                id, 
+                oldImage, 
+                {...newSocio}
+            );
+            res(updated);
+        });
+    }
+    searchSocio(idSocio).then(socio => {
+        socio.status !== 200 &&
+        res.status(socio.status).send({
+            message: socio.message
+        });
+        
+        return socio.message;
+    })
+    .then(datos => updateSocio(datos.id, datos.imagen, req.body))
+    .then(result=>{
+        res.status(result.status).send({
+            message: result.message,
+        })
+    })
+    .catch(err=>{
+        res.status(err.status).send({
+            message: err.message
+        })
+    });
+}
 
 const buscarSocioController =  (req, res) => {
     const { idSocio } = req.params;
@@ -68,4 +112,5 @@ const buscarSocioController =  (req, res) => {
 export default Object.freeze({
     ingresarSocio: ingresarSocioController,
     buscarSocio: buscarSocioController,
+    actualizarSocio: actualizarSocioController,
 });

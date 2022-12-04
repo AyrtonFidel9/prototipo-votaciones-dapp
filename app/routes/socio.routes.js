@@ -1,6 +1,6 @@
 import express from 'express';
 import { SociosController } from '../controllers/index.js';
-import { authJwt, uploadFile } from '../middleware/index.js';
+import { authJwt } from '../middleware/index.js';
 import { validateCedula } from '../middleware/index.js';
 
 const routerSocios = express.Router();
@@ -39,6 +39,15 @@ routerSocios.route('/:idSocio')
         authJwt.isAdmin,
     ], (req, res) => {
         SociosController.buscarSocio(req, res);
+    });
+
+routerSocios.route('/update/:idSocio')
+    .put([
+        authJwt.verifyToken,
+        authJwt.isAdmin,
+        validateCedula
+    ], (req, res) => {
+        SociosController.actualizarSocio(req,res);
     });
 
 export default routerSocios;

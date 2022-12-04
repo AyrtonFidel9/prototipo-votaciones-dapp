@@ -267,6 +267,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
+  /socios/update/{idSocio}:
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Actualizar los campos de un socio'
+      description: 'Endpoint para actualizar los datos de un socio por el ID, tabla SOCIOS'
+      operationId: CU-06
+      parameters:
+        - in: path
+          name: idSocio
+          schema:
+            type: integer
+          required: true
+          description: El id debe ser un valor numerico, para  actualizar los datos correctamente
+      requestBody:
+        description: 'Aztualizar los datos de un socio'
+        content:
+          multipart/form-data:
+            description: 'Ingresar datos de un socio'
+            required: true
+            schema:
+              $ref: '#/components/schemas/Socios'
+      responses:
+        '200':
+          description: Socio actualizado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
   /user/{username}:
     get:
       tags:

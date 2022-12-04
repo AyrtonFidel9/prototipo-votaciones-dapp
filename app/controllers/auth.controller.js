@@ -1,4 +1,4 @@
-import { iniciarSesion } from "../use-cases/cuenta/index.js";
+import { iniciarSesion, buscarCuenta } from "../use-cases/cuenta/index.js";
 
 
 async function iniciarSesionController (req, res) {
@@ -18,16 +18,28 @@ async function iniciarSesionController (req, res) {
             token: accessToken
         });
 
-    /*res.status(status).send({
+    res.status(status).send({
         message: message
-    });*/
+    });
 }
 
-function registrarCuentaController(req, res){
+function buscarCuentaController(req, res){
+    const { idSocio } = req.params;
 
+    const cuenta = buscarCuenta(idSocio);
+
+    cuenta.then(c => {
+        res.status(c.status).send({
+            message: c.message,
+        })
+    }).catch(err=>{
+        res.status(err.status).send({
+            message: err.message,
+        })
+    });
 }
 
 export default Object.freeze({
-    iniciarSesion: (req, res) => iniciarSesionController(req,res),
-    holaMundo: () => 'Hola Mundo',
+    iniciarSesion: iniciarSesionController,
+    buscarCuenta: buscarCuentaController,
 });

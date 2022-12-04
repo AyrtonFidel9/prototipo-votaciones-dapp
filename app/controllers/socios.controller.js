@@ -21,7 +21,8 @@ const ingresarSocioController = (req, res) => {
     function ingresar(socio) {
 
         return new Promise((res, rej) => {
-            const added = ingresarSocio({ ...socio });
+            const added = ingresarSocio({ ...socio }, 
+                req.headers['x-real-ip'] || req.connection.remoteAddress);
             res(added);
         });
     }
@@ -40,6 +41,7 @@ const ingresarSocioController = (req, res) => {
         return ingresar(req.body);
     })
     .then(result=>{
+
         res.status(result.status).send({
             message: result.message,
         })
@@ -47,6 +49,8 @@ const ingresarSocioController = (req, res) => {
     .catch(err=>{
         
         const __dirname = process.cwd();
+
+        console.log(err);
 
         fs.unlinkSync( __dirname+err.message.errors[0].instance.imagen);
 

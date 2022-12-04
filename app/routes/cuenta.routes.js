@@ -1,5 +1,6 @@
 import express from 'express';
 import { AuthController } from '../controllers/index.js';
+import { authJwt } from '../middleware/index.js';
 
 const routerCuenta = express.Router();
 
@@ -16,9 +17,13 @@ routerCuenta.route('/iniciar-sesion')
         AuthController.iniciarSesion(req, res);
     });
 
-routerCuenta.route('/Saludo')
-    .get((req, res) => {
-        res.send('Hola' + req.body);
+routerCuenta.route('/cuentas/:idSocio')
+    .get([
+        authJwt.verifyToken,
+        authJwt.isAdmin
+    ],(req, res)=>{
+        AuthController.buscarCuenta(req, res);
     });
+
 
 export default routerCuenta;

@@ -1,4 +1,5 @@
 import { Socios } from "../../models/index.js";
+import { registrarCuenta } from "../cuenta/index.js";
 
 export default async function ingresarSocio(
     {nombres,
@@ -9,7 +10,7 @@ export default async function ingresarSocio(
     estado,
     email,
     celular,
-    idAgencia}
+    idAgencia}, ip
 ){ 
 
     try{
@@ -24,10 +25,26 @@ export default async function ingresarSocio(
             celular: celular,
             idAgencia: idAgencia,
         });
-
-        return {
-            status: 200, //OK,
-            message: socio,
+        try{
+            const account = await registrarCuenta(
+                nombres,
+                apellidos,
+                codigo,
+                ip,
+                socio.id,
+            );
+            return {
+                status: 200, //OK,
+                message: {
+                    socio: socio.dataValues, 
+                    cuenta: account.message.dataValues
+                }
+            }
+        }catch(err){
+            throw ({
+                status: 400,
+                message: err,
+            });
         }
     }
     catch(err){

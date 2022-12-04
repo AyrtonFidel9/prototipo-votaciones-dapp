@@ -82,17 +82,19 @@ paths:
                 $ref: '#/components/schemas/cuentas'
         '405':
           description: Datos invalidos
-  /cuentas/{id}:
+  /cuentas/{idSocio}:
     get:
+      security:
+        - BearerAuth: []
       tags:
         - cuentas
-      summary: Buscar cuentas por ID
+      summary: Buscar cuentas por ID del socio
       description: Retorna una cuenta
-      operationId: getCuentaById
+      operationId: CU-09
       parameters:
-        - name: id
+        - name: idSocio
           in: path
-          description: ID de la cuenta
+          description: ID del socio propietario de la cuenta
           required: true
           schema:
             type: integer
@@ -104,14 +106,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/cuentas'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/cuentas'
         '400':
           description: Invalid ID supplied
         '404':
-          description: Pet not found
-    post:
+          description: No existe una cuenta para el socio
+    put:
       tags:
         - cuentas
       summary: Actualizar nombre de usuario de una cuenta
@@ -133,30 +132,6 @@ paths:
       responses:
         '405':
           description: Invalid input
-          
-    delete:
-      tags:
-        - cuentas
-      summary: Borrar una cuenta
-      description: Borrar una cuenta
-      operationId: deleteCuenta
-      parameters:
-        - name: jwt
-          in: header
-          description: ''
-          required: false
-          schema:
-            type: string
-        - name: id
-          in: path
-          description: Pet id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '400':
-          description: Id no valido
   /iniciar-sesion:
     post:
       tags:
@@ -532,26 +507,25 @@ components:
           type: integer
           format: int64
           example: 10
-        nombres:
+        usuario:
           type: string
-          description: Nombres del propietario de una cuenta
-          example: Fidel Ayrton
-        apellidos:
+          description: Nombre de usuario del propietario de una cuenta
+          example: AyrtonFidel1290
+        password:
           type: string
-          description: Apellidos del propietario de una cuenta
-          example: Avalos Cuadrado
-        createAt:
+          description: Contraseña del propietario de una cuenta
+          example: 123123
+        rol:
+          type: string
+          example: 'ROLE_SOCIO'
+        ipCliente:
+          type: string
+          description: DIRECCION IP DEL CLIENTE
+          example: '172.12.54.1'
+        ultimoAcceso:
           type: string
           format: date-time
-        status:
-          type: string
-          description: Estado de la cuenta
-          example: habilitado
-          enum:
-            - habilitado
-            - inavilitado
-        complete:
-          type: boolean
+          example: '2022-06-01 15:30:02'
     Address:
       type: object
       properties:

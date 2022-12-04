@@ -5,7 +5,7 @@ import './models/index.js';
 import cors  from 'cors';
 import bodyParser from 'body-parser';
 import { Agencias, Cuenta, Socios } from './models/index.js';
-import bcrypt from 'bcryptjs';
+import CryptoJS from "crypto-js";
 
 async function main() {
     console.log({PORT})
@@ -32,8 +32,11 @@ async function main() {
             idAgencia: agencia.id,
         });
 
-        const salt = bcrypt.genSaltSync(10);
-        const pass = await bcrypt.hash('1234',salt);
+
+        const pass = CryptoJS.AES.encrypt(
+            '1234',
+            'key-caycne-189321').toString();
+
         const date = new Date();
 
         const cuenta = await Cuenta.create({ 

@@ -2,7 +2,7 @@ import { Cuenta } from '../../models/index.js';
 import { secret } from '../../config/index.js';
 import { Sequelize, Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import { decryptPass } from './password.js';
 
 export default function iniciarSesion(usuario, password){
     return Cuenta.findOne({
@@ -16,8 +16,7 @@ export default function iniciarSesion(usuario, password){
                 message: 'Cuenta no encontrada!!',
                 accessToken: null,
             };
-        const passIsValid = bcrypt.compareSync(password,user.password);
-        
+        const passIsValid = password === decryptPass(user.password);
         if(!passIsValid)
             return {
                 status: 401,

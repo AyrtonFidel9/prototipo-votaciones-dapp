@@ -3,7 +3,8 @@ import { buscarAgencia } from "../use-cases/agencias/index.js";
 import { 
     ingresarSocio,
     buscarSocio,
-    actualizarSocio
+    actualizarSocio,
+    eliminarSocio
 } from "../use-cases/socios/index.js";
 import fs from 'fs';
 
@@ -109,8 +110,46 @@ const buscarSocioController =  (req, res) => {
     })
 }
 
+const eliminarSocioController = (req, res) => {
+    const { idSocio } = req.params;
+
+    function search (id){
+        return new Promise((res, rej)=>{
+            const buscar = buscarSocio(id);
+            res(buscar);
+        });
+    }
+
+    function eliminar (id){
+        return new Promise((res, rej)=>{
+            const deleted = eliminarSocio(id);
+            res(deleted);
+        });
+    }
+
+    search(idSocio).then(socio=>{
+        if(socio.status !== 200)
+            res.status(socio.status).send({
+                message: socio.message
+            });
+        return socio.message.id;
+    })
+    .then(id => eliminar(id))
+    .then(resp => {
+        res.status(resp.status).send({
+            message: resp.message,
+        });
+    })
+    .catch(err=>{
+        res.status(err.status).send({
+            message: err.message
+        });
+    });    
+}
+
 export default Object.freeze({
     ingresarSocio: ingresarSocioController,
     buscarSocio: buscarSocioController,
     actualizarSocio: actualizarSocioController,
+    eliminarSocio: eliminarSocioController
 });

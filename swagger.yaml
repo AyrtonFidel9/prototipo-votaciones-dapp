@@ -296,6 +296,37 @@ paths:
           description: Socio actualizado correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /socios/delete/{idSocio}:
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Eliminar un socio por ID'
+      description: 'Endpoint para eliminar un socio de la tabla SOCIOS'
+      operationId: CU-08
+      parameters: 
+        - in: path
+          name: idSocio
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico para eliminar de forma satisfactoria los datos del socio
+      responses:
+        '200':
+          description: Datos eliminados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
   /user/{username}:
     get:
       tags:

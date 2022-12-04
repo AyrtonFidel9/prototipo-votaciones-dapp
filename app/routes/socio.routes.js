@@ -17,19 +17,19 @@ routerSocios.route('/registrar')
     .post([
         authJwt.verifyToken,
         authJwt.isAdmin,
-        validateCedula, ],
-    (req, res) => {
+        validateCedula,
+    ], (req, res) => {
         if (req.fileValidationError) {
             res.status(400).send({
                 message: req.fileValidationError
             });
         }
 
-        if(req.file)
+        if (req.file)
             req.body.imagen = req.file.filename
         else
             req.body.imagen = null
-            
+
         SociosController.ingresarSocio(req, res);
     });
 
@@ -47,7 +47,15 @@ routerSocios.route('/update/:idSocio')
         authJwt.isAdmin,
         validateCedula
     ], (req, res) => {
-        SociosController.actualizarSocio(req,res);
+        SociosController.actualizarSocio(req, res);
+    });
+
+routerSocios.route('/delete/:idSocio')
+    .delete([
+        authJwt.verifyToken,
+        authJwt.isAdmin,
+    ], (req, res) => {
+        SociosController.eliminarSocio(req, res);
     });
 
 export default routerSocios;

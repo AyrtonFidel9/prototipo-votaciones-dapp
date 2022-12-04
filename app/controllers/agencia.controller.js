@@ -1,5 +1,5 @@
-import { 
-    ingresarAgencia, 
+import {
+    ingresarAgencia,
     buscarAgencia,
     eliminarAgencia,
     actualizarAgencia
@@ -33,7 +33,7 @@ const ingresarAgenciaController = async (req, res) => {
 
 const buscarAgenciaController = (req, res) => {
     const { agenciaId } = req.params;
-    
+
     const search = buscarAgencia(agenciaId);
 
     search.then(resp => {
@@ -45,7 +45,7 @@ const buscarAgenciaController = (req, res) => {
 
 const eliminarAgenciaController = async (req, res) => {
     const { agenciaId } = req.params;
-    
+
     //const search = buscarAgencia(agenciaId);
 
     /*search.then(resp => {
@@ -69,47 +69,46 @@ const eliminarAgenciaController = async (req, res) => {
         });
     });*/
     Promise.all([
-        await buscarAgencia(agenciaId), 
+        await buscarAgencia(agenciaId),
         eliminarAgencia(agenciaId)
     ])
-    .then(resp => {
-        const search = resp[0]; // se guarda el proceso de buscar agencia
+        .then(resp => {
+            const search = resp[0]; // se guarda el proceso de buscar agencia
 
-        if(search.status !== 200)
-        {
-            res.status(search.status).send({
-                message: search.message
+            if (search.status !== 200) {
+                res.status(search.status).send({
+                    message: search.message
+                });
+
+                return;
+            }
+
+            const deleted = resp[1]; // se guarda el proceso de eliminar agencia
+
+            res.status(deleted.status).send({
+                message: deleted.message,
             });
 
-            return;
-        }
-
-        const deleted = resp[1]; // se guarda el proceso de eliminar agencia
-
-        res.status(deleted.status).send({
-            message: deleted.message,
+        }).catch(err => {
+            res.status(err.status).send({
+                message: err.message
+            });
         });
-
-    }).catch(err => {
-        res.status(err.status).send({
-            message: err.message
-        });
-    });
 }
 
 const actualizarAgenciaController = (req, res) => {
-    
+
     const { agenciaId } = req.params;
 
-    function search(id){
-        return new Promise((res, rej)=>{
+    function search(id) {
+        return new Promise((res, rej) => {
             const buscar = buscarAgencia(id);
             res(buscar);
         })
     }
 
-    function update(id, newDatos){
-        return new Promise((res, rej)=>{
+    function update(id, newDatos) {
+        return new Promise((res, rej) => {
             const up = actualizarAgencia(id, newDatos);
             res(up);
         });
@@ -117,24 +116,24 @@ const actualizarAgenciaController = (req, res) => {
 
     search(agenciaId).then((agencia) => {
 
-        agencia.status !== 200 && 
-        res.status(agencia.status).send({
-            message: agencia.message
-        });
-        
+        agencia.status !== 200 &&
+            res.status(agencia.status).send({
+                message: agencia.message
+            });
+
         return agencia.message;
     })
-    .then((datos) => update(datos.id, req.body))
-    .then(result => {
-        res.status(result.status).send({
-            message: result.message,
+        .then((datos) => update(datos.id, req.body))
+        .then(result => {
+            res.status(result.status).send({
+                message: result.message,
+            })
         })
-    })
-    .catch(err=>{
-        res.status(err.status).send({
-            message: err.message
-        })
-    });
+        .catch(err => {
+            res.status(err.status).send({
+                message: err.message
+            })
+        });
 }
 
 export default Object.freeze({

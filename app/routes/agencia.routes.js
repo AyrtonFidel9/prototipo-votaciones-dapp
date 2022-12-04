@@ -1,6 +1,6 @@
 import express from 'express';
 import { AgenciaController } from '../controllers/index.js';
-import { cantidadGanadores } from '../middleware/socios/index.js';
+import { cantidadGanadores } from '../middleware/index.js';
 import { authJwt } from '../middleware/index.js';
 
 const routerAgencia = express.Router();

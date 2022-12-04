@@ -16,6 +16,9 @@ export const Agencias = sequelize.define('agencias',{
             notEmpty: {
                 msg: 'No se admiten campos vacíos'
             },
+            notNull: {
+                msg: 'Por favor, ingrese el nombre de la agencia'
+            }
         },
         unique:{
             arg: true,
@@ -28,6 +31,9 @@ export const Agencias = sequelize.define('agencias',{
         validate: {
             notEmpty: {
                 msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese la ubicación de la agencia'
             }
         },
     },
@@ -40,6 +46,9 @@ export const Agencias = sequelize.define('agencias',{
             },
             isNumeric: {
                 msg: 'Solo se admiten números'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese el numero de representantes de la agencia'
             }
         },
     },
@@ -52,6 +61,9 @@ export const Agencias = sequelize.define('agencias',{
             },
             isNumeric: {
                 msg: 'Solo se admiten números'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese la cantidad de ganadores de la agencia'
             }
         },
     }

@@ -216,15 +216,26 @@ paths:
                     example: El Usuario proporcionado es incorrecto
   /socios/registrar:
     post:
+      security:
+        - BearerAuth: []
       tags:
         - socios
-      summary: Registrar un socio
-      description: ''
-      operationId: regitrarSocio
-      parameters: []
+      summary: Registrar un socio de forma individual
+      description: 'Registrar un socio individualmente en la base de datos'
+      operationId: CU-05
+      requestBody:
+        description: 'Ingresar un socio'
+        content:
+          multipart/form-data:
+            description: 'Ingresar datos de un socio'
+            required: true
+            schema:
+              $ref: '#/components/schemas/Socios'
       responses:
-        default:
-          description: successful operation
+        '200':
+          description: Socio agregado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
   /user/{username}:
     get:
       tags:
@@ -511,6 +522,36 @@ components:
         ganadores: 
           type: integer
           example: 5
+    Socios:
+      type: object
+      properties:
+        nombres:
+          type: string
+          example: Jose Luis
+        apellidos:
+          type: string
+          example: Almeida Ramirez
+        cedula:
+          type: string,
+          example: '0606252138'
+        codigo:
+          type: integer
+          example: 1091
+        imagen:
+          type: string
+          format: binary
+        estado:
+          type: boolean
+          example: true
+        email:
+          type: string
+          example: joselui@mail.com
+        celular:
+          type: string
+          example: '0981509821'
+        idAgencia:
+          type: integer
+          example: 1
     Error:
       type: object
       properties:

@@ -1,5 +1,9 @@
 import { buscarAgencia } from "../use-cases/agencias/index.js";
-import { ingresarSocio } from "../use-cases/socios/index.js";
+import { 
+    ingresarSocio,
+    buscarSocio
+} from "../use-cases/socios/index.js";
+import fs from 'fs';
 
 const ingresarSocioController = (req, res) => {
 
@@ -29,7 +33,6 @@ const ingresarSocioController = (req, res) => {
     })
     .then(id => {
         req.body.idAgencia = id;
-        console.log(req.body);
         return ingresar(req.body);
     })
     .then(result=>{
@@ -38,7 +41,11 @@ const ingresarSocioController = (req, res) => {
         })
     })
     .catch(err=>{
-        console.log(err);
+        
+        const __dirname = process.cwd();
+
+        fs.unlinkSync( __dirname+err.message.errors[0].instance.imagen);
+
         res.status(err.status).send({
             message: err.message
         })
@@ -46,6 +53,19 @@ const ingresarSocioController = (req, res) => {
 }
 
 
+const buscarSocioController =  (req, res) => {
+    const { idSocio } = req.params;
+
+    const search = buscarSocio(idSocio);
+
+    search.then(resp => {
+        res.status(resp.status).send({
+            message: resp.message
+        });
+    })
+}
+
 export default Object.freeze({
-    ingresarSocio: ingresarSocioController
+    ingresarSocio: ingresarSocioController,
+    buscarSocio: buscarSocioController,
 });

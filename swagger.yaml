@@ -236,6 +236,37 @@ paths:
           description: Socio agregado correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /socios/{idSocio}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Buscar un socio por id'
+      description: 'Endpoint para buscar una socio por id en la base de datos, tabla SOCIOS'
+      operationId: CU-07
+      parameters:
+        - in: path
+          name: idSocio
+          schema:
+            type: integer
+          required:
+          description: El ID del socio debe ser un valor numerico para poder ejecutar la búsqueda correctamente
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
   /user/{username}:
     get:
       tags:
@@ -421,7 +452,6 @@ paths:
           description: Agencia actualizada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
-
 components:
   schemas:
     InicioSesion:

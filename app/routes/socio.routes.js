@@ -33,4 +33,12 @@ routerSocios.route('/registrar')
         SociosController.ingresarSocio(req, res);
     });
 
+routerSocios.route('/:idSocio')
+    .get([
+        authJwt.verifyToken,
+        authJwt.isAdmin,
+    ], (req, res) => {
+        SociosController.buscarSocio(req, res);
+    });
+
 export default routerSocios;

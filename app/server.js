@@ -14,6 +14,12 @@ async function main() {
         app.listen(PORT, ()=>{
             console. log ("Server is listening on port", PORT);
         });
+
+        // simple route
+        app.get("/", (req, res) => {
+            res.json({ message: "Welcome to DAPP Vote." });
+        });
+
         const agencia = await Agencias.create({
             nombre: 'La Matriz',
             ubicacion: 'La Matriz',

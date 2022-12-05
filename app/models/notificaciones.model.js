@@ -8,21 +8,52 @@ export const Notificaciones = sequelize.define('notificaciones', {
         autoIncrement: true
     },
     fecha: {
-        type: DataTypes.DATEONLY
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese la fecha'
+            }
+        },
     },
     hora: {
-        type: DataTypes.TIME
+        type: DataTypes.TIME,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese la hora'
+            }
+        },
     },
     msg: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese un mensaje'
+            }
+        },
     },
     estado: {
-        type: DataTypes.ENUM,
-        values: [
-            'online',
-            'offline',
-        ],
-        defaultValue: 'online'
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese el estado'
+            }
+        },
     },
     grado: {
         type: DataTypes.ENUM,
@@ -31,6 +62,15 @@ export const Notificaciones = sequelize.define('notificaciones', {
             '2',
             '3'
         ],
-        defaultValue: '1'
+        defaultValue: '1',
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese el grado'
+            }
+        },
     }
 });

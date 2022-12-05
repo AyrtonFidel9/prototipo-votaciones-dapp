@@ -23,7 +23,106 @@ tags:
     description: Operaciones para socios
   - name: agencias
     description: Operaciones para agencias
+  - name: notificacion
+    description: Operaciones para notificaciones
 paths:
+  /notificacion/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - notificacion
+      summary: Buscar una notificacion por ID
+      description: Retorna la informacion de la notificacion
+      operationId: CU-16
+      parameters:
+        - name: id
+          in: path
+          description: ID de la notificacion
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe la notificacion
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - notificacion
+      summary: Buscar cuentas por ID del socio
+      description: Retorna una cuenta
+      operationId: CU-15
+      parameters:
+        - name: id
+          in: path
+          description: ID de la notificacion
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Campos para ingresar una notificacion
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe la notificacion
+  /notificacion/ingresar/{idSocio}:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - notificacion
+      summary: Ingresar una notificacion
+      description: Ingresa una noticiacion
+      operationId: CU-14
+      parameters:
+        - name: idSocio
+          in: path
+          description: ID del socio
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: 'Registrar una notificacion en formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe la notificacion
   /cuentas/{idSocio}:
     get:
       security:
@@ -538,6 +637,29 @@ components:
         ganadores: 
           type: integer
           example: 5
+    Notificacion:
+      type: object
+      properties:
+        fecha:
+          type: string
+          format: date
+          example: '2022-12-01'
+        hora:
+          type: string
+          format: time
+          example: '15:30'
+        msg: 
+          type: integer
+          example: 'Cambiar la contraseña'
+        estado: 
+          type: boolean
+          example: false
+        grado: 
+          type: string
+          example: 1
+        idCliente:
+          type: integer
+          example: 1
     Socios:
       type: object
       properties:

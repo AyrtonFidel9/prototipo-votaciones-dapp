@@ -12,6 +12,7 @@ routerCuenta.use((res, req, next) => {
     next();
 });
 
+// comprobar que el socio este habilitado
 routerCuenta.route('/iniciar-sesion')
     .post(function (req, res) {
         AuthController.iniciarSesion(req, res);
@@ -25,5 +26,12 @@ routerCuenta.route('/cuentas/:idSocio')
         AuthController.buscarCuenta(req, res);
     });
 
+routerCuenta.route('/cuentas/:idSocio')
+    .put([
+        authJwt.verifyToken,
+        authJwt.isAdmin
+    ], (req, res)=>{
+        AuthController.actualizarCuenta(req, res);
+    });
 
 export default routerCuenta;

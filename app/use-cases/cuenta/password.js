@@ -19,5 +19,10 @@ function decryptPass(pass){
     const decrypt = CryptoJS.AES.decrypt(pass, secret_key);
     return decrypt.toString(CryptoJS.enc.Utf8);
 }
+function encryptPass(pass){
+    return CryptoJS.AES.encrypt(
+        pass,
+        secret_key).toString();
+}
 
-export { generatePassEncrypt, decryptPass };
+export { generatePassEncrypt, decryptPass, encryptPass };

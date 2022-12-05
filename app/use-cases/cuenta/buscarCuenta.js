@@ -5,7 +5,6 @@ export default async function buscarCuenta(id){
     const cuenta = await Cuenta.findOne({
         where: {idSocio: id},
     });
-
     if(cuenta === null){
         return {
             status: 404,

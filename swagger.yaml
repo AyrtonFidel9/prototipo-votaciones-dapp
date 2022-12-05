@@ -24,64 +24,6 @@ tags:
   - name: agencias
     description: Operaciones para agencias
 paths:
-  /cuentas:
-    put:
-      tags:
-        - cuentas
-      summary: Actualizar una cuenta
-      description: Actualizar una cuenta existente por Id
-      operationId: updateCuenta
-      requestBody:
-        description: Actualizar una cuenta existente en la BD
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/cuentas'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/cuentas'
-        required: true
-      responses:
-        '200':
-          description: Operacion correctamnete
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/cuentas'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/cuentas'
-        '400':
-          description: ID no valido
-        '404':
-          description: Cuenta no encontrada
-        '405':
-          description: Error en la validacion
-    post:
-      tags:
-        - cuentas
-      summary: Agregar una nueva cuenta
-      description: Agregar una nueva cuenta
-      operationId: addCuenta
-      requestBody:
-        description: Crear una cuenta en la BD
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/cuentas'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/cuentas'
-        required: true
-      responses:
-        '200':
-          description: Operacion correcta
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/cuentas'
-        '405':
-          description: Datos invalidos
   /cuentas/{idSocio}:
     get:
       security:
@@ -111,27 +53,37 @@ paths:
         '404':
           description: No existe una cuenta para el socio
     put:
+      security:
+        - BearerAuth: []
       tags:
         - cuentas
-      summary: Actualizar nombre de usuario de una cuenta
+      summary: Actualizar la cuenta de un usuario
       description: ''
-      operationId: updateCuentaWithForm
+      operationId: CU-12
       parameters:
-        - name: Id
+        - name: idSocio
           in: path
-          description: Id de la cuenta a ser actualizada
+          description: ID del socio propietario de la cuenta
           required: true
           schema:
             type: integer
             format: int64
-        - name: nameUser
-          in: query
-          description: Nombre de usuario a ser actualizado
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cuentas'
       responses:
-        '405':
-          description: Invalid input
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cuentas'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe una cuenta para el socio
   /iniciar-sesion:
     post:
       tags:

@@ -1,6 +1,7 @@
 import { Socios } from "../../models/index.js";
 import { registrarCuenta } from "../cuenta/index.js";
 
+// verificar que los campos de cedula, codigo, email y celular no estae duplicados
 export default async function ingresarSocio(
     {nombres,
     apellidos,
@@ -12,7 +13,6 @@ export default async function ingresarSocio(
     celular,
     idAgencia}, ip
 ){ 
-
     try{
         const socio = await Socios.create({
             nombres: nombres,

@@ -9,4 +9,3 @@ export const sequelize = new Sequelize(
         dialect: 'postgres', //nombre del gestor de base de datos - SQL
     },
 );
-

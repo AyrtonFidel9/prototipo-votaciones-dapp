@@ -30,4 +30,8 @@ export const Recuperacion = sequelize.define('recuperacion', {
         type: DataTypes.BOOLEAN,
         allowNull: false,
     }
-});
+},
+{
+    freezeTableName: true
+}
+);

@@ -74,13 +74,20 @@ Agencias.hasMany( Socios, {
     sourceKey: 'id'
 });
 
-Socios.belongsTo( Agencias );
+Socios.belongsTo( Agencias, {
+    foreignKey: 'idAgencia',
+    sourceKey: 'id'
+});
 
 Agencias.hasMany( Elecciones, {
     foreignKey: 'idAgencia',
     sourceKey: 'id'
 });
 
-Elecciones.belongsTo( Agencias );
+Elecciones.belongsTo( Agencias, {
+    foreignKey: 'idAgencia',
+    sourceKey: 'id'
+});
 
 // export default Agencias;
+

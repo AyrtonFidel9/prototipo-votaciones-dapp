@@ -32,7 +32,7 @@ paths:
         - cuentas
       summary: Buscar cuentas por ID del socio
       description: Retorna una cuenta
-      operationId: CU-09
+      operationId: CU-10
       parameters:
         - name: idSocio
           in: path
@@ -90,7 +90,7 @@ paths:
         - usuarios
       summary: Iniciar sesion un usuario en el sistema
       description: ''
-      operationId: iniciarSesion
+      operationId: CU-11
       requestBody:
         description: Campos para iniciar sesión en la aplicación
         required: true

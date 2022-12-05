@@ -1,9 +1,20 @@
-import { Cuenta } from "../models";
+import { Cuenta } from "../models/index.js";
 import jwt from "jsonwebtoken";
 import { secret } from "../config/index.js";
 
 const verifyToken = (req, res, next) =>{
-    const token = req.headers['x-access-token'];
+    //const token = req.headers['x-access-token'];
+    //console.log(req.headers)
+
+    if(!req.headers['authorization'])
+        return res.status(400).send({
+            message: 'El token no ha sido proveído'
+        });
+
+
+    const bearer = req.headers['authorization'].split(' ');
+    const token = bearer[1];
+
 
     if(!token)
         return res.status(406).send({
@@ -20,8 +31,10 @@ const verifyToken = (req, res, next) =>{
     });
 };
 
-const idAdmin = (req, res, next) => {
-    const token = req.headers['x-access-token'];
+const isAdmin = (req, res, next) => {
+    const bearer = req.headers['authorization'].split(' ');
+    const token = bearer[1];
+
     const decoded = jwt.verify(token, secret);
 
     Cuenta.findByPk(decoded.id).then( account => {
@@ -37,7 +50,9 @@ const idAdmin = (req, res, next) => {
 };
 
 const isSocio = (req, res, next) => {
-    const token = req.headers['x-access-token'];
+    const bearer = req.headers['authorization'].split(' ');
+    const token = bearer[1];
+
     const decoded = jwt.verify(token, secret);
 
     Cuenta.findByPk(decoded.id).then( account => {
@@ -53,7 +68,9 @@ const isSocio = (req, res, next) => {
 };
 
 const isJGE = (req, res, next) => {
-    const token = req.headers['x-access-token'];
+    const bearer = req.headers['authorization'].split(' ');
+    const token = bearer[1];
+
     const decoded = jwt.verify(token, secret);
 
     Cuenta.findByPk(decoded.id).then( account => {
@@ -75,6 +92,6 @@ const authJwt = {
     isJGE: isJGE
 };
 
-module.exports = authJwt;
+export { authJwt };
 
 

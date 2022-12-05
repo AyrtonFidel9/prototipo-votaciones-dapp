@@ -1,10 +1,10 @@
 import { Cuenta } from '../../models/index.js';
 import { secret } from '../../config/index.js';
-import { Sequelize, Op } from 'sequelize';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import { decryptPass } from './password.js';
+import actualizarCuenta from './actualizarCuenta.js';
 
-export default function iniciarSesion(usuario, password){
+export default function iniciarSesion(usuario, password, ip){
     return Cuenta.findOne({
         where: {
             usuario: usuario,
@@ -16,23 +16,25 @@ export default function iniciarSesion(usuario, password){
                 message: 'Cuenta no encontrada!!',
                 accessToken: null,
             };
-        const passIsValid = bcrypt.compareSync(password,user.password);
-        
+        const passIsValid = password === decryptPass(user.dataValues.password);
         if(!passIsValid)
             return {
                 status: 401,
                 message: 'Contraseña incorrecta',
                 accessToken: null,
             };
-
+        
+        user.dataValues.ipCliente = ip;
+        actualizarCuenta(user.dataValues, user.dataValues).then();
+        
         const token = jwt.sign(
             {id: user.id, rol: user.rol, usuario: user.usuario},
             secret,
             {expiresIn: 14400},
         );
         
-        const authorities = [];
-        authorities.push(user.rol);
+        /*const authorities = [];
+        authorities.push(user.rol);*/
 
         return {
             status: 200,

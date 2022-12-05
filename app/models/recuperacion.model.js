@@ -7,7 +7,7 @@ export const Recuperacion = sequelize.define('recuperacion', {
         primaryKey: true,
         autoIncrement: true,
     },
-    ipRecovry:{
+    ipRecovery:{
         type: DataTypes.STRING,
         allowNull: false,
         validate: {

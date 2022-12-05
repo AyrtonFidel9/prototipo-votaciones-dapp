@@ -9,6 +9,9 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.1
+schemes:
+  - http
+  - https
 servers:
   - url: http://localhost:8080/api/v1
 tags:
@@ -16,79 +19,123 @@ tags:
     description: Todo sobre las cuentas
   - name: usuarios
     description: Todo sobre los cuentas
-  - name: user
-    description: Operations about user
+  - name: socios
+    description: Operaciones para socios
+  - name: agencias
+    description: Operaciones para agencias
+  - name: notificacion
+    description: Operaciones para notificaciones
 paths:
-  /cuentas:
-    put:
-      tags:
-        - cuentas
-      summary: Actualizar una cuenta
-      description: Actualizar una cuenta existente por Id
-      operationId: updateCuenta
-      requestBody:
-        description: Actualizar una cuenta existente en la BD
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/cuentas'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/cuentas'
-        required: true
-      responses:
-        '200':
-          description: Operacion correctamnete
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/cuentas'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/cuentas'
-        '400':
-          description: ID no valido
-        '404':
-          description: Cuenta no encontrada
-        '405':
-          description: Error en la validacion
-    post:
-      tags:
-        - cuentas
-      summary: Agregar una nueva cuenta
-      description: Agregar una nueva cuenta
-      operationId: addCuenta
-      requestBody:
-        description: Crear una cuenta en la BD
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/cuentas'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/cuentas'
-        required: true
-      responses:
-        '200':
-          description: Operacion correcta
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/cuentas'
-        '405':
-          description: Datos invalidos
-  
-  /cuentas/{id}:
+  /notificacion/{id}:
     get:
+      security:
+        - BearerAuth: []
       tags:
-        - cuentas
-      summary: Buscar cuentas por ID
-      description: Retorna una cuenta
-      operationId: getCuentaById
+        - notificacion
+      summary: Buscar una notificacion por ID
+      description: Retorna la informacion de la notificacion
+      operationId: CU-16
       parameters:
         - name: id
           in: path
-          description: ID de la cuenta
+          description: ID de la notificacion
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe la notificacion
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - notificacion
+      summary: Buscar cuentas por ID del socio
+      description: Retorna una cuenta
+      operationId: CU-15
+      parameters:
+        - name: id
+          in: path
+          description: ID de la notificacion
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Campos para ingresar una notificacion
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe la notificacion
+  /notificacion/ingresar/{idSocio}:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - notificacion
+      summary: Ingresar una notificacion
+      description: Ingresa una noticiacion
+      operationId: CU-14
+      parameters:
+        - name: idSocio
+          in: path
+          description: ID del socio
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: 'Registrar una notificacion en formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe la notificacion
+  /cuentas/{idSocio}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - cuentas
+      summary: Buscar cuentas por ID del socio
+      description: Retorna una cuenta
+      operationId: CU-10
+      parameters:
+        - name: idSocio
+          in: path
+          description: ID del socio propietario de la cuenta
           required: true
           schema:
             type: integer
@@ -100,66 +147,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/cuentas'
-            application/xml:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe una cuenta para el socio
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - cuentas
+      summary: Actualizar la cuenta de un usuario
+      description: ''
+      operationId: CU-12
+      parameters:
+        - name: idSocio
+          in: path
+          description: ID del socio propietario de la cuenta
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cuentas'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
               schema:
                 $ref: '#/components/schemas/cuentas'
         '400':
           description: Invalid ID supplied
         '404':
-          description: Pet not found
-    post:
-      tags:
-        - cuentas
-      summary: Actualizar nombre de usuario de una cuenta
-      description: ''
-      operationId: updateCuentaWithForm
-      parameters:
-        - name: Id
-          in: path
-          description: Id de la cuenta a ser actualizada
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: nameUser
-          in: query
-          description: Nombre de usuario a ser actualizado
-          schema:
-            type: string
-      responses:
-        '405':
-          description: Invalid input
-          
-    delete:
-      tags:
-        - cuentas
-      summary: Borrar una cuenta
-      description: Borrar una cuenta
-      operationId: deleteCuenta
-      parameters:
-        - name: jwt
-          in: header
-          description: ''
-          required: false
-          schema:
-            type: string
-        - name: id
-          in: path
-          description: Pet id to delete
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '400':
-          description: Id no valido
+          description: No existe una cuenta para el socio
   /iniciar-sesion:
     post:
       tags:
         - usuarios
       summary: Iniciar sesion un usuario en el sistema
       description: ''
-      operationId: iniciarSesion
+      operationId: CU-11
       requestBody:
         description: Campos para iniciar sesión en la aplicación
         required: true
@@ -172,7 +202,7 @@ paths:
           description: inicio de sesión correcto, token generado
           headers:
             X-Rate-Limit:
-              description: calls per hour allowed by the user
+              description: calls per hour allowed by the cuenta
               schema:
                 type: integer
                 format: int32
@@ -210,17 +240,119 @@ paths:
                   message:
                     type: string
                     example: El Usuario proporcionado es incorrecto
-  /user/logout:
-    get:
+  /socios/registrar:
+    post:
+      security:
+        - BearerAuth: []
       tags:
-        - user
-      summary: Logs out current logged in user session
-      description: ''
-      operationId: logoutUser
-      parameters: []
+        - socios
+      summary: Registrar un socio de forma individual
+      description: 'Registrar un socio individualmente en la base de datos'
+      operationId: CU-05
+      requestBody:
+        description: 'Ingresar un socio'
+        content:
+          multipart/form-data:
+            description: 'Ingresar datos de un socio'
+            required: true
+            schema:
+              $ref: '#/components/schemas/Socios'
       responses:
-        default:
-          description: successful operation
+        '200':
+          description: Socio agregado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /socios/{idSocio}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Buscar un socio por id'
+      description: 'Endpoint para buscar una socio por id en la base de datos, tabla SOCIOS'
+      operationId: CU-07
+      parameters:
+        - in: path
+          name: idSocio
+          schema:
+            type: integer
+          required:
+          description: El ID del socio debe ser un valor numerico para poder ejecutar la búsqueda correctamente
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /socios/update/{idSocio}:
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Actualizar los campos de un socio'
+      description: 'Endpoint para actualizar los datos de un socio por el ID, tabla SOCIOS'
+      operationId: CU-06
+      parameters:
+        - in: path
+          name: idSocio
+          schema:
+            type: integer
+          required: true
+          description: El id debe ser un valor numerico, para  actualizar los datos correctamente
+      requestBody:
+        description: 'Aztualizar los datos de un socio'
+        content:
+          multipart/form-data:
+            description: 'Ingresar datos de un socio'
+            required: true
+            schema:
+              $ref: '#/components/schemas/Socios'
+      responses:
+        '200':
+          description: Socio actualizado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /socios/delete/{idSocio}:
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Eliminar un socio por ID'
+      description: 'Endpoint para eliminar un socio de la tabla SOCIOS'
+      operationId: CU-08
+      parameters: 
+        - in: path
+          name: idSocio
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico para eliminar de forma satisfactoria los datos del socio
+      responses:
+        '200':
+          description: Datos eliminados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
   /user/{username}:
     get:
       tags:
@@ -295,6 +427,117 @@ paths:
           description: Invalid username supplied
         '404':
           description: User not found
+  /agencia/registrar:
+    post:
+      security:
+        - BearerAuth: [] 
+      tags:
+        - agencias
+      summary: 'Ingresar una agencia'
+      description: 'Endpoint para ingresar una agencia en el sistema'
+      operationId: CU-01
+      requestBody:
+        description: 'Registrar una agencia formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Agencia' 
+      responses:
+        '200':
+          description: Agencia agregada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /agencia/{agenciaId}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - agencias
+      summary: 'Buscar una agencia por id'
+      description: 'Endpoint para buscar una agencia por id en la base de datos, tabla AGENCIA'
+      operationId: CU-02
+      parameters:
+        - in: path
+          name: agenciaId
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /agencia/delete/{agenciaId}:
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - agencias
+      summary: 'Eliminar una agencia por id'
+      description: 'Endpoint para eliminar una agencia por id en la base de datos, tabla AGENCIA'
+      operationId: CU-03
+      parameters:
+        - in: path
+          name: agenciaId
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos eliminados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /agencia/update/{agenciaId}:
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - agencias
+      summary: 'Actualizar una agencia por ID'
+      description: 'Endpoint para actualizar una agencia por id en la base de datos, tabla AGENCIA'
+      operationId: CU-04
+      parameters:
+        - in: path
+          name: agenciaId
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      requestBody:
+        description: 'Actualizar una agencia formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Agencia' 
+      responses:
+        '200':
+          description: Agencia actualizada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
 components:
   schemas:
     InicioSesion:
@@ -315,26 +558,25 @@ components:
           type: integer
           format: int64
           example: 10
-        nombres:
+        usuario:
           type: string
-          description: Nombres del propietario de una cuenta
-          example: Fidel Ayrton
-        apellidos:
+          description: Nombre de usuario del propietario de una cuenta
+          example: AyrtonFidel1290
+        password:
           type: string
-          description: Apellidos del propietario de una cuenta
-          example: Avalos Cuadrado
-        createAt:
+          description: Contraseña del propietario de una cuenta
+          example: 123123
+        rol:
+          type: string
+          example: 'ROLE_SOCIO'
+        ipCliente:
+          type: string
+          description: DIRECCION IP DEL CLIENTE
+          example: '172.12.54.1'
+        ultimoAcceso:
           type: string
           format: date-time
-        status:
-          type: string
-          description: Estado de la cuenta
-          example: habilitado
-          enum:
-            - habilitado
-            - inavilitado
-        complete:
-          type: boolean
+          example: '2022-06-01 15:30:02'
     Address:
       type: object
       properties:
@@ -380,6 +622,74 @@ components:
           description: User Status
           format: int32
           example: 1
+    Agencia:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: San Andrés
+        ubicacion:
+          type: string
+          example: Cesar Naveda y Chiriboga
+        representantes: 
+          type: integer
+          example: 10
+        ganadores: 
+          type: integer
+          example: 5
+    Notificacion:
+      type: object
+      properties:
+        fecha:
+          type: string
+          format: date
+          example: '2022-12-01'
+        hora:
+          type: string
+          format: time
+          example: '15:30'
+        msg: 
+          type: integer
+          example: 'Cambiar la contraseña'
+        estado: 
+          type: boolean
+          example: false
+        grado: 
+          type: string
+          example: 1
+        idCliente:
+          type: integer
+          example: 1
+    Socios:
+      type: object
+      properties:
+        nombres:
+          type: string
+          example: Jose Luis
+        apellidos:
+          type: string
+          example: Almeida Ramirez
+        cedula:
+          type: string,
+          example: '0606252138'
+        codigo:
+          type: integer
+          example: 1091
+        imagen:
+          type: string
+          format: binary
+        estado:
+          type: boolean
+          example: true
+        email:
+          type: string
+          example: joselui@mail.com
+        celular:
+          type: string
+          example: '0981509821'
+        idAgencia:
+          type: integer
+          example: 1
     Error:
       type: object
       properties:
@@ -398,3 +708,19 @@ components:
         message:
           type: string
           example: Su rol le impide realizar la presente operación
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  security: [
+    {
+      "Bearer": []
+    },
+    {
+      "BasicAuth": []
+    }
+  ]

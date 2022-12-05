@@ -1,7 +1,7 @@
-import { Cuenta } from "../models";
-import { Socios } from "../models";
+import { Cuenta } from "../models/index.js";
+import { Socios } from "../models/index.js";
 
-checkDuplicateUsernameOrEmail = (req, res, next) => {
+const checkDuplicateUsernameOrEmail = (req, res, next) => {
     // Username
     Cuenta.findOne({
         where: {
@@ -16,7 +16,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
         }
 
         // Email
-        Socio.findOne({
+        Socios.findOne({
             where: {
                 email: req.body.email
             }
@@ -33,7 +33,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
     });
 };
 
-checkRolesExisted = (req, res, next) => {
+const checkRolesExisted = (req, res, next) => {
     if (req.body.roles) {
         for (let i = 0; i < req.body.roles.length; i++) {
             if (!Cuenta.rol.includes(req.body.roles[i])) {
@@ -53,4 +53,4 @@ const verifySignUp = {
     checkRolesExisted: checkRolesExisted
 };
 
-module.exports = verifySignUp;
+export { verifySignUp };

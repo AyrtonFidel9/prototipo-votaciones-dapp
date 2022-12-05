@@ -20,22 +20,47 @@ export const Cuenta = sequelize.define('cuenta',{
     },
     usuario: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese los nombres'
+            }
+        },
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese los nombres'
+            }
+        },
     },
     ipCliente:{
         type: DataTypes.STRING,
-        validate: {
-            isIP: true
-        },
         allowNull: false,
+        validate: {
+            isIP: {
+                msg: 'Los datos no corresponden a una IP'
+            },
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese los nombres'
+            }
+        },
     },
     ultimoAcceso:{
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW
     }
 });
 

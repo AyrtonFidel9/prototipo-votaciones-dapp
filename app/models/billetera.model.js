@@ -13,14 +13,8 @@ export const Billetera = sequelize.define('billetera',{
 });
 
 
-Listas.hasOne(Billetera, {
-    foreignKey: 'address',
-    sourceKey: 'id'
-})
+Listas.hasOne(Billetera);
 
-Billetera.belongsTo(Listas, {
-    foreignKey: 'address',
-    targetKey: 'address'
-})
+Billetera.belongsTo(Listas);
 
 

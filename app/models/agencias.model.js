@@ -71,7 +71,9 @@ export const Agencias = sequelize.define('agencias',{
 
 Agencias.hasMany( Socios, {
     foreignKey: 'idAgencia',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'  
 });
 
 Socios.belongsTo( Agencias, {
@@ -81,7 +83,9 @@ Socios.belongsTo( Agencias, {
 
 Agencias.hasMany( Elecciones, {
     foreignKey: 'idAgencia',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'  
 });
 
 Elecciones.belongsTo( Agencias, {

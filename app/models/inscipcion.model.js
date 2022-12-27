@@ -27,7 +27,9 @@ export const Inscripciones = sequelize.define('inscrpciones',{
 
 Inscripciones.hasOne(Listas, {
     foreignKey: 'idInscripcion',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'  
 })
 
 Listas.belongsTo(Inscripciones, {

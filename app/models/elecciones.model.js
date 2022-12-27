@@ -21,7 +21,9 @@ export const Elecciones = sequelize.define('elecciones',{
 
 Elecciones.hasMany(Listas, {
     foreignKey: 'idElecciones',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'  
 });
 
 Listas.belongsTo(Elecciones, {

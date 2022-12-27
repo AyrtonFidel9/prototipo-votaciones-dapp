@@ -66,7 +66,9 @@ export const Cuenta = sequelize.define('cuenta',{
 
 Cuenta.hasMany(Notificaciones, {
     foreignKey: 'idCuenta',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'  
 });
 
 Notificaciones.belongsTo(Cuenta, {
@@ -76,7 +78,9 @@ Notificaciones.belongsTo(Cuenta, {
 
 Cuenta.hasMany(Recuperacion, {
     foreignKey: 'idCuenta',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'  
 });
 
 Recuperacion.belongsTo(Cuenta, {

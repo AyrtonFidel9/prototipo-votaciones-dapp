@@ -113,7 +113,9 @@ export const Socios = sequelize.define('socios',{
 
 Socios.hasOne(Cuenta, {
     foreignKey: 'idSocio',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'  
 });
 
 Cuenta.belongsTo(Socios, {
@@ -123,7 +125,9 @@ Cuenta.belongsTo(Socios, {
 
 Socios.hasOne(Inscripciones, {
     foreignKey: 'idSocio',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'  
 })
 
 Inscripciones.belongsTo(Socios, {

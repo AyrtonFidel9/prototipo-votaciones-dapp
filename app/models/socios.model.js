@@ -112,7 +112,11 @@ export const Socios = sequelize.define('socios',{
 });
 
 Socios.hasOne(Cuenta, {
-    foreignKey: 'idSocio',
+    foreignKey: {
+        name: 'idSocio',
+        allowNull: false,
+        unique: true
+    },
     sourceKey: 'id',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
@@ -123,14 +127,18 @@ Cuenta.belongsTo(Socios, {
     targetKey: 'id'
 });
 
-Socios.hasOne(Inscripciones, {
-    foreignKey: 'idSocio',
+Socios.hasMany(Inscripciones, {
+    foreignKey: {
+        name: 'idSocio',
+        allowNull: false,
+    },
     sourceKey: 'id',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
+    hooks: true
 })
 
 Inscripciones.belongsTo(Socios, {
     foreignKey: 'idSocio',
-    targetKey: 'id'
+    targetKey: 'id',
 })

@@ -15,7 +15,6 @@ routerCuenta.use((res, req, next) => {
 // comprobar que el socio este habilitado
 routerCuenta.route('/iniciar-sesion')
     .post([validateEstado],function (req, res) {
-        console.log("AUTENTICAAAAAAAAAAAAAAAAAAAAR");
         AuthController.iniciarSesion(req, res);
     });
 
@@ -29,8 +28,7 @@ routerCuenta.route('/cuentas/:idSocio')
 
 routerCuenta.route('/cuentas/findById/:id')
     .get([
-        authJwt.verifyToken,
-        authJwt.isAdmin
+        authJwt.verifyToken
     ],(req, res)=>{
         AuthController.buscarCuentaById(req, res);       
     });

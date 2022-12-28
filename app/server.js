@@ -2,7 +2,7 @@ import app from './app.js';
 import { sequelize } from './database.js';
 import { PORT } from './config/index.js';
 import './models/index.js';
-import { Agencias, Cuenta, Socios } from './models/index.js';
+import { Agencias, Cuenta, Inscripciones, Socios } from './models/index.js';
 import CryptoJS from "crypto-js";
 
 async function main() {
@@ -54,6 +54,16 @@ async function main() {
             idAgencia: agencia2.id,
         });
 
+        const socio3 = await Socios.create({
+            nombres: 'Maria Jose',
+            apellidos: 'Perez Solorzano',
+            codigo: 1237,
+            estado: true,
+            email: 'mariajose@mail.com',
+            celular: '0981588752',
+            cedula: '0104292461',
+            idAgencia: agencia2.id,
+        });
         
 
         const pass = CryptoJS.AES.encrypt(
@@ -83,10 +93,31 @@ async function main() {
             ipCliente: '172.45.10.1',
             ultimoAcceso: date
         });
-        
-        
-        console.log(cuenta.password);
 
+        const cuenta3 = await Cuenta.create({ 
+            usuario: "JGE92",
+            password: pass, 
+            rol: "ROLE_JGE",
+            ultimoAcceso: '2022-12-10',
+            ipCliente: '192.192.10.12',
+            idSocio: socio3.id,
+            ipCliente: '172.45.10.1',
+            ultimoAcceso: date
+        });
+
+        const inscripcion = await Inscripciones.create({
+            formulario: '',
+            declaracion: '',
+            idSocio: cuenta2.id,
+        });
+
+        const inscripcion2 = await Inscripciones.create({
+            formulario: '',
+            declaracion: '',
+            idSocio: cuenta2.id,
+        })
+        
+        
     } catch (error) {
         console.error ("Unable to connect to the database:", error);
     }

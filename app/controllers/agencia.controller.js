@@ -102,6 +102,8 @@ const actualizarAgenciaController = (req, res) => {
 
     const { agenciaId } = req.params;
 
+    console.log(req.body);
+
     function search(id) {
         return new Promise((res, rej) => {
             const buscar = buscarAgencia(id);

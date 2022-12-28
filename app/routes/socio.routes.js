@@ -36,7 +36,6 @@ routerSocios.route('/registrar')
 routerSocios.route('/:idSocio')
     .get([
         authJwt.verifyToken,
-        authJwt.isAdmin,
     ], (req, res) => {
         SociosController.buscarSocio(req, res);
     });
@@ -51,7 +50,6 @@ routerSocios.route('/')
 routerSocios.route('/update/:idSocio')
     .put([
         authJwt.verifyToken,
-        authJwt.isAdmin,
         validateCedula
     ], (req, res) => {
         SociosController.actualizarSocio(req, res);

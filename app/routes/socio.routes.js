@@ -40,6 +40,13 @@ routerSocios.route('/:idSocio')
     ], (req, res) => {
         SociosController.buscarSocio(req, res);
     });
+routerSocios.route('/')
+    .get([
+        authJwt.verifyToken,
+        authJwt.isAdmin,
+    ], (req, res) => {
+        SociosController.buscarAllSocios(req, res);
+    });
 
 routerSocios.route('/update/:idSocio')
     .put([
@@ -57,5 +64,12 @@ routerSocios.route('/delete/:idSocio')
     ], (req, res) => {
         SociosController.eliminarSocio(req, res);
     });
+
+routerSocios.route('/existbyPhone/:number')
+    .get((req, res)=>{
+        SociosController.existSocioByPhone(req, res);
+    });
+
+
 
 export default routerSocios;

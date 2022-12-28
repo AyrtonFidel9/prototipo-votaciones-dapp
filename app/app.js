@@ -6,6 +6,10 @@ import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
 import YAML from 'js-yaml';
 import { uploadFile } from './middleware/index.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 const swaggerDocument  = YAML.load(
     await readFile(new URL('../swagger.yaml', import.meta.url)));
@@ -13,10 +17,12 @@ const swaggerDocument  = YAML.load(
 const app = express();
 
 const corsOptions = {
-    origin: "http://localhost:8081"
+    origin: "http://localhost:3000"
 };
 
+
 app.use(cors(corsOptions));
+app.use('/images',express.static(path.join(__dirname, '/public/images/')));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(

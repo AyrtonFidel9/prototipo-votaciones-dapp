@@ -16,14 +16,17 @@ export default async function actualizarSocio (
         celular,
         idAgencia
     }){
+
     
     if(oldImage !== ('/app/public/images/'+imagen)){
         imagen = path.join('/app/public/images/',imagen);
-        oldImage == null || oldImage == '' || fs.unlinkSync(oldImage);        
+        oldImage == null || oldImage == '' || fs.unlinkSync('.'+oldImage);        
+    }else{
+        imagen = oldImage;
     }
     
     try{
-        await Socios.update({
+        const socio = await Socios.update({
             nombres: nombres,
             apellidos: apellidos,
             cedula: cedula,
@@ -35,10 +38,11 @@ export default async function actualizarSocio (
             idAgencia: idAgencia,
         },{
             where: {id: id}
-        })
+        });
+
         return {
             status: 200,
-            message: 'Datos del socio actualizados correctamente'
+            message: "Datos actualizados con exito",
         }
     }catch(err){
         throw ({

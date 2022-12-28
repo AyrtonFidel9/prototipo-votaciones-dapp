@@ -2,19 +2,21 @@ import {
     ingresarAgencia,
     buscarAgencia,
     eliminarAgencia,
-    actualizarAgencia
+    actualizarAgencia,
+    buscarAllAgencia
 } from "../use-cases/agencias/index.js";
 
-const ingresarAgenciaController = async (req, res) => {
+const ingresarAgenciaController = (req, res) => {
     const {
         nombre,
         ubicacion,
-        representantes,
-        ganadores
+        numRepresentantes,
+        numGanadores
     } = req.body;
 
+
     const addedAgencia = ingresarAgencia(
-        nombre, ubicacion, representantes, ganadores
+        nombre, ubicacion, numRepresentantes, numGanadores
     );
 
     addedAgencia.then(resp => {
@@ -136,9 +138,26 @@ const actualizarAgenciaController = (req, res) => {
         });
 }
 
+function buscarAllAgenciasController (req, res) {
+
+    const buscar = buscarAllAgencia();
+
+    buscar.then(agencia=>{
+        if(agencia.status === 200)
+            res.status(agencia.status).send({
+                message: agencia.message
+            });
+    }).catch(err=>{
+        res.status(err.status).send({
+            message: err.message
+        });
+    });    
+}
+
 export default Object.freeze({
     ingresarAgencia: ingresarAgenciaController,
     buscarAgencia: buscarAgenciaController,
     eliminarAgencia: eliminarAgenciaController,
     actualizarAgencia: actualizarAgenciaController,
+    buscarAllAgencias: buscarAllAgenciasController,
 });

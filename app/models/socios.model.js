@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
 import { Cuenta } from './cuenta.model.js';
-import { Inscripciones } from './inscipcion.model.js';
+import { Inscripciones } from './inscripcion.model.js';
 
 export const Socios = sequelize.define('socios',{
     id: {
@@ -113,7 +113,9 @@ export const Socios = sequelize.define('socios',{
 
 Socios.hasOne(Cuenta, {
     foreignKey: 'idSocio',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
 });
 
 Cuenta.belongsTo(Socios, {
@@ -123,7 +125,9 @@ Cuenta.belongsTo(Socios, {
 
 Socios.hasOne(Inscripciones, {
     foreignKey: 'idSocio',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
 })
 
 Inscripciones.belongsTo(Socios, {

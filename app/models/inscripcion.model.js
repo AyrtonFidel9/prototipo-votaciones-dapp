@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
 import { Listas } from './listas.model.js';
 
-export const Inscripciones = sequelize.define('inscrpciones',{
+export const Inscripciones = sequelize.define('inscripciones',{
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -27,7 +27,9 @@ export const Inscripciones = sequelize.define('inscrpciones',{
 
 Inscripciones.hasOne(Listas, {
     foreignKey: 'idInscripcion',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
 })
 
 Listas.belongsTo(Inscripciones, {

@@ -12,8 +12,8 @@ export default async function actualizarCuenta(
 
     try{
         const cuenta = await Cuenta.update({
-            rol: rol,
-            usuario: usuario,
+            rol: rol != oldCuenta.rol ? rol : oldCuenta.rol,
+            usuario: usuario != oldCuenta.usuario ? usuario : oldCuenta.usuario,
             password: pass,
             ipCliente: ipCliente,
             ultimoAcceso: new Date(),

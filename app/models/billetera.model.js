@@ -15,14 +15,18 @@ export const Billetera = sequelize.define('billetera',{
 
 
 Listas.hasOne(Billetera, {
-    foreignKey: 'billetera'
+    foreignKey: 'billetera',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
 });
 
 Billetera.belongsTo(Listas);
 
 
 Socios.hasOne(Billetera, {
-    foreignKey: 'billetera'
+    foreignKey: 'billetera',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
 });
 
 Billetera.belongsTo(Socios);

@@ -1,14 +1,13 @@
 import { Cuenta } from "../../models/index.js";
 import { decryptPass } from "./password.js";
 
-export default async function buscarCuenta(id){
-    const cuenta = await Cuenta.findOne({
-        where: {idSocio: id},
-    });
+export default async function buscarCuentaById(id){
+    const cuenta = await Cuenta.findByPk(id);
+    
     if(cuenta === null){
         return {
             status: 404,
-            message: `No existe una cuenta para el socio con el id: ${id}`,
+            message: `No existe una cuenta para el id: ${id}`,
         }
     }
     else{

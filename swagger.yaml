@@ -25,6 +25,8 @@ tags:
     description: Operaciones para agencias
   - name: notificacion
     description: Operaciones para notificaciones
+  - name: recuperacion
+    description: Operaciones para procesos de recuperacion de contraseña
 paths:
   /notificacion/{id}:
     get:
@@ -123,6 +125,34 @@ paths:
           description: Invalid ID supplied
         '404':
           description: No existe la notificacion
+  /cuentas/findById/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - cuentas
+      summary: Buscar cuentas por ID de cuenta
+      description: Retorna una cuenta
+      operationId: CU-ND-005¿6
+      parameters:
+        - name: id
+          in: path
+          description: ID de la cuenta
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cuentas'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe una cuenta para el socio
   /cuentas/{idSocio}:
     get:
       security:
@@ -172,6 +202,41 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/cuentas'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cuentas'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe una cuenta para el socio
+  /cuentas/reboot/{idSocio}:
+    put:
+      tags:
+        - cuentas
+      summary: Actualizar contraseña de un usuario
+      description: ''
+      operationId: CU-ND-004
+      parameters:
+        - name: idSocio
+          in: path
+          description: ID del socio propietario de la cuenta
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                newPassoword:
+                  type: string
+                  description: Contraseña del propietario de una cuenta
+                  example: 123123
       responses:
         '200':
           description: successful operation
@@ -240,6 +305,30 @@ paths:
                   message:
                     type: string
                     example: El Usuario proporcionado es incorrecto
+  /socios:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Traer todos los socios'
+      description: 'Endpoint para traer todos los socios de la base de datos, tabla SOCIOS'
+      operationId: CU-ND-005
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
   /socios/registrar:
     post:
       security:
@@ -278,6 +367,35 @@ paths:
             type: integer
           required:
           description: El ID del socio debe ser un valor numerico para poder ejecutar la búsqueda correctamente
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /socios/existbyPhone/{number}:
+    get:
+      tags:
+        - socios
+      summary: 'Verificar la existencia del socio por su numero celular'
+      description: 'Endpoint para verificar la existencia del socio, tabla SOCIOS'
+      operationId: CU-ND-001
+      parameters:
+        - in: path
+          name: number
+          schema:
+            type: string
+          required:
+          description: El numero del socio debe ser un valor numerico para poder ejecutar la búsqueda correctamente
       responses:
         '200':
           description: Datos encontrados correctamente
@@ -448,6 +566,30 @@ paths:
           description: Agencia agregada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /agencia:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - agencias
+      summary: 'Buscar todas las agencias'
+      description: 'Endpoint para buscar todas las agencias de la base de datos, tabla AGENCIA'
+      operationId: CU-ND-006
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
   /agencia/{agenciaId}:
     get:
       security:
@@ -538,6 +680,64 @@ paths:
           description: Agencia actualizada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /recuperacion/ingresar/{number}:
+    post:
+      tags:
+        - recuperacion
+      summary: 'Caso de uso para generar un codigo de recuperacion para el socio'
+      description: 'Endpoint para generar y guardar el codigo de recuperacion en la tabla Recuperacion'
+      operationId: CU-ND-002
+      parameters:
+        - in: path
+          name: number
+          schema:
+            type: string
+          required:
+          description: El numero del socio debe ser un valor numerico para poder ejecutar la recuperacion correctamente
+      responses:
+        '200':
+          description: Codigo de recuperacion generado correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /recuperacion/actualizarEstado/{codigo}:
+    put:
+      tags:
+        - recuperacion
+      summary: 'Caso de uso para actualizar el estado del codigo de recuperacion para el socio'
+      description: 'Endpoint para Caso de uso para actualizar el estado del codigo de recuperacion en la tabla Recuperacion'
+      operationId: CU-ND-003
+      parameters:
+        - in: path
+          name: codigo
+          schema:
+            type: string
+          required:
+          description: El codigo debe ser una cadena
+      responses:
+        '200':
+          description: Actualizacion satisfactoria
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
 components:
   schemas:
     InicioSesion:

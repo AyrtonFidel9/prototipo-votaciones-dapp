@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
-import { Listas } from './listas.model.js';
+import { Representantes } from './representantes.model.js';
 
 export const Inscripciones = sequelize.define('inscripciones',{
     id: {
@@ -25,14 +25,14 @@ export const Inscripciones = sequelize.define('inscripciones',{
     }
 })
 
-Inscripciones.hasOne(Listas, {
+Inscripciones.hasOne(Representantes, {
     foreignKey: 'idInscripcion',
     sourceKey: 'id',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
 })
 
-Listas.belongsTo(Inscripciones, {
+Representantes.belongsTo(Inscripciones, {
     foreignKey: 'idInscripcion',
     targetKey: 'id'
 })

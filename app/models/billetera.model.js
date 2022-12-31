@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
-import { Listas } from './listas.model.js';
+import { Representantes } from './representantes.model.js';
 import { Socios } from './socios.model.js';
 
 export const Billetera = sequelize.define('billetera',{
@@ -14,13 +14,13 @@ export const Billetera = sequelize.define('billetera',{
 });
 
 
-Listas.hasOne(Billetera, {
+Representantes.hasOne(Billetera, {
     foreignKey: 'billetera',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
 });
 
-Billetera.belongsTo(Listas);
+Billetera.belongsTo(Representantes);
 
 
 Socios.hasOne(Billetera, {

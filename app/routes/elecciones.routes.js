@@ -1,5 +1,5 @@
 import express from 'express';
-import { AuthController } from '../controllers/index.js';
+import { EleccionesController } from '../controllers/index.js';
 import { authJwt } from '../middleware/index.js';
 
 const routerElecciones = express.Router();
@@ -12,26 +12,44 @@ routerElecciones.use((res, req, next) => {
     next();
 });
 
-// comprobar que el socio este habilitado
-routerElecciones.route('/iniciar-sesion')
-    .post(function (req, res) {
-        AuthController.iniciarSesion(req, res);
+routerElecciones.route('/registrar')
+    .post([
+        authJwt.verifyToken, 
+        authJwt.isJGE
+    ],function (req, res) {
+        EleccionesController.ingresarElecciones(req, res);
     });
 
-routerElecciones.route('/elecciones/:id')
+routerElecciones.route('/:idEleccion')
     .get([
         authJwt.verifyToken,
-        authJwt.isAdmin
+        authJwt.isJGE
     ],(req, res)=>{
-        AuthController.buscarCuenta(req, res);
+        EleccionesController.getEleccion(req, res);
     });
 
-routerElecciones.route('/elecciones/:id')
+routerElecciones.route('/')
+    .get([
+        authJwt.verifyToken,
+        authJwt.isJGE
+    ],(req, res)=>{
+        EleccionesController.getAllElecciones(req, res);
+    });
+
+routerElecciones.route('/delete/:idEleccion')
+    .delete([
+        authJwt.verifyToken,
+        authJwt.isJGE
+    ], (req, res)=>{
+        EleccionesController.deleteEleccion(req, res);
+    });
+
+routerElecciones.route('/update/:idEleccion')
     .put([
         authJwt.verifyToken,
-        authJwt.isAdmin
+        authJwt.isJGE
     ], (req, res)=>{
-        AuthController.actualizarCuenta(req, res);
+        EleccionesController.updateEleccion(req, res);
     });
 
 export default routerElecciones;

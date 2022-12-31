@@ -42,7 +42,7 @@ routerSocios.route('/:idSocio')
 routerSocios.route('/')
     .get([
         authJwt.verifyToken,
-        authJwt.isAdmin,
+        authJwt.isAdminOrJGE,
     ], (req, res) => {
         SociosController.buscarAllSocios(req, res);
     });
@@ -66,6 +66,14 @@ routerSocios.route('/delete/:idSocio')
 routerSocios.route('/existbyPhone/:number')
     .get((req, res)=>{
         SociosController.existSocioByPhone(req, res);
+    });
+
+routerSocios.route('/innerjoin/cuentas')
+    .get([
+        authJwt.verifyToken,
+        authJwt.isJGE,
+    ],(req, res)=>{
+        SociosController.buscarSocioCuenta(req, res);
     });
 
 

@@ -2,7 +2,7 @@ import app from './app.js';
 import { sequelize } from './database.js';
 import { PORT } from './config/index.js';
 import './models/index.js';
-import { Agencias, Cuenta, Inscripciones, Socios } from './models/index.js';
+import { Agencias, Cuenta, Elecciones, Inscripciones, Socios, Representantes } from './models/index.js';
 import CryptoJS from "crypto-js";
 
 async function main() {
@@ -64,6 +64,28 @@ async function main() {
             cedula: '0104292461',
             idAgencia: agencia2.id,
         });
+
+        const socio4 = await Socios.create({
+            nombres: 'Luis Hernesto',
+            apellidos: 'Alvarez Villa',
+            codigo: 1233,
+            estado: true,
+            email: 'mariajose@mail.com',
+            celular: '0981588752',
+            cedula: '0104292461',
+            idAgencia: agencia2.id,
+        });
+
+        const socio5 = await Socios.create({
+            nombres: 'Sonia Maria',
+            apellidos: 'Guaman Diaz',
+            codigo: 1232,
+            estado: true,
+            email: 'mariajose@mail.com',
+            celular: '0981588752',
+            cedula: '0104292461',
+            idAgencia: agencia2.id,
+        });
         
 
         const pass = CryptoJS.AES.encrypt(
@@ -105,19 +127,72 @@ async function main() {
             ultimoAcceso: date
         });
 
+
+        const cuenta4 = await Cuenta.create({ 
+            usuario: "LuisAlvarez92",
+            password: pass, 
+            rol: "ROLE_SOCIO",
+            ultimoAcceso: '2022-12-10',
+            ipCliente: '192.192.10.12',
+            idSocio: socio4.id,
+            ipCliente: '172.45.10.1',
+            ultimoAcceso: date
+        });
+
+        const cuenta5 = await Cuenta.create({ 
+            usuario: "Sonia92",
+            password: pass, 
+            rol: "ROLE_SOCIO",
+            ultimoAcceso: '2022-12-10',
+            ipCliente: '192.192.10.12',
+            idSocio: socio5.id,
+            ipCliente: '172.45.10.1',
+            ultimoAcceso: date
+        });
+
         const inscripcion = await Inscripciones.create({
             formulario: '',
             declaracion: '',
-            idSocio: cuenta2.id,
+            idSocio: socio4.id,
         });
 
         const inscripcion2 = await Inscripciones.create({
             formulario: '',
             declaracion: '',
-            idSocio: cuenta2.id,
+            idSocio: socio4.id,
         })
+
+        const eleccion = await Elecciones.create({
+            nombre: 'Elecciones 1',
+            duracion: 8,
+            idAgencia: agencia.id,
+        });
+
+        const eleccion2 = await Elecciones.create({
+            nombre: 'Elecciones 2',
+            duracion: 8,
+            idAgencia: agencia2.id,
+        });
         
         
+        const representante = await Representantes.create({
+            "principal": 1232,
+            "psuplente": 1231,
+            "ssuplente": 1233,
+            "ethCantVot": 20,
+            "idInscripcion": inscripcion.id,
+            "idElecciones": eleccion.id,
+            
+        });
+
+        const representante2 = await Representantes.create({
+            "principal": 1231,
+            "psuplente": 1233,
+            "ssuplente": 1232,
+            "ethCantVot": 20,
+            "idInscripcion": inscripcion2.id,
+            "idElecciones": eleccion2.id,
+        });
     } catch (error) {
         console.error ("Unable to connect to the database:", error);
     }

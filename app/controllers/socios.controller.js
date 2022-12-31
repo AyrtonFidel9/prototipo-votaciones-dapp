@@ -6,7 +6,8 @@ import {
     actualizarSocio,
     eliminarSocio,
     buscarSocioByPhone,
-    buscarAllSocios
+    buscarAllSocios,
+    buscarSocioCuenta,
 } from "../use-cases/socios/index.js";
 import fs from 'fs';
 
@@ -82,7 +83,6 @@ const actualizarSocioController = (req, res) => {
         })
     })
     .catch(err=>{
-        console.log(err);
         return res.status(err.status).send({
             message: err.message
         })
@@ -183,6 +183,23 @@ function buscarAllSociosController (req, res) {
     });    
 }
 
+function buscarSocioCuentaController (req, res) {
+
+    const buscar = buscarSocioCuenta();
+
+    buscar.then(socios=>{
+        if(socios.status === 200)
+            res.status(socios.status).send({
+                message: socios.message
+            });
+    }).catch(err=>{
+        console.log(err);
+        // res.status(err.status).send({
+        //     message: err.message
+        // });
+    });    
+}
+
 export default Object.freeze({
     ingresarSocio: ingresarSocioController,
     buscarSocio: buscarSocioController,
@@ -190,4 +207,5 @@ export default Object.freeze({
     eliminarSocio: eliminarSocioController,
     existSocioByPhone: existSocioByPhoneController,
     buscarAllSocios: buscarAllSociosController,
+    buscarSocioCuenta: buscarSocioCuentaController,
 });

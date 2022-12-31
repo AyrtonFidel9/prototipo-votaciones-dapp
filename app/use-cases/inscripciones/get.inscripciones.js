@@ -1,5 +1,5 @@
-import * as db from '../../models/index.js'
-import { Elecciones } from db.Elecciones
+import { Inscripciones } from '../../models/index.js';
+
 
 export const findAll = (req, res) => {
     Elecciones.findAll()

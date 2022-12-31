@@ -5,10 +5,7 @@ export default async function buscarAgencia( id ){
         const agencia = await Agencias.findByPk(id);
         
         if(agencia === null){
-            throw({
-                status: 404,
-                message: `No existe una agencia con el id: ${id}`,
-            });
+            throw(`No existe una agencia con el id: ${id}`);
         }else{
             return {
                 status: 200,

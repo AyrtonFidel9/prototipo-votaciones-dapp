@@ -4,3 +4,5 @@ export { default as SociosController } from './socios.controller.js';
 export { default as NotificacionController } from './notificaciones.controller.js';
 export { default as MessagesController } from './messages.controller.js';
 export { default as RecuperacionController } from './recuperacion.controller.js';
+export { default as EleccionesController } from './elecciones.controller.js';
+export { default as RepresentantesController } from './representantes.controller.js';

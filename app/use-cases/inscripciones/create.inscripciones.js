@@ -1,5 +1,4 @@
-import * as db from '../../models/index.js';
-import { Inscripciones } from db.Inscripciones
+import { Inscripciones } from '../../models/index.js';
 
 export const create = (req, res) => {
     // Validate request

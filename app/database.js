@@ -5,7 +5,8 @@ export const sequelize = new Sequelize(
     'postgres', // usuario
     'postgres', // contraseña
     {
-        host: '172.23.115.177', //ip del servidor
+        host: '172.31.8.203', //ip del servidor
         dialect: 'postgres', //nombre del gestor de base de datos - SQL
     },
 );
+

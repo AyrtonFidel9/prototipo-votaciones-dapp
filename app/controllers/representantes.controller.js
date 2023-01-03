@@ -4,7 +4,9 @@ import {
    createRepresentante,
    deleteRepresentanteById,
    updateRepresentante,
-   eleccionfindOne
+   eleccionfindOne,
+   generarBilletera,
+   ingresarBilletera
 } from "../use-cases/index.js";
 
 /**
@@ -35,6 +37,9 @@ function ingresarRepresentantesController(req, res) {
    searchEleccion(req.body.idElecciones)
    .then(eleccion => eleccion.message.id)
    .then(idEleccion => {
+      const wallet = generarBilletera();
+      ingresarBilletera(wallet);
+      req.body.billeteraAddress = wallet.address;
       req.body.idEleccion = idEleccion;
       return ingresarRepresentante(req.body);
    })

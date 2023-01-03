@@ -7,7 +7,8 @@ const createRepresentante = async ({
    ssuplente,
    idInscripcion,
    idElecciones,
-   ethCantVot
+   ethCantVot,
+   billeteraAddress,
 }) => {
    try {
       const representante = await Representantes.create({
@@ -16,8 +17,9 @@ const createRepresentante = async ({
          ssuplente,
          idInscripcion,
          idElecciones,
-         ethCantVot
-      })
+         ethCantVot,
+         billeteraAddress,
+      });
 
       return {
          message: 'Representantes ingresados correctamente',

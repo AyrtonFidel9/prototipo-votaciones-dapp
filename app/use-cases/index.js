@@ -6,3 +6,4 @@ export * from './notificaciones/index.js';
 export * from './recovery/index.js';
 export * from './representantes/index.js';
 export * from './socios/index.js';
+export * from './billetera/index.js';

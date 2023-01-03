@@ -10,6 +10,7 @@ import {
     buscarSocioCuenta,
 } from "../use-cases/socios/index.js";
 import fs from 'fs';
+import { generarBilletera, ingresarBilletera } from "../use-cases/index.js";
 
 
 const ingresarSocioController = (req, res) => {
@@ -33,7 +34,10 @@ const ingresarSocioController = (req, res) => {
         return agencia.message.id;
     })
     .then(id => {
+        const wallet = generarBilletera();
+        ingresarBilletera(wallet);
         req.body.idAgencia = id;
+        req.body.billeteraAddress = wallet.address;
         return ingresar(req.body);
     })
     .then(result=>{
@@ -42,6 +46,7 @@ const ingresarSocioController = (req, res) => {
         })
     })
     .catch(err=>{
+        console.log(err);
         if(err.message.errors){
             const __dirname = process.cwd();
             fs.unlinkSync( __dirname+err.message.errors[0].instance.imagen);
@@ -193,10 +198,9 @@ function buscarSocioCuentaController (req, res) {
                 message: socios.message
             });
     }).catch(err=>{
-        console.log(err);
-        // res.status(err.status).send({
-        //     message: err.message
-        // });
+        res.status(err.status).send({
+            message: err.message
+        });
     });    
 }
 

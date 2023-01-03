@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
+import { Billetera } from './billetera.model.js';
 
 export const Representantes = sequelize.define('representantes',{
     id: {
@@ -56,4 +57,3 @@ export const Representantes = sequelize.define('representantes',{
         type: DataTypes.SMALLINT
     }
 });
-

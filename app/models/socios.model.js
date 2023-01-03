@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
+import { Billetera } from './billetera.model.js';
 import { Cuenta } from './cuenta.model.js';
 import { Inscripciones } from './inscripcion.model.js';
 
@@ -142,3 +143,10 @@ Inscripciones.belongsTo(Socios, {
     foreignKey: 'idSocio',
     targetKey: 'id',
 })
+
+Billetera.hasOne(Socios,{
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+});
+
+Socios.belongsTo(Billetera);

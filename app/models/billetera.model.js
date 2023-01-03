@@ -6,30 +6,36 @@ import { Socios } from './socios.model.js';
 export const Billetera = sequelize.define('billetera',{
     address: {
         type: DataTypes.STRING,
-        primaryKey: true
+        primaryKey: true,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese la direccion de la billetera'
+            }
+        },
     },
     privateKey: {
         type: DataTypes.JSON,
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'No se admiten campos vacíos'
+            },
+            notNull: {
+                msg: 'Por favor, ingrese la clave privada'
+            }
+        },
     }
 });
 
-
-Representantes.hasOne(Billetera, {
-    foreignKey: 'billetera',
+Billetera.hasOne(Representantes,{
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
 });
 
-Billetera.belongsTo(Representantes);
-
-
-Socios.hasOne(Billetera, {
-    foreignKey: 'billetera',
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-});
-
-Billetera.belongsTo(Socios);
-
+Representantes.belongsTo(Billetera);
 
 

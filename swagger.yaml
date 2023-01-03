@@ -31,6 +31,8 @@ tags:
     description: Operaciones para elecciones
   - name: representantes
     description: Operaciones para representantes/listas
+  - name: votaciones
+    description: Operaciones para el proceso de votaciones
 paths:
   /notificacion/{id}:
     get:
@@ -1034,6 +1036,24 @@ paths:
           description: Agencia actualizada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /votaciones/enviar-voto:
+    post:
+      tags:
+        - votaciones
+      summary: 'Enviar voto'
+      description: 'Endpoint para votar por un representante en una eleccion'
+      requestBody:
+        description: 'Registrar un representate formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Votacion' 
+      responses:
+        '200':
+          description: Voto enviado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
 
 components:
   schemas:
@@ -1229,6 +1249,15 @@ components:
         idElecciones:
           type: integer
           example: 1
+    Votacion:
+      type: object
+      properties:
+        idEleccion:
+          type: integer
+          example: 1
+        walletRep:
+          type: string
+          example: '0x03213213213sadsa'
     Error:
       type: object
       properties:

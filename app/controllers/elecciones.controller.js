@@ -6,13 +6,14 @@ import {
    deleteEleccionById,
    updateEleccion
 } from "../use-cases/index.js";
+import { VotacionesController } from "./index.js";
 
 /**
  * Validar que no haya mas de una eleccion por dia en una agencia
  * Validar que no se pueda modificar la eleccion una vez este iniciada
  * Trigger cambiar de estado la eleccion que ha terminado
  * Quitar la opcion de eliminar a las elecciones del pasado
- * 
+ * Validar que la creacion de una eleccion se de en el estado no iniciado
  */
 
 function ingresarEleccionController(req, res) {
@@ -91,7 +92,15 @@ function updateEleccionController (req, res) {
    });
 
    buscarEleccion(req.params.idEleccion)
-   .then(eleccion => actualizar(eleccion.message.id, req.body))
+   .then(eleccion => {
+      if(req.body.estado === 'EN-CURSO')
+         VotacionesController.registrarEleccion(
+            eleccion.message.id, 
+            req.body.dia,
+         // req.body.address,
+         );
+      return actualizar(eleccion.message.id, req.body)
+   })
    .then(resp=>{
       res.status(resp.status).send({
          message: resp.message

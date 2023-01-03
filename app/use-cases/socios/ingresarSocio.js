@@ -11,9 +11,12 @@ export default async function ingresarSocio(
       estado,
       email,
       celular,
-      idAgencia }, ip
+      idAgencia,
+      billeteraAddress,
+   }, ip
 ) {
    try {
+
       const socio = await Socios.create({
          nombres: nombres,
          apellidos: apellidos,
@@ -24,6 +27,7 @@ export default async function ingresarSocio(
          email: email,
          celular: celular,
          idAgencia: idAgencia,
+         billeteraAddress: billeteraAddress,
       });
       try {
          const account = await registrarCuenta(
@@ -33,6 +37,7 @@ export default async function ingresarSocio(
             ip,
             socio.id,
          );
+
          return {
             status: 200, //OK,
             message: {

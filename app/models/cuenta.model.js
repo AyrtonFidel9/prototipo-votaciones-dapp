@@ -17,6 +17,7 @@ export const Cuenta = sequelize.define('cuenta',{
                 'ROLE_JGE' 
             ],
         }),
+        allowNull: false,
     },
     usuario: {
         type: DataTypes.STRING,

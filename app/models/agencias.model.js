@@ -69,12 +69,16 @@ export const Agencias = sequelize.define('agencias',{
     }
 });
 
+
+// OJO CON ESA CONSTANTE, DISCUTIRLA
 Agencias.hasMany( Socios, {
-    foreignKey: 'idAgencia',
+    foreignKey: {
+        name: 'idAgencia',
+        allowNull: false,
+    },
     sourceKey: 'id',
     onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'  
-});
+    onUpdate: 'CASCADE',
 
 Socios.belongsTo( Agencias, {
     foreignKey: 'idAgencia',

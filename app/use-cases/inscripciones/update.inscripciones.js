@@ -1,5 +1,5 @@
-import * as db from '../../models/index.js';
-import { Inscripciones } from db.Inscripciones;
+import { Inscripciones } from '../../models/index.js';
+
 
 export const update = (req, res) => {
     const id = req.params.id;

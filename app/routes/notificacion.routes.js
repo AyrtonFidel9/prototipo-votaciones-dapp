@@ -31,7 +31,6 @@ routerNotificacion.route('/:id')
         authJwt.verifyToken,
     ], (req, res)=>{
         NotificacionController.actualizarNotificacion(req, res);
-    })
-
+    });
 
 export default routerNotificacion;

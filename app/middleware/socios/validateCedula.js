@@ -14,9 +14,10 @@ function validateCedula(req, res, next){
     const finalValue = 10 - residuo;
     const respuesta = finalValue === cedula.charAt(cedula.length - 1);
 
-    residuo !== 0 && !respuesta && res.status(401).send({
-        message: "Cédula no válida!",
-    });
+    if(residuo !== 0 && !respuesta) 
+        return res.status(401).send({
+            message: "Cédula no válida!",
+        });
 
     next();
 }

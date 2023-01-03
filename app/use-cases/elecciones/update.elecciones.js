@@ -1,26 +1,36 @@
-import * as db from '../../models/index.js';
-import { Elecciones } from db.Elecciones;
+import { Elecciones } from '../../models/index.js';
 
-export const update = (req, res) => {
-    const id = req.params.id;
-  
-    Elecciones.update(req.body, {
-      where: { id: id }
-    })
-      .then(num => {
-        if (num == 1) {
-          res.send({
-            message: "Elecciones actualizada correctamente."
-          });
-        } else {
-          res.send({
-            message: `No se puede actualizar Elecciones con id=${id}. Quizás la Eleccion no fue encontrada o la consulta esta vacia!`
-          });
-        }
+export const updateEleccion = async (idEleccion, {
+   nombre,
+   dia,
+   hora,
+   duracion,
+   estado,
+   idAgencia,
+}) => {
+   try {
+      const eleccion = await Elecciones.update({
+         nombre,
+         dia,
+         hora,
+         duracion,
+         estado,
+         idAgencia
+      },{
+         where: { id: idEleccion}
       })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error Al actualizar la Elecciones con id=" + id
-        });
+
+      if(eleccion[0] === 1)
+         return {
+            status: 200,
+            message: 'Datos actualizados correctamente',
+         };
+      else 
+         throw("Ha ocurrido un error al actualizar los datos");
+   } catch (ex) {
+      throw ({
+         status: 400,
+         message: ex
       });
-  };
+   }
+};

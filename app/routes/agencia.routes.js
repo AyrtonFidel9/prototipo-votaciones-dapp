@@ -31,6 +31,14 @@ routerAgencia.route('/:agenciaId')
         AgenciaController.buscarAgencia(req,res);
     });
 
+routerAgencia.route('/')
+    .get([authJwt.verifyToken,
+        authJwt.isAdminOrJGE,
+    ],
+    (req, res) => {
+        AgenciaController.buscarAllAgencias(req,res);
+    });
+
 routerAgencia.route('/delete/:agenciaId')
     .delete([authJwt.verifyToken,
         authJwt.isAdmin
@@ -46,6 +54,5 @@ routerAgencia.route('/update/:agenciaId')
     ], (req, res)=>{
         AgenciaController.actualizarAgencia(req,res);
     });
-
 
 export default routerAgencia;

@@ -85,11 +85,30 @@ const isJGE = (req, res, next) => {
     });
 };
 
+const isAdminOrJGE = (req, res, next) => {
+    const bearer = req.headers['authorization'].split(' ');
+    const token = bearer[1];
+
+    const decoded = jwt.verify(token, secret);
+
+    Cuenta.findByPk(decoded.id).then( account => {
+        if(account.rol === 'ROLE_JGE' || account.rol === 'ROLE_ADMIN'){
+            next();
+            return;
+        }
+        
+        res.status(403).send({
+            message: "Se requiere el rol de presidente de la JGE"
+        });
+    });
+};
+
 const authJwt = {
     verifyToken: verifyToken,
     isAdmin: isAdmin,
     isSocio: isSocio,
-    isJGE: isJGE
+    isJGE: isJGE,
+    isAdminOrJGE: isAdminOrJGE,
 };
 
 export { authJwt };

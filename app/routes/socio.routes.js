@@ -36,15 +36,20 @@ routerSocios.route('/registrar')
 routerSocios.route('/:idSocio')
     .get([
         authJwt.verifyToken,
-        authJwt.isAdmin,
     ], (req, res) => {
         SociosController.buscarSocio(req, res);
+    });
+routerSocios.route('/')
+    .get([
+        authJwt.verifyToken,
+        authJwt.isAdminOrJGE,
+    ], (req, res) => {
+        SociosController.buscarAllSocios(req, res);
     });
 
 routerSocios.route('/update/:idSocio')
     .put([
         authJwt.verifyToken,
-        authJwt.isAdmin,
         validateCedula
     ], (req, res) => {
         SociosController.actualizarSocio(req, res);
@@ -57,5 +62,20 @@ routerSocios.route('/delete/:idSocio')
     ], (req, res) => {
         SociosController.eliminarSocio(req, res);
     });
+
+routerSocios.route('/existbyPhone/:number')
+    .get((req, res)=>{
+        SociosController.existSocioByPhone(req, res);
+    });
+
+routerSocios.route('/innerjoin/cuentas')
+    .get([
+        authJwt.verifyToken,
+        authJwt.isJGE,
+    ],(req, res)=>{
+        SociosController.buscarSocioCuenta(req, res);
+    });
+
+
 
 export default routerSocios;

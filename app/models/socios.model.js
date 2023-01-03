@@ -1,7 +1,8 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
+import { Billetera } from './billetera.model.js';
 import { Cuenta } from './cuenta.model.js';
-import { Inscripciones } from './inscipcion.model.js';
+import { Inscripciones } from './inscripcion.model.js';
 
 export const Socios = sequelize.define('socios',{
     id: {
@@ -112,10 +113,14 @@ export const Socios = sequelize.define('socios',{
 });
 
 Socios.hasOne(Cuenta, {
-    foreignKey: 'idSocio',
+    foreignKey: {
+        name: 'idSocio',
+        allowNull: false,
+        unique: true
+    },
     sourceKey: 'id',
     onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'  
+    onUpdate: 'CASCADE',
 });
 
 Cuenta.belongsTo(Socios, {
@@ -123,14 +128,25 @@ Cuenta.belongsTo(Socios, {
     targetKey: 'id'
 });
 
-Socios.hasOne(Inscripciones, {
-    foreignKey: 'idSocio',
+Socios.hasMany(Inscripciones, {
+    foreignKey: {
+        name: 'idSocio',
+        allowNull: false,
+    },
     sourceKey: 'id',
     onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'  
+    onUpdate: 'CASCADE',
+    hooks: true
 })
 
 Inscripciones.belongsTo(Socios, {
     foreignKey: 'idSocio',
-    targetKey: 'id'
+    targetKey: 'id',
 })
+
+Billetera.hasOne(Socios,{
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+});
+
+Socios.belongsTo(Billetera);

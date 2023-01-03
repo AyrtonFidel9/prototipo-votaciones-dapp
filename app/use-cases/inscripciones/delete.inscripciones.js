@@ -1,5 +1,5 @@
-import * as db from '../../models/index.js'
-import { Inscripciones } from db.Inscripciones
+import { Inscripciones } from '../../models/index.js';
+
 
 
 // Delete a Inscripciones with the specified id in the request

@@ -25,6 +25,14 @@ tags:
     description: Operaciones para agencias
   - name: notificacion
     description: Operaciones para notificaciones
+  - name: recuperacion
+    description: Operaciones para procesos de recuperacion de contraseña
+  - name: elecciones
+    description: Operaciones para elecciones
+  - name: representantes
+    description: Operaciones para representantes/listas
+  - name: votaciones
+    description: Operaciones para el proceso de votaciones
 paths:
   /notificacion/{id}:
     get:
@@ -123,6 +131,34 @@ paths:
           description: Invalid ID supplied
         '404':
           description: No existe la notificacion
+  /cuentas/findById/{id}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - cuentas
+      summary: Buscar cuentas por ID de cuenta
+      description: Retorna una cuenta
+      operationId: CU-ND-005¿6
+      parameters:
+        - name: id
+          in: path
+          description: ID de la cuenta
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cuentas'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe una cuenta para el socio
   /cuentas/{idSocio}:
     get:
       security:
@@ -172,6 +208,41 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/cuentas'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cuentas'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: No existe una cuenta para el socio
+  /cuentas/reboot/{idSocio}:
+    put:
+      tags:
+        - cuentas
+      summary: Actualizar contraseña de un usuario
+      description: ''
+      operationId: CU-ND-004
+      parameters:
+        - name: idSocio
+          in: path
+          description: ID del socio propietario de la cuenta
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                newPassoword:
+                  type: string
+                  description: Contraseña del propietario de una cuenta
+                  example: 123123
       responses:
         '200':
           description: successful operation
@@ -240,6 +311,54 @@ paths:
                   message:
                     type: string
                     example: El Usuario proporcionado es incorrecto
+  /socios:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Traer todos los socios'
+      description: 'Endpoint para traer todos los socios de la base de datos, tabla SOCIOS'
+      operationId: CU-ND-005
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /socios/innerjoin/cuentas:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: 'Traer todos los socios'
+      description: 'Endpoint para traer todos los socios Y SUS CUENTAS de la base de datos, tabla SOCIOS'
+      operationId: CU-ND-012
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
   /socios/registrar:
     post:
       security:
@@ -278,6 +397,35 @@ paths:
             type: integer
           required:
           description: El ID del socio debe ser un valor numerico para poder ejecutar la búsqueda correctamente
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /socios/existbyPhone/{number}:
+    get:
+      tags:
+        - socios
+      summary: 'Verificar la existencia del socio por su numero celular'
+      description: 'Endpoint para verificar la existencia del socio, tabla SOCIOS'
+      operationId: CU-ND-001
+      parameters:
+        - in: path
+          name: number
+          schema:
+            type: string
+          required:
+          description: El numero del socio debe ser un valor numerico para poder ejecutar la búsqueda correctamente
       responses:
         '200':
           description: Datos encontrados correctamente
@@ -448,6 +596,30 @@ paths:
           description: Agencia agregada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /agencia:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - agencias
+      summary: 'Buscar todas las agencias'
+      description: 'Endpoint para buscar todas las agencias de la base de datos, tabla AGENCIA'
+      operationId: CU-ND-006
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
   /agencia/{agenciaId}:
     get:
       security:
@@ -538,6 +710,351 @@ paths:
           description: Agencia actualizada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /recuperacion/ingresar/{number}:
+    post:
+      tags:
+        - recuperacion
+      summary: 'Caso de uso para generar un codigo de recuperacion para el socio'
+      description: 'Endpoint para generar y guardar el codigo de recuperacion en la tabla Recuperacion'
+      operationId: CU-ND-002
+      parameters:
+        - in: path
+          name: number
+          schema:
+            type: string
+          required:
+          description: El numero del socio debe ser un valor numerico para poder ejecutar la recuperacion correctamente
+      responses:
+        '200':
+          description: Codigo de recuperacion generado correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /recuperacion/actualizarEstado/{codigo}:
+    put:
+      tags:
+        - recuperacion
+      summary: 'Caso de uso para actualizar el estado del codigo de recuperacion para el socio'
+      description: 'Endpoint para Caso de uso para actualizar el estado del codigo de recuperacion en la tabla Recuperacion'
+      operationId: CU-ND-003
+      parameters:
+        - in: path
+          name: codigo
+          schema:
+            type: string
+          required:
+          description: El codigo debe ser una cadena
+      responses:
+        '200':
+          description: Actualizacion satisfactoria
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /elecciones/registrar:
+    post:
+      security:
+        - BearerAuth: [] 
+      tags:
+        - elecciones
+      summary: 'Ingresar una eleccion'
+      description: 'Endpoint para ingresar una eleccion en el sistema'
+      requestBody:
+        description: 'Registrar una eleccion formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Eleccion' 
+      responses:
+        '200':
+          description: Eleccion agregada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /elecciones:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - elecciones
+      summary: 'Buscar todas las elecciones'
+      description: 'Endpoint para buscar todas las elecciones de la base de datos, tabla elecciones'
+      operationId: CU-ND-007
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /elecciones/{idEleccion}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - elecciones
+      summary: 'Buscar una eleccion por ID de la eleccion'
+      description: 'Endpoint para buscar una eleccion de la base de datos, tabla elecciones'
+      operationId: CU-17
+      parameters:
+        - in: path
+          name: idEleccion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /elecciones/delete/{idEleccion}:
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - elecciones
+      summary: 'Eliminar una eleccion por id'
+      description: 'Endpoint para eliminar una eleccion por id en la base de datos, tabla ELECCIONES'
+      operationId: CU-18
+      parameters:
+        - in: path
+          name: idEleccion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos eliminados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /elecciones/update/{idEleccion}:
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - elecciones
+      summary: 'Actualizar una eleccion por ID'
+      description: 'Endpoint para actualizar una eleccion por id en la base de datos, tabla AGENCIA'
+      operationId: CU-04
+      parameters:
+        - in: path
+          name: idEleccion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      requestBody:
+        description: 'Actualizar una agencia formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Eleccion' 
+      responses:
+        '200':
+          description: Agencia actualizada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /representantes:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - representantes
+      summary: 'Buscar todos los representantes'
+      description: 'Endpoint para buscar todos los representantes de la base de datos, tabla representantes'
+      operationId: CU-ND-008
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /representantes/registrar:
+    post:
+      security:
+        - BearerAuth: [] 
+      tags:
+        - representantes
+      summary: 'Ingresar un representante/lista'
+      description: 'Endpoint para ingresar un representante para la elecciones'
+      requestBody:
+        description: 'Registrar un representate formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Representante' 
+      responses:
+        '200':
+          description: Eleccion agregada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /representantes/{idRepresentante}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - representantes
+      summary: 'Buscar un representante por id'
+      description: 'Endpoint para buscar un representante por id en la base de datos, tabla AGENCIA'
+      operationId: CU-ND-009
+      parameters:
+        - in: path
+          name: idRepresentante
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /representantes/delete/{idRepresentante}:
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - representantes
+      summary: 'Eliminar un representante por id'
+      description: 'Endpoint para eliminar un representate por id en la base de datos, tabla REPRESENTANTES'
+      operationId: CU-ND-010
+      parameters:
+        - in: path
+          name: idRepresentante
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos eliminados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /representantes/update/{idRepresentante}:
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - representantes
+      summary: 'Actualizar un representante por ID'
+      description: 'Endpoint para actualizar un representante por id en la base de datos, tabla REPRESENTANTES'
+      operationId: CU-ND-011
+      parameters:
+        - in: path
+          name: idRepresentante
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      requestBody:
+        description: 'Actualizar una agencia formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Representante' 
+      responses:
+        '200':
+          description: Agencia actualizada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /votaciones/enviar-voto:
+    post:
+      tags:
+        - votaciones
+      summary: 'Enviar voto'
+      description: 'Endpoint para votar por un representante en una eleccion'
+      requestBody:
+        description: 'Registrar un representate formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Votacion' 
+      responses:
+        '200':
+          description: Voto enviado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+
 components:
   schemas:
     InicioSesion:
@@ -690,6 +1207,57 @@ components:
         idAgencia:
           type: integer
           example: 1
+    Eleccion:
+      type: object
+      properties:
+        nombre:
+          type: string
+          example: Eleccion numero 1
+        dia:
+          type: string
+          example: "2022-12-28"
+        hora:
+          type: string,
+          example: "18:02:51"
+        duracion:
+          type: integer
+          example: 8
+        estado:
+          type: string
+          example: 'NO-INICIADO'
+        idAgencia:
+          type: integer
+          example: 1
+    Representante:
+      type: object
+      properties:
+        principal:
+          type: integer
+          example: 1234
+        psuplente:
+          type: integer
+          example: 1231
+        ssuplente:
+          type: integer,
+          example: 1233
+        ethCantVot:
+          type: integer
+          example: 8
+        idInscripcion:
+          type: string
+          example: 1
+        idElecciones:
+          type: integer
+          example: 1
+    Votacion:
+      type: object
+      properties:
+        idEleccion:
+          type: integer
+          example: 1
+        walletRep:
+          type: string
+          example: '0x03213213213sadsa'
     Error:
       type: object
       properties:

@@ -1,11 +1,10 @@
 export default function cantidadGanadores(req, res, next){
-
     const {
-        representantes,
-        ganadores
+        numRepresentantes,
+        numGanadores
     } = req.body;
 
-    if(ganadores >= representantes){
+    if(numGanadores >= numRepresentantes){
         res.status(400).send({
             message: "La cantidad de ganadores no puede ser mayor a la cantidad de representantes",
         });

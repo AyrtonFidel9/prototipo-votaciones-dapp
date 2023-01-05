@@ -3,43 +3,50 @@ import { Inscripciones } from '../../models/index.js';
 
 
 // Delete a Inscripciones with the specified id in the request
-export const deleteById = (req, res) => {
-    const id = req.params.id;
-  
-    Inscripciones.destroy({
-      where: { id: id }
+export const deleteById = async (idInscripcion) => {
+  try{
+    const eliminar = await Inscripciones.destroy({
+      where: { id: idInscripcion }
     })
-      .then(num => {
-        if (num == 1) {
-          res.send({
-            message: "Inscripcion was deleted successfully!"
-          });
-        } else {
-          res.send({
-            message: `Cannot delete Inscripcion with id=${id}. Maybe Inscripciones was not found!`
-          });
-        }
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Could not delete Inscripcion with id=" + id
-        });
-      });
+
+    if(eliminar !== 1){
+      throw (`Ha ocurrido un error al eliminar la inscripción`);
+   }
+
+   return {
+      status: 200,
+      message: 'Inscripción eliminada con éxito'
+   }
+
+  } catch(e){
+    throw ({
+      status: 400,
+      message: ex
+    });
   };
-  
+};
+
   // Delete all Inscripciones from the database.
-export const deleteAll = (req, res) => {
-    Inscripciones.destroy({
-      where: {},
-      truncate: false
-    })
-      .then(nums => {
-        res.send({ message: `${nums} Inscripciones were deleted successfully!` });
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while removing all Inscripciones."
-        });
+export const deleteAll = async () => {
+    try{
+      const eliminar = await Inscripciones.destroy({
+        where: {},
+        truncate: false
       });
-  };
+
+      if (eliminar.nums < 0){
+        throw (`Ha ocurrido un error al eliminar todas las inscripciones`);
+      }
+
+      return {
+        status: 200,
+        message: `${eliminar.nums} Inscripciones fueron eliminadas correctamente!` 
+      }
+      
+    } catch (e) {
+      throw ({
+        status: 400,
+        message: e
+      })
+    }
+  }

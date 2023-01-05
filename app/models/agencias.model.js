@@ -79,6 +79,7 @@ Agencias.hasMany( Socios, {
     sourceKey: 'id',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
+});
 
 Socios.belongsTo( Agencias, {
     foreignKey: 'idAgencia',
@@ -98,4 +99,3 @@ Elecciones.belongsTo( Agencias, {
 });
 
 // export default Agencias;
-

@@ -7,3 +7,4 @@ export { default as RecuperacionController } from './recuperacion.controller.js'
 export { default as EleccionesController } from './elecciones.controller.js';
 export { default as RepresentantesController } from './representantes.controller.js';
 export { default as VotacionesController } from './votacion.controller.js';
+export { default as InscripcionesController } from './inscripciones.controller.'

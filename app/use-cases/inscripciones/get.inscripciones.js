@@ -1,30 +1,39 @@
 import { Inscripciones } from '../../models/index.js';
 
 
-export const findAll = (req, res) => {
-    Elecciones.findAll()
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while retrieving Elecciones."
-        });
-      });
-  };
+export const inscripcionesFindAll = async () => {
+  try{
+    const inscripciones = await Inscripciones.findAll();
+
+    return ({
+      status: 200,
+      message: inscripciones,
+    })
+  } catch (e) {
+    throw ({
+      status: 400,
+      message: e
+    })
+  } 
+};
   
-  // Find a single Elecciones with an id
-  export const findOne = (req, res) => {
-    const id = req.params.id;
-  
-    Elecciones.findByPk(id)
-      .then(data => {
-        res.send(data);
-      })
-      .catch(err => {
-        res.status(404).send({
-          message: "No se encontró Elecciones con id= " + id
-        });
-      });t
+  // Find a single Incripciones with an id
+  export const findOne = async (id) => {
+    try{
+      const inscripcion = await Incripciones.findByPk(id)
+      if (inscripcion === null)
+        throw(
+          `No existe una elección con el id: ${id}`
+        )
+      else 
+        return ({
+          status: 200,
+          message: inscripcion
+        })
+    } catch (e) {
+      throw ({
+        status: 400,
+        message: e
+     });
+    }
   };

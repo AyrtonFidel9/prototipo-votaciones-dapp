@@ -1,6 +1,6 @@
 import { Elecciones } from '../../models/index.js';
 
-const eleccionesfindAll = async () => {
+async function eleccionesFindAll() {
    try {
       const elecciones = await Elecciones.findAll();
       return ({
@@ -13,10 +13,10 @@ const eleccionesfindAll = async () => {
          message: ex
       });
    }
-};
+}
 
 // Find a single Elecciones with an id
-const eleccionfindOne = async (id) => {
+const eleccionFindOne = async (id) => {
    try {
       const eleccion = await Elecciones.findByPk(id);
       if (eleccion === null)
@@ -35,4 +35,4 @@ const eleccionfindOne = async (id) => {
    }
 };
 
-export { eleccionesfindAll, eleccionfindOne };
+export { eleccionesFindAll, eleccionFindOne };

@@ -8,12 +8,12 @@ export const deleteEleccionById = async (idEleccion) => {
       })
 
       if(eliminar !== 1){
-         throw (`Ha ocurrido un error al eliminar la eleccion`);
+         throw (`Ha ocurrido un error al eliminar la elección`);
       }
 
       return {
          status: 200,
-         message: 'Eleccion eliminada con exito'
+         message: 'Elección eliminada con éxito'
       }
 
    }catch(ex){

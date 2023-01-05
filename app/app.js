@@ -6,6 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 import { readFile } from 'fs/promises';
 import YAML from 'js-yaml';
 import { uploadFile } from './middleware/index.js';
+import { uploadPdfFile } from './middleware/index.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -31,6 +32,7 @@ app.use(
     })
 );
 app.use(uploadFile.single('imagen'))
+app.use(uploadPdfFile.single())
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/v1", routes);	
 

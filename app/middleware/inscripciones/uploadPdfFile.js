@@ -4,10 +4,16 @@ import fs from "fs";
 
 const __dirname = process.cwd();
 
-const pdfTypesFilter = (req, file, cb) => {
+const pdfTypesFilter = async (req, file, cb) => {
     if (file.mimetype.includes('application/pdf')
     ) {
         cb(null, true);
+        try {
+             fs.mkdir(path.join(__dirname, `/app/public/docs/inscripcion/${req.body.id}`));
+          } catch {
+            console.log(`${salesTotalsDir} already exists.`);
+          }
+
     } else {
         req.fileValidationError = 'Solo se aceptan archivos de formato: PDF';
         cb(null, false, req.fileValidationError);
@@ -21,7 +27,13 @@ const storage = multer.diskStorage({
         req.body.formulario = `${Date.now()}-${file.originalname}`;
         cb(null, `${Date.now()}-${file.originalname}`, req);
     },
-    destination: fs.mkdir(path.join(__dirname, `/app/public/docs/inscripcion/${req.body.id}`)),
+    destination: path.join(
+        __dirname, `/app/public/docs/inscripcion/${req.body.id}`, (err) => {
+            if (err){
+                return console.error(err);
+            }
+        }
+    ),
 });
 
 const uploadFile = multer({
@@ -33,8 +45,3 @@ export { uploadPdfFile };
 
 
 
-try {
-    await fs.mkdir(salesTotalsDir);
-  } catch {
-    console.log(`${salesTotalsDir} already exists.`);
-  }

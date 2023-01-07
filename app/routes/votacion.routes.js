@@ -1,5 +1,6 @@
 import express from 'express';
 import { VotacionesController } from '../controllers/index.js';
+import { authJwt } from '../middleware/authJwt.js';
 
 const routerVotacion = express.Router();
 
@@ -12,8 +13,27 @@ routerVotacion.use((res, req, next) => {
 });
 
 routerVotacion.route('/enviar-voto')
-   .post((req, res) => {
-      VotacionesController.emitirVoto(req, res);
+   .post([
+      authJwt.verifyToken,
+      authJwt.isSocio,
+   ],(req, res) => {
+      VotacionesController.sufragar(req, res);
+   });
+
+routerVotacion.route('/enviar-token')
+   .post([
+      authJwt.verifyToken,
+      authJwt.isAdmin,
+   ],(req, res) => {
+      VotacionesController.enviarToken(req, res);
+   });
+
+routerVotacion.route('/aprobar-gasto')
+   .post([
+      authJwt.verifyToken,
+      authJwt.isAdmin,
+   ],(req, res) => {
+      VotacionesController.aprovarGastoToken(req, res);
    });
 
 export default routerVotacion;

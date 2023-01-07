@@ -1,7 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
 import { Representantes } from './representantes.model.js';
-import { Socios } from './socios.model.js';
 
 export const Billetera = sequelize.define('billetera',{
     address: {

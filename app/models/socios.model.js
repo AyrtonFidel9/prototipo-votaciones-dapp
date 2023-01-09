@@ -48,11 +48,9 @@ export const Socios = sequelize.define('socios',{
     },
     codigo: {
         type: DataTypes.INTEGER,
-        validate: {
-            min: 1
-        },
         allowNull: false,
         validate: {
+            min: 1,
             notEmpty: {
                 msg: 'No se admiten campos vacíos'
             },

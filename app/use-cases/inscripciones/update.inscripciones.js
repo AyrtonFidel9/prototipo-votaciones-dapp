@@ -1,26 +1,31 @@
 import { Inscripciones } from '../../models/index.js';
 
+export const updateInscripciones = async (idInscripciones, {
+  formulario,
+  declaracion,
+  estado,
+  idAgencia,
+  idSocio
+}) => {
+  try{
+    const inscripcion = await Inscripciones.update({
 
-export const update = (req, res) => {
-    const id = req.params.id;
-  
-    Inscripciones.update(req.body, {
-      where: { id: id }
+    },{
+      where: {id: idInscripciones}
     })
-      .then(num => {
-        if (num == 1) {
-          res.send({
-            message: "Inscripciones actualizada correctamente."
-          });
-        } else {
-          res.send({
-            message: `No se puede actualizar Inscripciones con id=${id}. Quizás la Eleccion no fue encontrada o la consulta esta vacia!`
-          });
-        }
-      })
-      .catch(err => {
-        res.status(500).send({
-          message: "Error Al actualizar la Inscripciones con id=" + id
-        });
-      });
+
+    if(inscripcion[0] === 1)
+      return{
+        status: 200,
+        message: `Datos actualizados correctamente`
+      }
+    else 
+      throw(`Ha ocurrido un error al actualizar los datos`)
+
+  } catch (e){
+    throw ({
+      status: 400,
+      message: ex
+    });
+  }
   };

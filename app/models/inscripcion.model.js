@@ -9,10 +9,10 @@ export const Inscripciones = sequelize.define('inscripciones',{
         autoIncrement: true
     },
     formulario: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
     },
     declaracion: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
         allowNull: false
     },
     estado: {

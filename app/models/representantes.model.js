@@ -9,7 +9,10 @@ export const Representantes = sequelize.define('representantes',{
         autoIncrement: true
     },
     principal: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
+        validate: {
+            min: 1
+        },
         allowNull: false,
         validate: {
             notEmpty: {
@@ -24,7 +27,10 @@ export const Representantes = sequelize.define('representantes',{
         },
     },
     psuplente: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
+        validate: {
+            min: 1
+        },
         allowNull: false,
         validate: {
             notEmpty: {
@@ -39,7 +45,10 @@ export const Representantes = sequelize.define('representantes',{
         },
     },
     ssuplente: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
+        validate: {
+            min: 1
+        },
         allowNull: false,
         validate: {
             notEmpty: {

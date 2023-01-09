@@ -47,7 +47,10 @@ export const Socios = sequelize.define('socios',{
         },
     },
     codigo: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
+        validate: {
+            min: 1
+        },
         allowNull: false,
         validate: {
             notEmpty: {

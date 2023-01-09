@@ -17,7 +17,7 @@ export const inscripcionesFindAll = async () => {
 };
   
   // Find a single Incripciones with an id
-  export const findOne = async (id) => {
+  export const inscripcionFindOne = async (id) => {
     try{
       const inscripcion = await Incripciones.findByPk(id)
       if (inscripcion === null)

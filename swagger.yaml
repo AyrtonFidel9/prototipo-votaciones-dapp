@@ -26,13 +26,15 @@ tags:
   - name: notificacion
     description: Operaciones para notificaciones
   - name: recuperacion
-    description: Operaciones para procesos de recuperacion de contraseña
+    description: Operaciones para procesos de recuperación de contraseña
   - name: elecciones
     description: Operaciones para elecciones
   - name: representantes
     description: Operaciones para representantes/listas
   - name: votaciones
     description: Operaciones para el proceso de votaciones
+  - name: inscripciones
+    description: Operaciones para el proceso de inscripciones
 paths:
   /notificacion/{id}:
     get:
@@ -1055,6 +1057,143 @@ paths:
         '401':
           $ref: '#/components/schemas/Unauthorized'
 
+
+  /inscripciones/registrar:
+    post:
+      security:
+        - BearerAuth: [] 
+      tags:
+        - inscripciones
+      summary: 'Ingresar una inscripcion'
+      description: 'Endpoint para ingresar una inscripcion en el sistema'
+      requestBody:
+        description: 'Registrar una inscripcion formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/inscripcion' 
+      responses:
+        '200':
+          description: inscripcion agregada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /inscripciones:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - inscripciones
+      summary: 'Buscar todas las inscripciones'
+      description: 'Endpoint para buscar todas las inscripciones de la base de datos, tabla inscripciones'
+      operationId: CU-ND-007
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /inscripciones/{idinscripcion}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - inscripciones
+      summary: 'Buscar una inscripcion por ID de la inscripcion'
+      description: 'Endpoint para buscar una inscripcion de la base de datos, tabla inscripciones'
+      operationId: CU-17
+      parameters:
+        - in: path
+          name: idinscripcion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /inscripciones/delete/{idinscripcion}:
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - inscripciones
+      summary: 'Eliminar una inscripcion por id'
+      description: 'Endpoint para eliminar una inscripcion por id en la base de datos, tabla inscripcionES'
+      operationId: CU-18
+      parameters:
+        - in: path
+          name: idinscripcion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos eliminados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /inscripciones/update/{idinscripcion}:
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - inscripciones
+      summary: 'Actualizar una inscripcion por ID'
+      description: 'Endpoint para actualizar una inscripcion por id en la base de datos, tabla AGENCIA'
+      operationId: CU-04
+      parameters:
+        - in: path
+          name: idinscripcion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      requestBody:
+        description: 'Actualizar una agencia formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/inscripcion' 
+      responses:
+        '200':
+          description: Agencia actualizada correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+
+
 components:
   schemas:
     InicioSesion:
@@ -1258,6 +1397,22 @@ components:
         walletRep:
           type: string
           example: '0x03213213213sadsa'
+    Inscripcion:
+      type: object
+      properties:
+        idInscripcion:
+          type: integer
+          example: 1
+        formulario:
+          type: string
+          example: 'Formulario0001.pdf'
+        declaracion:
+          type: string
+          example: 'declaracion0001.pdf'
+        estado:
+          type: string
+          example: 'online'
+
     Error:
       type: object
       properties:

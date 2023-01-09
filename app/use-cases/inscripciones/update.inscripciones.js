@@ -1,6 +1,6 @@
 import { Inscripciones } from '../../models/index.js';
 
-export const updateInscripciones = async (idInscripciones, {
+export const inscripcionesUpdate = async (idInscripciones, {
   formulario,
   declaracion,
   estado,

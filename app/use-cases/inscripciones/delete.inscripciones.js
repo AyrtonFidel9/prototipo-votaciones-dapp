@@ -1,7 +1,7 @@
 import { Inscripciones } from '../../models/index.js';
 
 // Delete a Inscripciones with the specified id in the request
-export const deleteById = async (idInscripcion) => {
+export const inscripcionesDeleteById = async (idInscripcion) => {
   try{
     const eliminar = await Inscripciones.destroy({
       where: { id: idInscripcion }
@@ -25,7 +25,7 @@ export const deleteById = async (idInscripcion) => {
 };
 
   // Delete all Inscripciones from the database.
-export const deleteAll = async () => {
+export const inscripcionesDeleteAll = async () => {
     try{
       const eliminar = await Inscripciones.destroy({
         where: {},

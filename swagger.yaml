@@ -1040,6 +1040,8 @@ paths:
           $ref: '#/components/schemas/Unauthorized'
   /votaciones/enviar-voto:
     post:
+      security:
+        - BearerAuth: []
       tags:
         - votaciones
       summary: 'Enviar voto'
@@ -1056,8 +1058,46 @@ paths:
           description: Voto enviado correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
-
-
+  /votaciones/enviar-token:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - votaciones
+      summary: 'Enviar un token/voto'
+      description: 'Endpoint para enviar un token al socio'
+      requestBody:
+        description: 'Registrar un representate formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnviarToken' 
+      responses:
+        '200':
+          description: Voto enviado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
+  /votaciones/aprobar-gasto:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - votaciones
+      summary: 'Aprobar gasto de un token/voto'
+      description: 'Endpoint para aprobar un token al socio'
+      requestBody:
+        description: 'Registrar un representate formato JSON'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AprobarGasto' 
+      responses:
+        '200':
+          description: Voto enviado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
   /inscripciones/registrar:
     post:
       security:
@@ -1397,6 +1437,27 @@ components:
         walletRep:
           type: string
           example: '0x03213213213sadsa'
+        walletSocio:
+          type: string
+          example: '0x03213213213sadsa'
+    EnviarToken:
+      type: object
+      properties:
+        addressOwner:
+          type: integer
+          example: '0x3A5f1C98a50d13D79C44f7b19dDfbEdBA1E2830C'
+        addressSocio:
+          type: string
+          example: '0x431c3176861722d815F331f953aB5017efCa68A4'
+    AprobarGasto:
+      type: object
+      properties:
+        addressOwner:
+          type: integer
+          example: '0x3A5f1C98a50d13D79C44f7b19dDfbEdBA1E2830C'
+        addressSpend:
+          type: string
+          example: '0x431c3176861722d815F331f953aB5017efCa68A4'
     Inscripcion:
       type: object
       properties:

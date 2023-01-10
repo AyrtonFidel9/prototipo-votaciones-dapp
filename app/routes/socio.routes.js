@@ -42,7 +42,6 @@ routerSocios.route('/:idSocio')
 routerSocios.route('/')
     .get([
         authJwt.verifyToken,
-        authJwt.isAdminOrJGE,
     ], (req, res) => {
         SociosController.buscarAllSocios(req, res);
     });

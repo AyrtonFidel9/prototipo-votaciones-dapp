@@ -91,14 +91,33 @@ function updateEleccionController (req, res) {
       resolve(up);
    });
 
+   const existEleccionToken = (id, address) => new Promise((resolve, reject)=>{
+      const proc = VotacionesController.validarExistenciaEleccion(
+         id,
+         address
+      );
+      resolve(proc);
+   })
+
    buscarEleccion(req.params.idEleccion)
    .then(eleccion => {
-      if(req.body.estado === 'EN-CURSO')
-         VotacionesController.registrarEleccion(
-            eleccion.message.id, 
-            req.body.dia,
-         // req.body.address,
-         );
+      if(req.body.estado === 'EN-CURSO'){
+         existEleccionToken(
+            eleccion.message.id,
+            //address
+         ).then(resp=>{
+            if(resp === true){
+               VotacionesController.registrarEleccion(
+                  eleccion.message.id, 
+                  req.body.dia,
+               // req.body.address,
+               );
+            }
+         });
+      }
+      return eleccion;
+   })
+   .then(eleccion => {
       return actualizar(eleccion.message.id, req.body)
    })
    .then(resp=>{

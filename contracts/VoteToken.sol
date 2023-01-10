@@ -25,7 +25,7 @@ contract VoteToken is ERC20, ERC20Burnable{
     uint256[] eleccionesRegistradas;
 
     constructor(uint256 initialSupply) ERC20 ("Ballot Nueva Esperanza", "BNE"){
-        _mint(msg.sender, initialSupply);
+        _mint(msg.sender, initialSupply * 10**18);
     }
 
     modifier duplicateEleccion (uint16 _idEleccion){
@@ -40,16 +40,6 @@ contract VoteToken is ERC20, ERC20Burnable{
         require (
             elecciones[_idEleccion].idEleccion != 0,     
             'La eleccion para sufragar no costa en el registro');
-
-        uint256 tamanio = eleccionesRegistradas.length;
-
-        for(uint16 i = 0; i <= tamanio; i++){
-            if(compareStrings(elecciones[_idEleccion].fecha,_fecha)){
-                require (
-                !elecciones[_idEleccion].votosReceived[_wallet], 
-                'Su voto ya ha sido registrado');
-            }
-        }
 
         require (
             !elecciones[_idEleccion].votosReceived[_wallet], 
@@ -69,7 +59,7 @@ contract VoteToken is ERC20, ERC20Burnable{
         Eleccion storage eleccion = elecciones[_idEleccion];
         eleccion.votosReceived[msg.sender] = true;
         emit VoterData(msg.sender, elecciones[_idEleccion].votosReceived[msg.sender]);
-        transfer(_lista, 1);
+        transfer(_lista, 1 * 10**18);
     }
 
     function haveVoteReceived (uint16 _idEleccion, address _user) 
@@ -85,14 +75,7 @@ contract VoteToken is ERC20, ERC20Burnable{
         eleccionesRegistradas.push(_idEleccion);
         emit EleccionData(_idEleccion, _fecha, false);
     }
-
-    function compareStrings(string memory a, string memory b) private pure returns (bool) {
-        if (bytes(a).length != bytes(b).length) {
-            return false;
-        }
-        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
-    }
-
+    
     function finishEleccion (uint16 _idEleccion) public {
         Eleccion storage eleccion = elecciones[_idEleccion];
         eleccion.finished = true;

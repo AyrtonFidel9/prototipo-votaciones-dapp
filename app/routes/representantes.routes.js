@@ -38,7 +38,7 @@ routerRepresentantes.route('/:idRepresentante')
 
 routerRepresentantes.route('/')
     .get([authJwt.verifyToken,
-        authJwt.isJGE,
+        authJwt.isJGEorSocio,
     ],
     (req, res) => {
         RepresentantesController.getAllRepresentantes(req, res);

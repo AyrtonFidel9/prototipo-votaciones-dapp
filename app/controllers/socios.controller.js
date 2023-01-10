@@ -88,6 +88,7 @@ const actualizarSocioController = (req, res) => {
         })
     })
     .catch(err=>{
+        console.log(err);
         return res.status(err.status).send({
             message: err.message
         })

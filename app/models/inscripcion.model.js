@@ -18,10 +18,11 @@ export const Inscripciones = sequelize.define('inscripciones',{
     estado: {
         type: DataTypes.ENUM,
         values: [
-            'online',
-            'offline',
+            'pendiente',
+            'aprobado',
+            'reprobado',
         ],
-        defaultValue: 'online'
+        defaultValue: 'pendiente'
     }
 })
 

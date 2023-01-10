@@ -937,7 +937,7 @@ paths:
       summary: 'Ingresar un representante/lista'
       description: 'Endpoint para ingresar un representante para la elecciones'
       requestBody:
-        description: 'Registrar un representate formato JSON'
+        description: 'Registrar un representante formato JSON'
         required: true
         content:
           application/json:
@@ -1072,7 +1072,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/inscripcion' 
+              $ref: '#/components/schemas/Inscripcion' 
       responses:
         '200':
           description: inscripcion agregada correctamente
@@ -1102,7 +1102,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
-  /inscripciones/{idinscripcion}:
+  /inscripciones/{idInscripcion}:
     get:
       security:
         - BearerAuth: []
@@ -1113,7 +1113,7 @@ paths:
       operationId: CU-17
       parameters:
         - in: path
-          name: idinscripcion
+          name: idInscripcion
           schema:
             type: integer
           required: true
@@ -1133,7 +1133,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
-  /inscripciones/delete/{idinscripcion}:
+  /inscripciones/delete/{idInscripcion}:
     delete:
       security:
         - BearerAuth: []
@@ -1144,7 +1144,7 @@ paths:
       operationId: CU-18
       parameters:
         - in: path
-          name: idinscripcion
+          name: idInscripcion
           schema:
             type: integer
           required: true
@@ -1164,7 +1164,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NotFound'
-  /inscripciones/update/{idinscripcion}:
+  /inscripciones/update/{idInscripcion}:
     put:
       security:
         - BearerAuth: []
@@ -1175,7 +1175,7 @@ paths:
       operationId: CU-04
       parameters:
         - in: path
-          name: idinscripcion
+          name: idInscripcion
           schema:
             type: integer
           required: true
@@ -1186,7 +1186,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/inscripcion' 
+              $ref: '#/components/schemas/Inscripcion' 
       responses:
         '200':
           description: Agencia actualizada correctamente
@@ -1412,7 +1412,6 @@ components:
         estado:
           type: string
           example: 'online'
-
     Error:
       type: object
       properties:

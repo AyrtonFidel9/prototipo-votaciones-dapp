@@ -15,7 +15,7 @@ routerInscripciones.use((res, req, next) => {
 routerInscripciones.route('/registrar')
     .post([
         authJwt.verifyToken, 
-        authJwt.isJGE
+        authJwt.isSocio
     ],function (req, res) {
         InscripcionesController.ingresarInscripciones(req, res);
     });
@@ -31,18 +31,18 @@ routerInscripciones.route('/:idInscripcion')
 routerInscripciones.route('/')
     .get([
         authJwt.verifyToken,
-        authJwt.isJGE
+        authJwt.isSocio //OR JGE
     ],(req, res)=>{
         InscripcionesController.getAllInscripciones(req, res);
     });
 
-routerInscripciones.route('/delete/:idInscripcion')
-    .delete([
-        authJwt.verifyToken,
-        authJwt.isJGE
-    ], (req, res)=>{
-        InscripcionesController.deleteInscripcion(req, res);
-    });
+// routerInscripciones.route('/delete/:idInscripcion')
+//     .delete([
+//         authJwt.verifyToken,
+//         authJwt.isJGE
+//     ], (req, res)=>{
+//         InscripcionesController.deleteInscripcion(req, res);
+//     });
 
 routerInscripciones.route('/update/:idInscripcion')
     .put([

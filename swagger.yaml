@@ -26,13 +26,15 @@ tags:
   - name: notificacion
     description: Operaciones para notificaciones
   - name: recuperacion
-    description: Operaciones para procesos de recuperacion de contraseña
+    description: Operaciones para procesos de recuperación de contraseña
   - name: elecciones
     description: Operaciones para elecciones
   - name: representantes
     description: Operaciones para representantes/listas
   - name: votaciones
     description: Operaciones para el proceso de votaciones
+  - name: inscripciones
+    description: Operaciones para el proceso de inscripciones
 paths:
   /notificacion/{id}:
     get:
@@ -935,7 +937,7 @@ paths:
       summary: 'Ingresar un representante/lista'
       description: 'Endpoint para ingresar un representante para la elecciones'
       requestBody:
-        description: 'Registrar un representate formato JSON'
+        description: 'Registrar un representante formato JSON'
         required: true
         content:
           application/json:
@@ -1038,8 +1040,6 @@ paths:
           $ref: '#/components/schemas/Unauthorized'
   /votaciones/enviar-voto:
     post:
-      security:
-        - BearerAuth: []
       tags:
         - votaciones
       summary: 'Enviar voto'
@@ -1056,46 +1056,144 @@ paths:
           description: Voto enviado correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
-  /votaciones/enviar-token:
+
+
+  /inscripciones/registrar:
     post:
       security:
-        - BearerAuth: []
+        - BearerAuth: [] 
       tags:
-        - votaciones
-      summary: 'Enviar un token/voto'
-      description: 'Endpoint para enviar un token al socio'
+        - inscripciones
+      summary: 'Ingresar una inscripcion'
+      description: 'Endpoint para ingresar una inscripcion en el sistema'
       requestBody:
-        description: 'Registrar un representate formato JSON'
+        description: 'Registrar una inscripcion formato JSON'
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/EnviarToken' 
+              $ref: '#/components/schemas/Inscripcion' 
       responses:
         '200':
-          description: Voto enviado correctamente
+          description: inscripcion agregada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
-  /votaciones/aprobar-gasto:
-    post:
+  /inscripciones:
+    get:
       security:
         - BearerAuth: []
       tags:
-        - votaciones
-      summary: 'Aprobar gasto de un token/voto'
-      description: 'Endpoint para aprobar un token al socio'
+        - inscripciones
+      summary: 'Buscar todas las inscripciones'
+      description: 'Endpoint para buscar todas las inscripciones de la base de datos, tabla inscripciones'
+      operationId: CU-ND-007
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /inscripciones/{idInscripcion}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - inscripciones
+      summary: 'Buscar una inscripcion por ID de la inscripcion'
+      description: 'Endpoint para buscar una inscripcion de la base de datos, tabla inscripciones'
+      operationId: CU-17
+      parameters:
+        - in: path
+          name: idInscripcion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /inscripciones/delete/{idInscripcion}:
+    delete:
+      security:
+        - BearerAuth: []
+      tags:
+        - inscripciones
+      summary: 'Eliminar una inscripcion por id'
+      description: 'Endpoint para eliminar una inscripcion por id en la base de datos, tabla inscripcionES'
+      operationId: CU-18
+      parameters:
+        - in: path
+          name: idInscripcion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
+      responses:
+        '200':
+          description: Datos eliminados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+  /inscripciones/update/{idInscripcion}:
+    put:
+      security:
+        - BearerAuth: []
+      tags:
+        - inscripciones
+      summary: 'Actualizar una inscripcion por ID'
+      description: 'Endpoint para actualizar una inscripcion por id en la base de datos, tabla AGENCIA'
+      operationId: CU-04
+      parameters:
+        - in: path
+          name: idInscripcion
+          schema:
+            type: integer
+          required: true
+          description: El ID debe ser un valor numérico
       requestBody:
-        description: 'Registrar un representate formato JSON'
+        description: 'Actualizar una agencia formato JSON'
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AprobarGasto' 
+              $ref: '#/components/schemas/Inscripcion' 
       responses:
         '200':
-          description: Voto enviado correctamente
+          description: Agencia actualizada correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+
+
 components:
   schemas:
     InicioSesion:
@@ -1299,27 +1397,21 @@ components:
         walletRep:
           type: string
           example: '0x03213213213sadsa'
-        walletSocio:
-          type: string
-          example: '0x03213213213sadsa'
-    EnviarToken:
+    Inscripcion:
       type: object
       properties:
-        addressOwner:
+        idInscripcion:
           type: integer
-          example: '0x3A5f1C98a50d13D79C44f7b19dDfbEdBA1E2830C'
-        addressSocio:
+          example: 1
+        formulario:
           type: string
-          example: '0x431c3176861722d815F331f953aB5017efCa68A4'
-    AprobarGasto:
-      type: object
-      properties:
-        addressOwner:
-          type: integer
-          example: '0x3A5f1C98a50d13D79C44f7b19dDfbEdBA1E2830C'
-        addressSpend:
+          example: 'Formulario0001.pdf'
+        declaracion:
           type: string
-          example: '0x431c3176861722d815F331f953aB5017efCa68A4'
+          example: 'declaracion0001.pdf'
+        estado:
+          type: string
+          example: 'online'
     Error:
       type: object
       properties:

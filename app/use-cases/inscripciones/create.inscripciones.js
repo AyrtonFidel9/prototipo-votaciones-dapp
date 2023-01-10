@@ -1,31 +1,30 @@
 import { Inscripciones } from '../../models/index.js';
 
-export const create = (req, res) => {
+export const inscripcionesCreate = async ({
+  formulario,
+  declaracion,
+  estado,
+  idAgencia,
+  idSocio
+}) => {
     // Validate request
-    if (!req.body.formulario) {
-      res.status(400).send({
-        message: "Content can not be empty!"
+    try{
+      const inscripcion = await Inscripciones.create({
+        formulario,
+        declaracion,
+        estado,
+        idAgencia,
+        idSocio
       });
-      return;
-    }
-  
-    // Create a inscripcion
-    const inscripcion = {
-      formulario: req.body.formulario,
-      declaracion: req.body.declaracion,
-      estado: req.body.estado,
-      idAgencia: req.body.idAgencia,
-    };
-  
-    // Save inscripcion in the database
-    Inscripciones.create(inscripcion)
-      .then(data => {
-        res.send(data);
+      return({
+        status: 200,
+        message: inscripcion.dataValues,
       })
-      .catch(err => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the inscripcion."
-        });
-      });
+
+    } catch(e){
+      throw ({
+        status: 400,
+        message: e,
+      })
+    }
   };

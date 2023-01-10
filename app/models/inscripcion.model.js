@@ -9,19 +9,20 @@ export const Inscripciones = sequelize.define('inscripciones',{
         autoIncrement: true
     },
     formulario: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
     },
     declaracion: {
-        type: DataTypes.BLOB,
+        type: DataTypes.STRING,
         allowNull: false
     },
     estado: {
         type: DataTypes.ENUM,
         values: [
-            'online',
-            'offline',
+            'pendiente',
+            'aprobado',
+            'reprobado',
         ],
-        defaultValue: 'online'
+        defaultValue: 'pendiente'
     }
 })
 

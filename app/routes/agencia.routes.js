@@ -25,7 +25,7 @@ routerAgencia.route('/registrar')
 
 routerAgencia.route('/:agenciaId')
     .get([authJwt.verifyToken,
-        authJwt.isAdmin
+        authJwt.isAdminOrSocio
     ],
     (req, res) => {
         AgenciaController.buscarAgencia(req,res);

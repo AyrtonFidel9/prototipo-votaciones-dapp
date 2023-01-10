@@ -85,6 +85,24 @@ const isJGE = (req, res, next) => {
     });
 };
 
+const isJGEorSocio = (req, res, next) => {
+    const bearer = req.headers['authorization'].split(' ');
+    const token = bearer[1];
+
+    const decoded = jwt.verify(token, secret);
+
+    Cuenta.findByPk(decoded.id).then( account => {
+        if(account.rol === 'ROLE_JGE' || account.rol === 'ROLE_SOCIO'){
+            next();
+            return;
+        }
+        
+        res.status(403).send({
+            message: "Se requiere el rol de presidente de la JGE o de Socio"
+        });
+    });
+};
+
 const isAdminOrJGE = (req, res, next) => {
     const bearer = req.headers['authorization'].split(' ');
     const token = bearer[1];
@@ -98,10 +116,30 @@ const isAdminOrJGE = (req, res, next) => {
         }
         
         res.status(403).send({
-            message: "Se requiere el rol de presidente de la JGE"
+            message: "Se requiere el rol de presidente de la JGE o de Admin"
         });
     });
 };
+
+
+const isAdminOrSocio = (req, res, next) => {
+    const bearer = req.headers['authorization'].split(' ');
+    const token = bearer[1];
+
+    const decoded = jwt.verify(token, secret);
+
+    Cuenta.findByPk(decoded.id).then( account => {
+        if(account.rol === 'ROLE_SOCIO' || account.rol === 'ROLE_ADMIN'){
+            next();
+            return;
+        }
+        
+        res.status(403).send({
+            message: "Se requiere el rol de presidente de la JGE o de Admin"
+        });
+    });
+};
+
 
 const authJwt = {
     verifyToken: verifyToken,
@@ -109,6 +147,8 @@ const authJwt = {
     isSocio: isSocio,
     isJGE: isJGE,
     isAdminOrJGE: isAdminOrJGE,
+    isJGEorSocio,
+    isAdminOrSocio,
 };
 
 export { authJwt };

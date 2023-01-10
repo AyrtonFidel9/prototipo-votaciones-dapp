@@ -57,7 +57,7 @@ export const Notificaciones = sequelize.define('notificaciones', {
     },
     grado: {
         type: DataTypes.ENUM,
-        values : [
+        values: [
             '1',
             '2',
             '3'

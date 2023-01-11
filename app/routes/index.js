@@ -7,6 +7,7 @@ import routerRecuperacion from './recuperacion.routes.js';
 import routerRepresentantes from './representantes.routes.js';
 import routerSocios from './socio.routes.js';
 import routerVotacion from './votacion.routes.js';
+import routerInscripciones from './inscripciones.routes.js';
 
 const routes = express.Router();
 
@@ -18,5 +19,6 @@ routes.use('/recuperacion', routerRecuperacion);
 routes.use('/elecciones', routerElecciones);
 routes.use('/representantes', routerRepresentantes);
 routes.use('/votaciones', routerVotacion);
+routes.use('/inscripciones', routerInscripciones);
 
 export default routes;

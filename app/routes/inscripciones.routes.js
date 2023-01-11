@@ -23,7 +23,7 @@ routerInscripciones.route('/registrar')
 routerInscripciones.route('/:idInscripcion')
     .get([
         authJwt.verifyToken,
-        authJwt.isJGE
+        authJwt.isJGEorSocio
     ],(req, res)=>{
         InscripcionesController.getInscripcion(req, res);
     });
@@ -31,7 +31,7 @@ routerInscripciones.route('/:idInscripcion')
 routerInscripciones.route('/')
     .get([
         authJwt.verifyToken,
-        authJwt.isSocio //OR JGE
+        authJwt.isJGEorSocio,
     ],(req, res)=>{
         InscripcionesController.getAllInscripciones(req, res);
     });

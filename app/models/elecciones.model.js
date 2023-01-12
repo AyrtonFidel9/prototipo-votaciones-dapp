@@ -69,3 +69,4 @@ Representantes.belongsTo(Elecciones, {
     foreignKey: 'idElecciones',
     targetKey: 'id'
 });
+

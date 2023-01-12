@@ -8,6 +8,10 @@ export const Inscripciones = sequelize.define('inscripciones',{
         primaryKey: true,
         autoIncrement: true
     },
+    nombre: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
     formulario: {
         type: DataTypes.STRING,
     },

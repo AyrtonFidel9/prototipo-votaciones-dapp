@@ -6,12 +6,9 @@ import {
    updateRepresentante,
    eleccionfindOne,
    generarBilletera,
-   ingresarBilletera
+   ingresarBilletera,
+   inscripcionFindOne
 } from "../use-cases/index.js";
-
-/**
- * Hacer el proceso de validacion para las inscripciones
- */
 
 function ingresarRepresentantesController(req, res) {
    function searchEleccion(idEleccion) {
@@ -21,9 +18,10 @@ function ingresarRepresentantesController(req, res) {
       });
    }
 
-   function searchInscripcion(idEleccion) {
+   function searchInscripcion(idInscripcion) {
       return new Promise((resolve, reject) => {
-         
+         const buscar = inscripcionFindOne(idInscripcion);
+         resolve(buscar);
       });
    }
 
@@ -34,13 +32,24 @@ function ingresarRepresentantesController(req, res) {
       });
    }
 
-   searchEleccion(req.body.idElecciones)
+   function ingresarWalletRepresentante(){
+      return new Promise((resolve, reject) => {
+         const wallet = generarBilletera();
+         const wallRep = ingresarBilletera(wallet);
+         resolve(wallRep);
+      });
+   }
+
+   searchInscripcion(req.body.idInscripcion)
+   .then(() => searchEleccion(req.body.idElecciones))
    .then(eleccion => eleccion.message.id)
    .then(idEleccion => {
-      const wallet = generarBilletera();
-      ingresarBilletera(wallet);
-      req.body.billeteraAddress = wallet.address;
       req.body.idEleccion = idEleccion;
+      return ingresarWalletRepresentante();
+   })
+   .then(wallet => wallet.datos)
+   .then( repWallet =>{
+      req.body.billeteraAddress = repWallet.address;
       return ingresarRepresentante(req.body);
    })
    .then(result => {

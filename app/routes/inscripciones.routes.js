@@ -49,7 +49,7 @@ routerInscripciones.route('/update/:idInscripcion')
         authJwt.verifyToken,
         authJwt.isJGE
     ], (req, res)=>{
-        InscripcionesController.updateInscripcion(req, res);
+        InscripcionesController.inscripcionesUpdate(req, res);
     });
 
 export default routerInscripciones;

@@ -1,25 +1,25 @@
 import {
     inscripcionesCreate,
-    buscarAgencia,
     inscripcionesFindAll,
     inscripcionFindOne,
     inscripcionesDeleteById,
-    inscripcionesUpdate
+    inscripcionesUpdate,
+    buscarSocio
 } from "../use-cases/index.js";
 import { VotacionesController } from "./index.js";
 
 /**
- * Validar que no haya mas de una Inscripciones por dia en una agencia
- * Validar que no se pueda modificar la Inscripciones una vez este iniciada
- * Trigger cambiar de estado la Inscripciones que ha terminado
- * Quitar la opción de eliminar a las Inscripciones del pasado
- * Validar que la creación de una Inscripciones se de en el estado no iniciado
+ * Asociar isncripciones con la eleccion
+ * Notificar el estado de la inscripcion
  */
 
 function ingresarInscripcionesController(req, res) {
-    function searchAgencia(idAgencia) {
+
+    console.log(req.body);
+
+    function searchSocio(id) {
         return new Promise((resolve, reject) => {
-            const buscar = buscarAgencia(idAgencia);
+            const buscar = buscarSocio(id);
             resolve(buscar);
         });
     }
@@ -31,10 +31,11 @@ function ingresarInscripcionesController(req, res) {
         });
     }
 
-    searchAgencia(req.body.idAgencia)
-        .then(agencia => agencia.message.id)
-        .then(idAgencia => {
-            req.body.idAgencia = idAgencia;
+    searchSocio(req.body.idSocio)
+        .then(socio =>{
+            const us = socio.message.dataValues;
+            req.body.idSocio = us.id;
+            req.body.nombre = `${new Date().toLocaleDateString()}-${us.nombres} ${us.apellidos}`;
             return ingresarInscripciones(req.body);
         })
         .then(result => {
@@ -91,14 +92,9 @@ function inscripcionesUpdateController (req, res) {
         resolve(up);
     });
 
-    buscarInscripciones(req.params.idInscripciones)
+    
+    buscarInscripciones(req.params.idInscripcion)
     .then(Inscripciones => {
-        if(req.body.estado === 'EN-CURSO')
-            VotacionesController.registrarInscripciones(
-            Inscripciones.message.id, 
-            req.body.dia,
-            // req.body.address,
-            );
         return actualizar(Inscripciones.message.id, req.body)
     })
     .then(resp=>{
@@ -125,7 +121,7 @@ function deleteInscripcionesController (req, res) {
         resolve(search);
     });
 
-    buscarInscripciones(req.params.idInscripciones)
+    buscarInscripciones(req.params.idInscripcion)
     .then(Inscripciones => eliminar(Inscripciones.message.id))
     .then(resp=>{
         res.status(resp.status).send({

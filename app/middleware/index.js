@@ -4,3 +4,4 @@ export * from './authJwt.js';
 export * from './socios/index.js';
 export * from './verifySignUp.js';
 export * from './representantes/index.js';
+export * from './inscripciones/index.js';

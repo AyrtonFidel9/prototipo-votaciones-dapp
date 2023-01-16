@@ -197,11 +197,33 @@ const enviarTokenController = async (req, res) => {
    }
 }
 
-const aprovarGastoToken = async (req, res) => {
-   
+const retornarBalanceController = async (req, res) => {
+   const { wallet } = req.params;
+
+   const balance = await voteToken.methods.balanceOf(wallet).call();
+   const balanceWei = web3.utils.fromWei(balance);
+
+   const balanceETH = await web3.eth.getBalance(wallet);
+   const balanceWeiETH = web3.utils.fromWei(balanceETH);
+
+   res.status(200).send({
+      ethers: balanceWeiETH,
+      BNE: balanceWei,
+   });
 }
 
 
+// en standby
+const validarSufragioVotanteController = async (req, res) => {
+   
+   const { idEleccion, wallet} = req.body;
+
+   const valor = await voteToken.methods.elecciones(idEleccion).call({
+      from: wallet
+   });
+//   const voto = valor.votosRe
+   return (valor.idEleccion == 0);
+}
 
 export default Object.freeze({
    emitirVoto: emitirVotoController,
@@ -209,6 +231,6 @@ export default Object.freeze({
    validarExistenciaEleccion: validarExistenciaEleccionController,
    enviarToken: enviarTokenController,
    sufragar: sufragarController,
-   aprovarGastoToken,
-
+   retornarBalance: retornarBalanceController,
+   validarSufragioVotante: validarSufragioVotanteController,
 });

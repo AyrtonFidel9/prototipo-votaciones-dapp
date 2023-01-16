@@ -36,4 +36,11 @@ routerVotacion.route('/aprobar-gasto')
       VotacionesController.aprovarGastoToken(req, res);
    });
 
+routerVotacion.route('/obtener-balance/:wallet')
+   .get([
+      authJwt.verifyToken,
+   ],(req, res) => {
+      VotacionesController.retornarBalance(req, res);
+   });
+
 export default routerVotacion;

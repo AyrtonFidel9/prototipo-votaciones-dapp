@@ -1,6 +1,6 @@
 import express from 'express';
 import { RepresentantesController } from '../controllers/index.js';
-import { authJwt, validateDisctictRep, validateRepresentante, validateRolRepresentante } from '../middleware/index.js';
+import { authJwt, validarRepresentante, validateDisctictRep, validateRepresentante, validateRolRepresentante } from '../middleware/index.js';
 
 const routerRepresentantes = express.Router();
 
@@ -23,6 +23,7 @@ routerRepresentantes.route('/registrar')
         validateRepresentante,
         validateRolRepresentante,
         validateDisctictRep,
+        validarRepresentante
     ],
     (req, res) => {
         RepresentantesController.ingresarRepresentantes(req, res);

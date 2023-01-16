@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
+import { Inscripciones } from './inscripcion.model.js';
 import { Representantes } from './representantes.model.js';
 
 export const Elecciones = sequelize.define('elecciones',{
@@ -70,3 +71,12 @@ Representantes.belongsTo(Elecciones, {
     targetKey: 'id'
 });
 
+Elecciones.hasMany(Inscripciones, {
+    foreignKey: 'idElecciones',
+    sourceKey: 'id'
+})
+
+Inscripciones.belongsTo(Elecciones,{
+    foreignKey: 'idElecciones',
+    targetKey: 'id'
+})

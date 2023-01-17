@@ -63,20 +63,24 @@ export const Elecciones = sequelize.define('elecciones',{
 
 Elecciones.hasMany(Representantes, {
     foreignKey: 'idElecciones',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
 });
 
 Representantes.belongsTo(Elecciones, {
     foreignKey: 'idElecciones',
-    targetKey: 'id'
+    targetKey: 'id',
 });
 
 Elecciones.hasMany(Inscripciones, {
     foreignKey: 'idElecciones',
-    sourceKey: 'id'
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
 })
 
 Inscripciones.belongsTo(Elecciones,{
     foreignKey: 'idElecciones',
-    targetKey: 'id'
+    targetKey: 'id',
 })

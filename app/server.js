@@ -188,18 +188,6 @@ async function main() {
             ultimoAcceso: date
         });
 
-        const inscripcion = await Inscripciones.create({
-            formulario: '',
-            declaracion: '',
-            idSocio: socio4.id,
-        });
-
-        const inscripcion2 = await Inscripciones.create({
-            formulario: '',
-            declaracion: '',
-            idSocio: socio4.id,
-        })
-
         const eleccion = await Elecciones.create({
             nombre: 'Elecciones 1',
             duracion: 8,
@@ -211,7 +199,20 @@ async function main() {
             duracion: 8,
             idAgencia: agencia2.id,
         });
-        
+
+        const inscripcion = await Inscripciones.create({
+            formulario: '',
+            declaracion: '',
+            idSocio: socio4.id,
+            idElecciones: eleccion2.id,
+        });
+
+        const inscripcion2 = await Inscripciones.create({
+            formulario: '',
+            declaracion: '',
+            idSocio: socio4.id,
+            idElecciones: eleccion2.id,
+        })
         
         const representante = await Representantes.create({
             principal: 1232,

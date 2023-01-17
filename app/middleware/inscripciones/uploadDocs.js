@@ -14,8 +14,8 @@ const pdfTypesFilter = async (req, file, cb) => {
 
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
-        req.body.formulario = `${Date.now()}-${req.body.id}-${file.originalname}`;
-        cb(null, `${Date.now()}-${req.body.id}-${file.originalname}`, req);
+        req.body[file.fieldname] = `${Date.now()}-${file.originalname}`;
+        cb(null, `${Date.now()}-${file.originalname}`, req);
     },
     destination: path.join(__dirname, `/app/public/docs/inscripcion/`),
 });
@@ -23,4 +23,5 @@ const storage = multer.diskStorage({
 export const uploadDocs = multer({
     storage: storage,
     fileFilter: pdfTypesFilter
-}).array('uploadedDocs',2);
+});
+

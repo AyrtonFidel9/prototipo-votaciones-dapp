@@ -107,13 +107,13 @@ function updateEleccionController (req, res) {
       if(req.body.estado === 'EN-CURSO'){
          existEleccionToken(
             eleccion.message.id,
-            //address
+            req.body.wallet,
          ).then(resp=>{
             if(resp === true){
                VotacionesController.registrarEleccion(
                   eleccion.message.id, 
                   req.body.dia,
-               // req.body.address,
+                  req.body.wallet,
                );
             }
          });

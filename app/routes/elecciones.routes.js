@@ -31,7 +31,6 @@ routerElecciones.route('/:idEleccion')
 routerElecciones.route('/')
     .get([
         authJwt.verifyToken,
-        authJwt.isJGEorSocio,
     ],(req, res)=>{
         EleccionesController.getAllElecciones(req, res);
     });

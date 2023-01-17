@@ -1,4 +1,7 @@
 function validateCedula(req, res, next){
+
+    console.log(req.body);
+
     let { cedula } = req.body;
 
     const value = [...cedula].reduce((acumulador, currentValue, index)=>{

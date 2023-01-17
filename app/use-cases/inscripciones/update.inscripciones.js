@@ -1,17 +1,23 @@
 import { Inscripciones } from '../../models/index.js';
 
-export const inscripcionesUpdate = async (idInscripciones, {
+export const inscripcionesUpdate = async (idInscripcion, {
   formulario,
   declaracion,
   estado,
   idAgencia,
-  idSocio
+  idSocio,
+  nombre
 }) => {
   try{
     const inscripcion = await Inscripciones.update({
-
+      formulario,
+      declaracion,
+      estado,
+      idAgencia,
+      idSocio,
+      nombre,
     },{
-      where: {id: idInscripciones}
+      where: {id: idInscripcion}
     })
 
     if(inscripcion[0] === 1)
@@ -22,7 +28,7 @@ export const inscripcionesUpdate = async (idInscripciones, {
     else 
       throw(`Ha ocurrido un error al actualizar los datos`)
 
-  } catch (e){
+  } catch (ex){
     throw ({
       status: 400,
       message: ex

@@ -23,10 +23,19 @@ routerVotacion.route('/enviar-voto')
 routerVotacion.route('/enviar-token')
    .post([
       authJwt.verifyToken,
-      authJwt.isAdmin,
+      authJwt.isAdminOrSocio,
    ],(req, res) => {
       VotacionesController.enviarToken(req, res);
    });
+
+routerVotacion.route('/enviar-ether')
+   .post([
+      authJwt.verifyToken,
+      authJwt.isJGEorSocio,
+   ],(req, res) => {
+      VotacionesController.enviarEther(req, res);
+   });
+
 
 routerVotacion.route('/aprobar-gasto')
    .post([
@@ -34,6 +43,13 @@ routerVotacion.route('/aprobar-gasto')
       authJwt.isAdmin,
    ],(req, res) => {
       VotacionesController.aprovarGastoToken(req, res);
+   });
+
+routerVotacion.route('/obtener-balance/:wallet')
+   .get([
+      authJwt.verifyToken,
+   ],(req, res) => {
+      VotacionesController.retornarBalance(req, res);
    });
 
 export default routerVotacion;

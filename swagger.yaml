@@ -1098,6 +1098,36 @@ paths:
           description: Voto enviado correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /votaciones/obtener-balance/{wallet}:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - votaciones
+      summary: 'Retornar balance de una billetera'
+      description: 'Endpoint para Retornar balance de una billetera'
+      parameters:
+        - in: path
+          name: wallet
+          schema:
+            type: string
+          required: true
+          description: La direccion de la billetera de ser una cadena
+      responses:
+        '200':
+          description: Datos encontrados correctamente
+        '400':
+          description: Operacion no autorizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: Datos no encontrados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
   /inscripciones/registrar:
     post:
       security:

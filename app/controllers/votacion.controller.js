@@ -33,22 +33,30 @@ const emitirVotoController = async (req, res) => {
 
 const validarExistenciaEleccionController = async (id, address) => {
    const valor = await voteToken.methods.elecciones(id).call({
-      from: '0x61634F5036737de8f15d36d7A476D21B52A43538'
+      from: address,
    });
    return (valor.idEleccion == 0);
 }
 
 const registrarEleccionController = async (id, dia, address) => {
-   // recolectar el address de quien registar la eleccion
-   console.log({dia, id});
+   const wallet = await obtenerAllBilleteras();
+
+   const billeteraJGE = wallet.message.filter(r =>
+      r.dataValues.address === address)[0].dataValues;
+
+   const privateKeyJGE = web3.eth.accounts.decrypt(
+      billeteraJGE.privateKey,
+      process.env.SECRET_KEY_WALLET
+   ).privateKey;
+
    try {
       const gasPrice = await web3.eth.getGasPrice();
       const gas = await voteToken.methods.agregarEleccion(id, dia).estimateGas({
-         from: '0x61634F5036737de8f15d36d7A476D21B52A43538',
+         from: address,
       });
-      web3.eth.accounts.wallet.add('e3cfe4fa8807091781651e8ac5acf488797e26e9b8a55d18ef2c2371154e7b7b');
+      web3.eth.accounts.wallet.add(`${privateKeyJGE}`);
       const value = await voteToken.methods.agregarEleccion(id, dia).send({
-         from: '0x61634F5036737de8f15d36d7A476D21B52A43538',
+         from: address,
          gasPrice: gasPrice,
          gas: gas,
       });
@@ -65,15 +73,11 @@ const sufragarController = async (req, res) => {
 
    const { idEleccion, walletRep, walletSocio } = req.body;
 
-   console.log(req.body);
-
    const gasPrice = await web3.eth.getGasPrice();
    const wallet = await obtenerAllBilleteras();
 
    const balanceSocio = await voteToken.methods.balanceOf(walletSocio).call();
    const balanceSocWei = web3.utils.fromWei(balanceSocio);
-
-
 
    if (balanceSocWei > 0) {
 
@@ -197,9 +201,64 @@ const enviarTokenController = async (req, res) => {
    }
 }
 
+const enviarEtherController = async (req, res) => {
+   const { addressOwner, addressSocio } = req.body;
+
+   const gasPrice = await web3.eth.getGasPrice();
+   const wallet = await obtenerAllBilleteras();
+
+   const walletSocio = wallet.message.filter(r =>
+      r.dataValues.address === addressSocio)[0].dataValues;
+
+   const privateKeySocio = web3.eth.accounts.decrypt(
+      walletSocio.privateKey,
+      process.env.SECRET_KEY_WALLET
+   ).privateKey;
+
+   web3.eth.accounts.wallet.add(`${privateKeySocio}`);
+
+   const nonce = await web3.eth.getTransactionCount(addressOwner, 'latest');
+   const toWei = web3.utils.toWei('0.0008', 'ether');
+
+   const transaction = {
+      'from': addressOwner,
+      'to': addressSocio,
+      'gasLimit': 1000000,
+      'gasPrice': gasPrice,
+      'nonce': nonce,
+      'value': toWei,
+   }
+
+   const walletOwner = wallet.message.filter(r =>
+      r.dataValues.address === addressOwner)[0].dataValues;
+
+   const privateKeyOwner = web3.eth.accounts.decrypt(
+      walletOwner.privateKey,
+      process.env.SECRET_KEY_WALLET
+   ).privateKey;
+
+   const signedTx = await web3.eth.accounts.signTransaction(transaction, privateKeyOwner);
+
+   web3.eth.sendSignedTransaction(
+      signedTx.rawTransaction,
+      (err, hash) => {
+         console.log(hash);
+         if (err) {
+            return res.status(400).send({
+               message: err,
+            })
+         } else {
+            return res.status(200).send({
+               message: hash
+            })
+         }
+      }
+   );   
+}
+
+
 const retornarBalanceController = async (req, res) => {
    const { wallet } = req.params;
-
    const balance = await voteToken.methods.balanceOf(wallet).call();
    const balanceWei = web3.utils.fromWei(balance);
 
@@ -233,4 +292,5 @@ export default Object.freeze({
    sufragar: sufragarController,
    retornarBalance: retornarBalanceController,
    validarSufragioVotante: validarSufragioVotanteController,
+   enviarEther: enviarEtherController,
 });

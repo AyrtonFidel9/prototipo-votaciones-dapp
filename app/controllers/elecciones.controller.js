@@ -11,9 +11,15 @@ import { VotacionesController } from "./index.js";
 /**
  * Validar que no haya mas de una eleccion por dia en una agencia
  * Validar que no se pueda modificar la eleccion una vez este iniciada
- * Trigger cambiar de estado la eleccion que ha terminado
+ * Trigger cambiar de estado la eleccion que ha terminado -
  * Quitar la opcion de eliminar a las elecciones del pasado
  * Validar que la creacion de una eleccion se de en el estado no iniciado
+ * Para en CURSO se debe estar enla fecha actual
+ * Si esta guardado como EXITOSO solo se puede cambiar a nulidad  e impugnado y viceversa
+ * EN CURSO no se acepta modificaciones
+ * Si esta EN CURSO, no puede pasar a NO INICIADO
+ * Si esta en EXITOSO NO PUEDE CAMBIAR A EN CURSO
+ * de EN CURSO solo puede cambiar a NO INICIADO
  */
 
 

@@ -33,7 +33,6 @@ routerAgencia.route('/:agenciaId')
 
 routerAgencia.route('/')
     .get([authJwt.verifyToken,
-        authJwt.isAdminOrJGE,
     ],
     (req, res) => {
         AgenciaController.buscarAllAgencias(req,res);

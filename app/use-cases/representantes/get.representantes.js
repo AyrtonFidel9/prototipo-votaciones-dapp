@@ -1,6 +1,8 @@
 import { Representantes } from "../../models/index.js";
 import { sequelize } from "../../database.js";
 import { config } from 'dotenv';
+import { Op } from "sequelize";
+
 config();
 
 const representantesFindAll = async () => {
@@ -79,7 +81,7 @@ const buscarRepresentante = async (codigo1, codigo2, codigo3, eleccion) => {
       const search = await Representantes.findAll({
          where: {
             idElecciones: eleccion,
-            $or: [
+            [Op.or]: [
                {
                   principal: codigo1
                },
@@ -91,20 +93,16 @@ const buscarRepresentante = async (codigo1, codigo2, codigo3, eleccion) => {
                }
             ]
          } 
-      })
+      });
 
-      if(search !== null)
-         throw(`El socio ${codigo} está registrado con otro representante}`);
-      else
-         return({
-            status: 200,
-            message: search,
-         });
+      if(search.length > 0)
+         throw(`Uno de los socios proporcionados ya estan registrados como representantes`);
+
    }catch(ex){
-         throw ({
-            status: 400,
-            message: ex
-         });
+      throw ({
+         status: 400,
+         message: ex
+      });
    }
 }
 

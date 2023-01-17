@@ -41,3 +41,5 @@ Representantes.belongsTo(Inscripciones, {
     foreignKey: 'idInscripcion',
     targetKey: 'id'
 })
+
+export const inscripcionesElecciones = sequelize.create

@@ -45,6 +45,7 @@ export const Socios = sequelize.define('socios',{
                 msg: 'Por favor, ingrese la cédula'
             }
         },
+        unique: true
     },
     codigo: {
         type: DataTypes.INTEGER,
@@ -61,6 +62,10 @@ export const Socios = sequelize.define('socios',{
                 msg: 'Por favor, ingrese el código'
             }
         },
+        unique: {
+            arg: true,
+            msg: 'Código ya registrado'
+        }
     },
     imagen: {
         type: DataTypes.STRING,
@@ -92,6 +97,10 @@ export const Socios = sequelize.define('socios',{
                 msg: 'Los datos del campo email no corresponden a un correo electrónico'
             }
         },
+        unique: {
+            arg: true,
+            msg: 'Este email ya está registrado'
+        }
     },
     celular: {
         type: DataTypes.STRING,
@@ -106,11 +115,16 @@ export const Socios = sequelize.define('socios',{
             },
             isNumeric: {
                 msg: 'Solo se admiten números'
-            }
+            },
         },
+        unique: {
+            arg: true,
+            msg: 'Número de celular ya esta registrado'
+        }
     }
 }, {
-    freezeTableName: true
+    freezeTableName: true,
+    
 });
 
 Socios.hasOne(Cuenta, {

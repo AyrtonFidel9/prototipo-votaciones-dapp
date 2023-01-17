@@ -1,4 +1,5 @@
-import { buscarSocioCondition } from "../../use-cases/index.js";
+import { request } from "express";
+import { buscarRepresentante, buscarSocioCondition } from "../../use-cases/index.js";
 
 
 async function validateRepresentante(req, res, next) {
@@ -32,4 +33,24 @@ async function validateRepresentante(req, res, next) {
    }
 }
 
-export { validateRepresentante };
+const validarRepresentante = async (req, res, next) => {
+   const {principal, psuplente, ssuplente, idElecciones} = req.body;
+
+   try{
+      const validar = await buscarRepresentante(principal, psuplente, ssuplente, idElecciones);
+
+      if(validar.status !== 200){
+         return res.status(validar.status).send({
+            message:validar.message
+         });
+      }
+      next()
+   } catch{
+      console.log(err);
+      return res.status(err.status).send({
+         message: err.message
+      });
+   }
+}
+
+export { validateRepresentante, validarRepresentante };

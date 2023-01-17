@@ -74,4 +74,39 @@ const representanteFindOne = async (id) => {
    }
 };
 
-export { representantesFindAll, representanteFindOne };
+const buscarRepresentante = async (codigo1, codigo2, codigo3, eleccion) => {
+   try{
+      const search = await Representantes.findAll({
+         where: {
+            idElecciones: eleccion,
+            $or: [
+               {
+                  principal: codigo1
+               },
+               {
+                  psuplente: codigo2
+               },
+               {
+                  ssuplente: codigo3
+               }
+            ]
+         } 
+      })
+
+      if(search !== null)
+         throw(`El socio ${codigo} está registrado con otro representante}`);
+      else
+         return({
+            status: 200,
+            message: search,
+         });
+   }catch(ex){
+         throw ({
+            status: 400,
+            message: ex
+         });
+   }
+}
+
+
+export { representantesFindAll, representanteFindOne, buscarRepresentante };

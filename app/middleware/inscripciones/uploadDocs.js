@@ -24,3 +24,4 @@ export const uploadDocs = multer({
     storage: storage,
     fileFilter: pdfTypesFilter
 });
+

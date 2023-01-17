@@ -13,7 +13,6 @@ export const Representantes = sequelize.define('representantes',{
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            
             min: 1,
             notEmpty: {
                 msg: 'No se admiten campos vacíos'
@@ -61,22 +60,4 @@ export const Representantes = sequelize.define('representantes',{
     ethCantVot: {
         type: DataTypes.SMALLINT
     }
-},
-{
-    indexes: [
-        {
-            unique: true,
-            fields: ['principal', 'psuplente', 'ssuplente'],
-            
-        }
-    ],
-    validate: {
-        validateRepresentante() {
-            if ((this.principal === principal) !== (this.longitude === null)) {
-                throw new Error('Either both latitude and longitude, or neither!');
-            }
-        }
-    }
-},
-    
-);
+});

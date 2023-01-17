@@ -6,7 +6,8 @@ export const inscripcionesUpdate = async (idInscripcion, {
   estado,
   idAgencia,
   idSocio,
-  nombre
+  nombre,
+  idElecciones,
 }) => {
   try{
     const inscripcion = await Inscripciones.update({
@@ -16,6 +17,7 @@ export const inscripcionesUpdate = async (idInscripcion, {
       idAgencia,
       idSocio,
       nombre,
+      idElecciones,
     },{
       where: {id: idInscripcion}
     })

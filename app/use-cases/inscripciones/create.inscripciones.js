@@ -6,7 +6,8 @@ export const inscripcionesCreate = async ({
   estado,
   idAgencia,
   idSocio,
-  nombre
+  nombre,
+  idElecciones,
 }) => {
     // Validate request
     try{
@@ -17,6 +18,7 @@ export const inscripcionesCreate = async ({
         idAgencia,
         idSocio,
         nombre,
+        idElecciones,
       });
       return({
         status: 200,

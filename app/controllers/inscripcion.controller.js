@@ -9,7 +9,6 @@ import {
 import { VotacionesController } from "./index.js";
 
 /**
- * Asociar isncripciones con la eleccion
  * Notificar el estado de la inscripcion
  */
 

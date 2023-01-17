@@ -60,6 +60,12 @@ async function main() {
             privateKey: web3.eth.accounts.encrypt('cc81dcea47e7f92d4cb12c0875f14a330fae6fc26f94387c75cb58ccad11b5dd', process.env.SECRET_KEY_WALLET),
         });
 
+        const billeteraJGE = await Billetera.create({
+            address: sequelize.fn('PGP_SYM_ENCRYPT','0x2Ba5ccd3842625aFfde477Ec66dBB9886D962bD0',process.env.SECRET_KEY_DATABASE),
+            privateKey: web3.eth.accounts.encrypt('b4229edc48e712da26c43e0ef579c31f7490d45911fa6a772f36bb3c45f24610', process.env.SECRET_KEY_WALLET),
+        });
+
+
         const socio = await Socios.create({
             nombres: 'Jane Jane',
             apellidos: 'Sanchez Mendoza',
@@ -93,6 +99,7 @@ async function main() {
             celular: '0981588753',
             cedula: '0104292461',
             idAgencia: agencia2.id,
+            billeteraAddress: billeteraJGE.address,
         });
 
         const socio4 = await Socios.create({
@@ -207,7 +214,7 @@ async function main() {
         
         
         const representante = await Representantes.create({
-            "principal": 1232,
+            principal: 1232,
             "psuplente": 1231,
             "ssuplente": 1233,
             "ethCantVot": 20,
@@ -216,7 +223,7 @@ async function main() {
         });
 
         const representante2 = await Representantes.create({
-            "principal": 1231,
+            principal: 1231,
             "psuplente": 1233,
             "ssuplente": 1232,
             "ethCantVot": 20,

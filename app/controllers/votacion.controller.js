@@ -272,16 +272,18 @@ const retornarBalanceController = async (req, res) => {
 }
 
 
-// en standby
 const validarSufragioVotanteController = async (req, res) => {
    
    const { idEleccion, wallet} = req.body;
 
-   const valor = await voteToken.methods.elecciones(idEleccion).call({
-      from: wallet
+   const valor = await voteToken.methods.haveVoteReceived(
+      idEleccion,
+      wallet,
+   ).call();
+   
+   res.status(200).send({
+      yaVoto: valor,
    });
-//   const voto = valor.votosRe
-   return (valor.idEleccion == 0);
 }
 
 export default Object.freeze({

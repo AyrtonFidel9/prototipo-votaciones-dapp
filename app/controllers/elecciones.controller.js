@@ -22,9 +22,6 @@ import { VotacionesController } from "./index.js";
  * de EN CURSO solo puede cambiar a NO INICIADO
  */
 
-
-
-
 function ingresarEleccionController(req, res) {
    function searchAgencia(idAgencia) {
       return new Promise((resolve, reject) => {

@@ -64,6 +64,7 @@ function getAllEleccionesController(req, res) {
             message: eleccion.message
          });
    }).catch(err => {
+      console.log(err);
       return res.status(err.status).send({
          message: err.message
       });
@@ -137,7 +138,6 @@ function updateEleccionController (req, res) {
       });
    });
 }
-
 
 function deleteEleccionController (req, res) {
    const eliminar = (id) => new Promise((resolve, reject)=>{

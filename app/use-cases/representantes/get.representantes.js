@@ -106,5 +106,27 @@ const buscarRepresentante = async (codigo1, codigo2, codigo3, eleccion) => {
    }
 }
 
+const getCountRepresentantesByidEleccion = async(eleccion) => {
+   try{
+      const { count, rows } = await Representantes.findAndCountAll({
+         where: {
+            idElecciones: eleccion,
+         } 
+      });
 
-export { representantesFindAll, representanteFindOne, buscarRepresentante };
+      return count;
+
+   }catch(ex){
+      throw ({
+         status: 400,
+         message: ex
+      });
+   }
+}
+
+export { 
+   representantesFindAll, 
+   representanteFindOne, 
+   buscarRepresentante,
+   getCountRepresentantesByidEleccion,
+};

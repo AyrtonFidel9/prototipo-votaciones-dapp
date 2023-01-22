@@ -70,7 +70,6 @@ routerSocios.route('/existbyPhone/:number')
 routerSocios.route('/innerjoin/cuentas')
     .get([
         authJwt.verifyToken,
-        authJwt.isJGEorSocio,
     ],(req, res)=>{
         SociosController.buscarSocioCuenta(req, res);
     });

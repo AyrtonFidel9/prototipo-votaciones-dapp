@@ -55,7 +55,6 @@ routerVotacion.route('/obtener-balance/:wallet')
 routerVotacion.route('/validar-sufragio')
    .post([
       authJwt.verifyToken,
-      authJwt.isSocio,
    ],(req, res) => {
       VotacionesController.validarSufragioVotante(req, res);
    });

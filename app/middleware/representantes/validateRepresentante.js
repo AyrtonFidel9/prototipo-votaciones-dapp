@@ -1,4 +1,3 @@
-import { request } from "express";
 import { buscarRepresentante, buscarSocioCondition } from "../../use-cases/index.js";
 
 

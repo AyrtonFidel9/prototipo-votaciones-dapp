@@ -29,16 +29,25 @@ const ingresarSocioController = (req, res) => {
         });
     }
 
+    function ingresarWallet(wallet) {
+        return new Promise((resolve, rej) => {
+            const added = ingresarBilletera(wallet);
+            resolve(added);
+        });
+    }
+
     searchAgencia(req.body.idAgencia)
     .then(agencia => {
         return agencia.message.id;
     })
     .then(id => {
-        const wallet = generarBilletera();
-        ingresarBilletera(wallet);
         req.body.idAgencia = id;
-        req.body.billeteraAddress = wallet.address;
-        return ingresar(req.body);
+        const wallet = generarBilletera();
+        return ingresarWallet(wallet);
+    })
+    .then( (wallet) => {
+        req.body.billeteraAddress = wallet.datos.address;
+        return ingresar(req.body)
     })
     .then(result=>{
         return res.status(result.status).send({

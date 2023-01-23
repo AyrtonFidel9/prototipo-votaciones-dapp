@@ -20,6 +20,7 @@ import { VotacionesController } from "./index.js";
  * Si esta EN CURSO, no puede pasar a NO INICIADO
  * Si esta en EXITOSO NO PUEDE CAMBIAR A EN CURSO
  * de EN CURSO solo puede cambiar a NO INICIADO
+ * Que la duracion de la eleccion no exceda las 8 horas habiles
  */
 
 function ingresarEleccionController(req, res) {

@@ -5,6 +5,7 @@ import messagesController from "./messages.controller.js";
 const ingresarRecuperacionController = (req, res) => {
     const { number } = req.params;
 
+
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
 
     function searchSocioByPhone(number) {
@@ -35,11 +36,12 @@ const ingresarRecuperacionController = (req, res) => {
     .then(idSocio => setCodeRecovery(ip,codigo,idSocio))
     .then(code => {
         //enviar mensaje por SMS
-        /*messagesController.sendMessage(
+        console.log(code);
+        messagesController.sendMessage(
             `Su código de recuperación, para reestablecer su contraseña es: ${codigo}`,
             number,
             "RECOVERY" // no valen los espacios, solo alfanumericos
-        );*/
+        );
         res.status(code.status).send({
             message: code.datos,
         });

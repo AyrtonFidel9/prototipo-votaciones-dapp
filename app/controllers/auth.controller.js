@@ -111,6 +111,8 @@ function rebootCuentaSocioController (req, res){
     const { idSocio } = req.params;
     const { newPassword } = req.body;
 
+    console.log(req.body);
+
     function search(idSocio) {
         return new Promise((res, rej) => {
             const cuenta = buscarCuentaBySocio(idSocio);
@@ -137,12 +139,13 @@ function rebootCuentaSocioController (req, res){
         const updatedData = { ...cuenta._previousDataValues };
         updatedData.ipCliente = ipCliente;
         updatedData.password = newPassword;
-        return actualizar(cuenta._previousDataValues, updatedData)
+        return actualizar(cuenta._previousDataValues, updatedData);
     }).then(up => {
         return res.status(up.status).send({
             message: up.message
         });
     }).catch(err => {
+        console.log(err);
         return res.status(err.status).send({
             message: err.message
         });

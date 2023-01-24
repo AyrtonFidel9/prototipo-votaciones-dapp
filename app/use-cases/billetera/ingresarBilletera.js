@@ -9,10 +9,11 @@ export default async function ingresarBilletera(
    privateKey,}
 ) {
    try {
-      const wallet = Billetera.create({ 
+      const wallet = await Billetera.create({ 
          address: sequelize.fn('PGP_SYM_ENCRYPT',address,process.env.SECRET_KEY_DATABASE),
          privateKey 
       });
+      console.log(wallet);
       return {
          status: 200,
          datos: wallet

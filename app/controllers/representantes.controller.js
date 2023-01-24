@@ -124,6 +124,7 @@ function updateRepresentanteController (req, res) {
    .then(eleccion => eleccion.message.id)
    .then(idEleccion => {
       req.body.idEleccion = idEleccion;
+      console.log(req.body);
       return buscarRepresentante(req.params.idRepresentante);
    })
    .then(representante => actualizar(representante.message.id, req.body))

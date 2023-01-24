@@ -45,9 +45,11 @@ const ingresarSocioController = (req, res) => {
         const wallet = generarBilletera();
         return ingresarWallet(wallet);
     })
-    .then( (wallet) => {
+    .then((wallet) => {
+        console.log(wallet);
         req.body.billeteraAddress = wallet.datos.address;
-        return ingresar(req.body)
+        console.log(req.body);
+        return ingresar(req.body);
     })
     .then(result=>{
         return res.status(result.status).send({

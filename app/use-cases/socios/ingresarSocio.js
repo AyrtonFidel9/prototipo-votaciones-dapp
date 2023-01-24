@@ -16,7 +16,6 @@ export default async function ingresarSocio(
    }, ip
 ) {
    try {
-
       const socio = await Socios.create({
          nombres: nombres,
          apellidos: apellidos,

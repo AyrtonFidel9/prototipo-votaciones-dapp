@@ -3,6 +3,7 @@ import { sequelize } from '../database.js';
 import { Billetera } from './billetera.model.js';
 import { Cuenta } from './cuenta.model.js';
 import { Inscripciones } from './inscripcion.model.js';
+import { Justificaciones } from './justificacion.model.js';
 
 export const Socios = sequelize.define('socios',{
     id: {
@@ -153,6 +154,23 @@ Socios.hasMany(Inscripciones, {
     onUpdate: 'CASCADE',
     hooks: true
 })
+
+Justificaciones.belongsTo(Socios, {
+    foreignKey: 'idSocio',
+    targetKey: 'id'
+})
+
+Socios.hasMany(Justificaciones, {
+    foreignKey: {
+        name: 'idSocio',
+        allowNull: false,
+    },
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    hooks: true
+})
+
 
 Inscripciones.belongsTo(Socios, {
     foreignKey: 'idSocio',

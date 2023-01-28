@@ -80,6 +80,8 @@ Elecciones.hasMany(Inscripciones, {
     onUpdate: 'CASCADE',
 })
 
+
+
 Inscripciones.belongsTo(Elecciones,{
     foreignKey: 'idElecciones',
     targetKey: 'id',

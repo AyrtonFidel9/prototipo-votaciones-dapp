@@ -16,7 +16,7 @@ async function main() {
     //CREATE EXTENSION IF NOT EXISTS pgcrypto;
     try {
         const web3 = new Web3();
-        await sequelize.sync();
+        await sequelize.sync({force: true});
         app.listen(PORT, ()=>{
             console.log("Server is listening on port", PORT);
         });

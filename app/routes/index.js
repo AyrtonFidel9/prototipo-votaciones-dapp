@@ -8,7 +8,8 @@ import routerRepresentantes from './representantes.routes.js';
 import routerSocios from './socio.routes.js';
 import routerVotacion from './votacion.routes.js';
 import routerInscripciones from './inscripciones.routes.js';
-import { uploadDocs, uploadFile } from '../middleware/index.js';
+import routerJustificacion from './justificacion.routes.js';
+import { uploadDocs, uploadFile, uploadJustificacion } from '../middleware/index.js';
 
 const routes = express.Router();
 
@@ -24,5 +25,6 @@ routes.use('/inscripciones', uploadDocs.fields([
     { name: 'declaracion', maxCount: 1},
     { name: 'formulario', maxCount: 1},
 ]), routerInscripciones);
+routes.use('/justificacion', uploadJustificacion.single('justificacion'), routerJustificacion);
 
 export default routes;

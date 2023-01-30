@@ -25,6 +25,6 @@ routes.use('/inscripciones', uploadDocs.fields([
     { name: 'declaracion', maxCount: 1},
     { name: 'formulario', maxCount: 1},
 ]), routerInscripciones);
-routes.use('/justificacion', uploadJustificacion.single('justificacion'), routerJustificacion);
+routes.use('/justificacion', uploadJustificacion.single('documento'), routerJustificacion);
 
 export default routes;

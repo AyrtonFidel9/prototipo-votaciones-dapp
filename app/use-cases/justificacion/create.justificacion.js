@@ -4,7 +4,8 @@ export const justificacionCreate = async ({
   nombre,
   fecha,
   documento,
-  idUsuario,
+  idSocio,
+  estado,
   idEleccion,
 }) => {
     // Validate request
@@ -14,7 +15,7 @@ export const justificacionCreate = async ({
         fecha,
         documento,
         estado,
-        idUsuario,
+        idSocio,
         idEleccion,
       });
       return({

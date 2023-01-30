@@ -3,7 +3,7 @@ import Sequelize from 'sequelize';
 export const sequelize = new Sequelize(
     'vote-coac', // nombre de la base de datos 
     'postgres', // usuario
-    'postgres', // contraseña
+    '', // contraseña
     {
         host: 'localhost', //ip del servidor
         port: 5432,

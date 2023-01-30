@@ -10,6 +10,7 @@ export const justificacionUpdate = async (idJustificacion, {
     const justificacion = await Justificacion.update({
       fecha,
       documento,
+      estado,
       idSocio,
       idElecciones,
     },{

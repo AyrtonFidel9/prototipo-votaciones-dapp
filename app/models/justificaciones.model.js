@@ -18,6 +18,15 @@ export const Justificacion = sequelize.define('justificaciones',{
     },
     documento:{
         type: DataTypes.STRING,
+    },
+    estado:{
+        type: DataTypes.ENUM,
+        values: [
+            'pendiente',
+            'aprobado',
+            'reprobado',
+        ], 
+        defaultValue: 'pendiente'
     }
 });
 

@@ -13,6 +13,7 @@ export const justificacionCreate = async ({
         nombre,
         fecha,
         documento,
+        estado,
         idUsuario,
         idEleccion,
       });

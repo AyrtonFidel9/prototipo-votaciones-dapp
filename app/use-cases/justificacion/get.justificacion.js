@@ -36,3 +36,24 @@ export const justificacionFindOne = async (id) => {
     });
   }
 };
+
+// Find a single Incripciones with an id
+export const justificacionFindEleccionaAndSocio = async (idSocio, idEleccion) => {
+  try{
+    const justificacion = await Justificacion.findOne({
+      where: {
+        idSocio: idSocio,
+        idEleccion: idEleccion,
+      }
+    });
+    if (justificacion === null)
+      return true;
+    else 
+      return false;
+  } catch (e) {
+    throw ({
+      status: 400,
+      message: e
+    });
+  }
+};

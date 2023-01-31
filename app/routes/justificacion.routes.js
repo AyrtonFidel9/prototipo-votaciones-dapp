@@ -1,6 +1,7 @@
 import express from 'express';
 import { JustificacionController } from '../controllers/index.js';
 import { authJwt } from '../middleware/index.js';
+import { validarJustificacion } from '../middleware/justificacion/validarJustificacion.js';
 
 const routerJustificacion = express.Router();
 
@@ -15,7 +16,8 @@ routerJustificacion.use((res, req, next) => {
 routerJustificacion.route('/registrar')
     .post([
         authJwt.verifyToken, 
-        authJwt.isSocio
+        authJwt.isSocio,
+        validarJustificacion,
     ],function (req, res) {
         JustificacionController.ingresarJustificacion(req, res);
     });
@@ -46,9 +48,9 @@ routerJustificacion.route('/delete/:idJustificacion')
 routerJustificacion.route('/update/:idJustificacion')
     .put([
         authJwt.verifyToken,
-        authJwt.isSocio
+        authJwt.isJGEorSocio
     ], (req, res)=>{
-        JustificacionController.updateJustificacion(req, res);
+        JustificacionController.justificacionUpdate(req, res);
     });
 
 export default routerJustificacion;

@@ -95,15 +95,15 @@ function justificacionUpdateController (req, res) {
         resolve(search);
     });
 
-    const actualizar = (id, datos) => new Promise((resolve, reject)=>{
-        const up = justificacionUpdate(id, datos);
+    const actualizar = (id, oldDoc,datos) => new Promise((resolve, reject)=>{
+        const up = justificacionUpdate(id, oldDoc ,datos);
         resolve(up);
     });
 
     
     buscarJustificacion(req.params.idJustificacion)
     .then(justificacion => {
-        return actualizar(justificacion.message.id, req.body)
+        return actualizar(justificacion.message.id, justificacion.message.documento, req.body);
     })
     .then(resp=>{
         res.status(resp.status).send({

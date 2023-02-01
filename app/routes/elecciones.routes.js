@@ -1,6 +1,11 @@
 import express from 'express';
 import { EleccionesController } from '../controllers/index.js';
-import { authJwt } from '../middleware/index.js';
+import { 
+    authJwt, 
+    validarElecciones, 
+    validarHorasHabiles, 
+    validarModificacion 
+} from '../middleware/index.js';
 
 const routerElecciones = express.Router();
 
@@ -15,7 +20,9 @@ routerElecciones.use((res, req, next) => {
 routerElecciones.route('/registrar')
     .post([
         authJwt.verifyToken, 
-        authJwt.isJGE
+        authJwt.isJGE,
+        validarElecciones,
+        validarHorasHabiles,
     ],function (req, res) {
         EleccionesController.ingresarElecciones(req, res);
     });
@@ -46,7 +53,8 @@ routerElecciones.route('/delete/:idEleccion')
 routerElecciones.route('/update/:idEleccion')
     .put([
         authJwt.verifyToken,
-        authJwt.isJGE
+        authJwt.isJGE,
+        validarModificacion
     ], (req, res)=>{
         EleccionesController.updateEleccion(req, res);
     });

@@ -9,7 +9,7 @@ export const create = async ({
    estado,
    idAgencia,
 }) => {
-   console.log(nombre);
+   estado = 'NO-INICIADO';
    try {
       const eleccion = await Elecciones.create({
          nombre,

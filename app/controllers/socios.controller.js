@@ -10,6 +10,9 @@ import {
     buscarSocioCuenta,
 } from "../use-cases/socios/index.js";
 import fs from 'fs';
+import csv from 'csv-parser';
+import path from "path";
+import os from 'os';
 import { generarBilletera, ingresarBilletera } from "../use-cases/index.js";
 
 
@@ -67,6 +70,86 @@ const ingresarSocioController = (req, res) => {
         })
     });
 }
+
+const ingresoMasivoController = (req, res) => {
+    const { idAgencia, buffer, nombreArchivo } = req.body;
+    const tmpFile = path.join(os.tmpdir(), nombreArchivo);
+    fs.writeFileSync(tmpFile, buffer);
+
+    function searchAgencia(id) {
+        return new Promise((resolve, rej) => {
+            const buscar = buscarAgencia(id);
+            resolve(buscar);
+        });
+    }
+
+
+
+    searchAgencia(idAgencia).then( agencia => {
+        return agencia.message.id;
+    }).catch(err=>{
+        return res.status(err.status).send({
+            message: err.message
+        })
+    });
+
+    const dataArray = [];
+    fs.createReadStream(tmpFile)
+        .pipe(csv())
+        .on('data', (data) => {
+            const cleanedData = {};
+            const usuario = {};
+            Object.entries(data).forEach(([key, value]) => {
+                cleanedData[key] = value.trim();
+                const valores = cleanedData[key].split(';');
+                key.split(';').forEach((item, index) => {
+                    usuario[item] = valores[index];
+                });
+            });            
+            dataArray.push(usuario);
+        }).on('end', () => {
+            let todoBien = false;
+            const errores = [];
+            dataArray.map( async (usuario) => {
+                try{
+                    const wallet = generarBilletera();
+                    usuario.estado = true; //---------------CONDICIONADO FALTA
+                    usuario.idAgencia = idAgencia;
+                    if(!usuario.celular){
+                        usuario.celular = null;
+                    }
+                    const walletDef = await ingresarBilletera(wallet);
+                    usuario.billeteraAddress = walletDef.datos.address;
+
+                    console.log(usuario);
+
+                    const result = await ingresarSocio({ ...usuario }, 
+                        req.headers['x-real-ip'] || req.connection.remoteAddress);
+
+                    if(result.status === 200){
+                        console.log('TODOOOO BIEN')
+                        todoBien = true;
+                    }else{
+                        console.log("dEERRRORRRRR");
+                        todoBien = false;
+                    }
+                }catch(err){
+                    errores.push(err);
+                    console.log(err);
+                }
+            });
+            if(todoBien){
+                return res.status(200).send({
+                    message: 'Datos ingresados con éxito',
+                })
+            }else{
+                return res.status(400).send({
+                    message: errores,
+                })
+            }
+        })
+}
+
 
 const actualizarSocioController = (req, res) => {
 
@@ -224,4 +307,5 @@ export default Object.freeze({
     existSocioByPhone: existSocioByPhoneController,
     buscarAllSocios: buscarAllSociosController,
     buscarSocioCuenta: buscarSocioCuentaController,
+    ingresoMasivo: ingresoMasivoController,
 });

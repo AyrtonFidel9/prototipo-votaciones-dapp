@@ -1,6 +1,6 @@
 import express from 'express';
 import { SociosController } from '../controllers/index.js';
-import { authJwt } from '../middleware/index.js';
+import { authJwt, uploadFile, uploadFileCSV } from '../middleware/index.js';
 import { validateCedula } from '../middleware/index.js';
 
 const routerSocios = express.Router();
@@ -17,6 +17,7 @@ routerSocios.route('/registrar')
     .post([
         authJwt.verifyToken,
         authJwt.isAdmin,
+        uploadFile.single('imagen'),
         validateCedula,
     ], (req, res) => {
         if (req.fileValidationError) {
@@ -73,5 +74,17 @@ routerSocios.route('/innerjoin/cuentas')
     ],(req, res)=>{
         SociosController.buscarSocioCuenta(req, res);
     });
+
+routerSocios.route('/carga-masiva')
+    .post([
+        uploadFileCSV.single('datos'),
+        authJwt.verifyToken,
+        authJwt.isAdmin,
+    ], (req, res) => {
+        req.body.buffer = req.file.buffer;
+        req.body.nombreArchivo = req.file.originalname;
+        SociosController.ingresoMasivo(req, res);
+    });
+
 
 export default routerSocios;

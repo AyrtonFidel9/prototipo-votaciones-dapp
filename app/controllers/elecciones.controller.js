@@ -78,7 +78,7 @@ function getEleccionController(req, res) {
    const search = eleccionfindOne(idEleccion);
 
    search.then(resp => {
-      res.status(resp.status).send({
+      return res.status(resp.status).send({
          message: resp.message
       });
    }).catch(err => {
@@ -110,26 +110,30 @@ function updateEleccionController (req, res) {
    buscarEleccion(req.params.idEleccion)
    .then(eleccion => {
       if(req.body.estado === 'EN-CURSO'){
-         existEleccionToken(
+         return existEleccionToken(
             eleccion.message.id,
             req.body.wallet,
-         ).then(resp=>{
-            if(resp === true){
-               VotacionesController.registrarEleccion(
-                  eleccion.message.id, 
-                  req.body.dia,
-                  req.body.wallet,
-               );
-            }
-         });
-      }
-      return eleccion;
-   })
-   .then(eleccion => {
-      return actualizar(eleccion.message.id, req.body)
+         )
+      }else return false;
    })
    .then(resp=>{
-      res.status(resp.status).send({
+      if(resp === true){
+         return VotacionesController.registrarEleccion(
+            req.params.idEleccion, 
+            req.body.dia,
+            req.body.wallet,
+            res,
+         );
+      }
+   })
+   .then((e) => {
+      if(e.status === 400){
+         throw(e);
+      }
+      return actualizar(req.params.idEleccion, req.body)
+   })
+   .then(resp=>{
+      return res.status(resp.status).send({
          message: resp.message
       });
    }).catch(err => {
@@ -154,7 +158,7 @@ function deleteEleccionController (req, res) {
    buscarEleccion(req.params.idEleccion)
    .then(eleccion => eliminar(eleccion.message.id))
    .then(resp=>{
-      res.status(resp.status).send({
+      return res.status(resp.status).send({
          message: resp.message
       });
    }).catch(err => {

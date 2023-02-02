@@ -9,13 +9,14 @@ import routerSocios from './socio.routes.js';
 import routerVotacion from './votacion.routes.js';
 import routerInscripciones from './inscripciones.routes.js';
 import routerJustificacion from './justificacion.routes.js';
-import { uploadDocs, uploadFile, uploadJustificacion } from '../middleware/index.js';
+import { uploadDocs, uploadFile, uploadFileCSV, uploadJustificacion } from '../middleware/index.js';
 
 const routes = express.Router();
 
 routes.use(routerCuenta);
 routes.use('/agencia', routerAgencia);
-routes.use('/socios', uploadFile.single('imagen'), routerSocios);
+//routes.use('/socios', uploadFile.single('imagen'), routerSocios);
+routes.use('/socios', routerSocios);
 routes.use('/notificacion', routerNotificacion);
 routes.use('/recuperacion', routerRecuperacion);
 routes.use('/elecciones', routerElecciones);

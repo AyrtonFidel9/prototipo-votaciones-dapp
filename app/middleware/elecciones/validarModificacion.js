@@ -10,40 +10,50 @@ async function validarModificacion(req, res, next) {
 
     const fecha = new Date(`${eleccion.dia} ${eleccion.hora}`);
     const horaInicial = fecha.getTime();
-    const fechaFinal = fecha.addHours(eleccion.duracion);
-    const horaFinal = fechaFinal.getTime();
-    const horaActual = Date.now().getTime();
-
+    const horaFinal = fecha.setHours(fecha.getHours() + eleccion.duracion);
+    const horaActual = (new Date()).getTime();
 
     if(eleccion.estado === 'NO-INICIADO'){
         if(estado !== 'EN-CURSO') return res.status(400).send({
             message:
             "La elección solo puede cambiar al estado de EN CURSO"
         })
-    }else if(eleccion.estado === 'EN-CURSO')
+    }else if(eleccion.estado === 'EN-CURSO'){
         //toma toda la fecha completa con hora
         if(horaActual >= horaInicial && horaActual <= horaFinal) return res.status(400).send({
             message:
             "La elección esta EN CURSO, no puede ser modificada "
-        }); else if( horaActual > horaInicial && estado !== 'NO-INICIADO' ){
-            return res.status(400).send({
-                message:
-                "La elección solo puede cambiar al estado de NO-INICIADO"
-            })
+        }); 
+
+        if( horaActual > horaInicial && estado !== 'NO-INICIADO'){
+            if(estado !== 'EXITOSO'){
+                return res.status(400).send({
+                    message:
+                    "La elección solo puede cambiar al estado de NO-INICIADO"
+                })
+            }
         } else if(horaActual < horaFinal && estado !== 'EXITOSO'){
             return res.status(400).send({
                 message:
                 "La elección solo puede cambiar al estado de EXITOSO"
             })
         }
-    else if(eleccion.estado === 'EXITOSO') {
-        if(estado !== 'NULIDAD' || estado !== 'IMPUGNADO') return res.status(400).send({
+
+    } else if(eleccion.estado === 'EXITOSO') {
+        if(estado !== 'NULIDAD' && estado !== 'IMPUGNADO') return res.status(400).send({
             message:
             "Una elección EXITOSA solo puede cambiar al estado de NULIDAD o IMPUGNADO "
         });
-    }else {
+    } else if(eleccion.estado === 'IMPUGNADO' || eleccion.estado === 'NULIDAD' ) { 
+        if(estado !== 'IMPUGNADO' && estado !== 'NULIDAD' && estado !== 'EXITOSO'){
+            return res.status(400).send({
+                message:
+                "La elección no puede ser modificada al estado de EN CURSO , NO INICIADO o EXITOSO"
+            });
+        }
+    } else {
         const fecEle = new Date(eleccion.dia);
-        const fecHoy = new Date(Date.now().toLocaleDateString('en-CA'));
+        const fecHoy = new Date().toLocaleDateString('en-CA');
         if(fecEle !== fecHoy && estado === 'EN-CURSO') return res.status(400).send({
             message:
             "La elección no puede ser modificada al estado de EN CURSO"

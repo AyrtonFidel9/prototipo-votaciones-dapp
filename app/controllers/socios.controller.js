@@ -14,6 +14,7 @@ import csv from 'csv-parser';
 import path from "path";
 import os from 'os';
 import { generarBilletera, ingresarBilletera } from "../use-cases/index.js";
+import { actualizarEstadoSocio } from "../use-cases/socios/actualizarSocio.js";
 
 
 const ingresarSocioController = (req, res) => {
@@ -71,7 +72,30 @@ const ingresarSocioController = (req, res) => {
     });
 }
 
-const ingresoMasivoController = (req, res) => {
+const leftJoinNotMatching = (array1, array2) => {
+    const result = [];
+    array1.forEach(obj1 => {
+        const obj2 = array2.find(x => parseInt(x.codigo) === parseInt(obj1.dataValues.codigo));
+        if (!obj2) {
+        result.push({ ...obj1 });
+        }
+    });
+    return result;
+};
+
+const rightJoinNotMatching = (array1, array2) => {
+    const result = [];
+    array2.forEach(obj2 => {
+        const obj1 = array1.find(x => parseInt(x.dataValues.codigo) === parseInt(obj2.codigo));
+        if (!obj1) {
+        result.push({ ...obj2 });
+        }
+    });
+    return result;
+};
+
+
+const ingresoMasivoController = async (req, res) => {
     const { idAgencia, buffer, nombreArchivo } = req.body;
     const tmpFile = path.join(os.tmpdir(), nombreArchivo);
     fs.writeFileSync(tmpFile, buffer);
@@ -83,8 +107,6 @@ const ingresoMasivoController = (req, res) => {
         });
     }
 
-
-
     searchAgencia(idAgencia).then( agencia => {
         return agencia.message.id;
     }).catch(err=>{
@@ -92,6 +114,13 @@ const ingresoMasivoController = (req, res) => {
             message: err.message
         })
     });
+
+
+    const dbUsuarios = await buscarSocioCuenta();
+    const dbSocios = dbUsuarios.message.filter( item => {
+        return item.dataValues.idAgencia === parseInt(idAgencia) && 
+                item.dataValues.cuentum.dataValues.rol === 'ROLE_SOCIO'
+    })
 
     const dataArray = [];
     fs.createReadStream(tmpFile)
@@ -110,7 +139,20 @@ const ingresoMasivoController = (req, res) => {
         }).on('end', () => {
             let todoBien = false;
             const errores = [];
-            dataArray.map( async (usuario) => {
+
+            const arrayDeshabilitar = leftJoinNotMatching(dbSocios, dataArray);
+
+            const arrayNuevos = rightJoinNotMatching(dbSocios, dataArray);
+
+            arrayDeshabilitar.map( async (usuario) => {
+                try{
+                    await actualizarEstadoSocio(usuario.dataValues.id, false);
+                }catch (err){
+                    console.log(err);
+                }
+            });
+
+            arrayNuevos.map( async (usuario) => {
                 try{
                     const wallet = generarBilletera();
                     usuario.estado = true; //---------------CONDICIONADO FALTA

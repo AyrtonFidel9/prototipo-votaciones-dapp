@@ -3,7 +3,7 @@ import { sequelize } from '../database.js';
 import { Billetera } from './billetera.model.js';
 import { Cuenta } from './cuenta.model.js';
 import { Inscripciones } from './inscripcion.model.js';
-import { Justificaciones } from './justificacion.model.js';
+import { Justificacion } from './justificacion.model.js';
 
 export const Socios = sequelize.define('socios',{
     id: {
@@ -155,12 +155,12 @@ Socios.hasMany(Inscripciones, {
     hooks: true
 })
 
-Justificaciones.belongsTo(Socios, {
+Justificacion.belongsTo(Socios, {
     foreignKey: 'idSocio',
     targetKey: 'id'
 })
 
-Socios.hasMany(Justificaciones, {
+Socios.hasMany(Justificacion, {
     foreignKey: {
         name: 'idSocio',
         allowNull: false,

@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
 import { Elecciones } from './elecciones.model.js';
 
-export const Justificaciones = sequelize.define('justificaciones',{
+export const Justificacion = sequelize.define('justificaciones',{
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -31,12 +31,12 @@ export const Justificaciones = sequelize.define('justificaciones',{
 })
 
 
-Justificaciones.belongsTo(Elecciones, {
+Justificacion.belongsTo(Elecciones, {
     foreignKey: 'idElecciones',
     targetKey: 'id'
 })
 
-Elecciones.hasMany(Justificaciones, {
+Elecciones.hasMany(Justificacion, {
     foreignKey: 'idElecciones',
     sourceKey: 'id',
     onDelete: 'CASCADE',

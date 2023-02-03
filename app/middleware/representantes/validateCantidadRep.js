@@ -10,7 +10,8 @@ async function validarCantidadRepresentantes(req, res, next) {
 
    const agencia = await buscarAgencia(eleccion.message.dataValues.idAgencia);
 
-   if(representantes <= agencia.message.dataValues.numRepresentantes){
+   // se suma uno por el candidato donde se vota nulo
+   if(representantes <= agencia.message.dataValues.numRepresentantes+1){
       next();
    }else{
       return res.status(400).send({

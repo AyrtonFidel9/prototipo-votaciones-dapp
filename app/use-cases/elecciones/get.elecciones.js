@@ -37,7 +37,7 @@ const eleccionfindOne = async (id) => {
 
 const eleccionesfindOneByAgencia = async (idAgencia) => {
    try {
-      const elecciones = await Elecciones.findOne({
+      const elecciones = await Elecciones.findAll({
          where: {
             idAgencia
          }
@@ -55,4 +55,25 @@ const eleccionesfindOneByAgencia = async (idAgencia) => {
    }
 };
 
-export { eleccionesfindAll, eleccionfindOne, eleccionesfindOneByAgencia };
+const eleccionesfindOneByFecha = async (idAgencia, fecha) => {
+   try {
+      const elecciones = await Elecciones.findAll({
+         where: {
+            idAgencia,
+            dia: fecha,
+         }
+      });
+      return ({
+         status: 200,
+         message: elecciones,
+      });
+
+   } catch (ex) {
+      throw ({
+         status: 400,
+         message: ex
+      });
+   }
+};
+
+export { eleccionesfindAll, eleccionfindOne, eleccionesfindOneByAgencia, eleccionesfindOneByFecha };

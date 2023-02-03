@@ -4,7 +4,10 @@ import {
    eleccionesfindAll,
    eleccionfindOne,
    deleteEleccionById,
-   updateEleccion
+   updateEleccion,
+   createRepresentante,
+   generarBilletera,
+   ingresarBilletera,
 } from "../use-cases/index.js";
 import { VotacionesController } from "./index.js";
 
@@ -20,7 +23,7 @@ import { VotacionesController } from "./index.js";
  * Si esta EN CURSO, no puede pasar a NO INICIADO [ X ]
  * Si esta en EXITOSO NO PUEDE CAMBIAR A EN CURSO [ x ]
       * de EN CURSO solo puede cambiar a NO INICIADO [ X ]
- * Que la duracion de la eleccion no exceda las 8 horas habiles []
+ * Que la duracion de la eleccion no exceda las 8 horas habiles [X]
  */
 
 function ingresarEleccionController(req, res) {
@@ -38,13 +41,46 @@ function ingresarEleccionController(req, res) {
       });
    }
 
+   function ingresarDummy(datos) {
+      return new Promise((resolve, reject) => {
+         const ingresar = createRepresentante(datos);;
+         resolve(ingresar);
+      });
+   }
+
+   function ingresarWalletRepresentante(){
+      return new Promise((resolve, reject) => {
+         const wallet = generarBilletera();
+         const wallRep = ingresarBilletera(wallet);
+         resolve(wallRep);
+      });
+   }
+
+
    searchAgencia(req.body.idAgencia)
       .then(agencia => agencia.message.id)
       .then(idAgencia => {
          req.body.idAgencia = idAgencia;
+
          return ingresarEleccion(req.body);
       })
       .then(result => {
+         ingresarWalletRepresentante()
+            .then(wallet => wallet.datos)
+            .then( repWallet =>{
+               const dummy = {
+                  principal: 0,
+                  psuplente: 0,
+                  ssuplente: 0,
+                  billeteraAddress: repWallet.address,
+                  idInscripcion: null,
+                  idElecciones: result.message.id,
+               }
+               return ingresarDummy(dummy);
+            }).then(respo => {
+               console.log(respo);
+            }).catch(err => console.log(err));
+
          return res.status(result.status).send({
             message: result.message,
          });
@@ -109,6 +145,7 @@ function updateEleccionController (req, res) {
 
    buscarEleccion(req.params.idEleccion)
    .then(eleccion => {
+      
       if(req.body.estado === 'EN-CURSO'){
          return existEleccionToken(
             eleccion.message.id,
@@ -125,6 +162,9 @@ function updateEleccionController (req, res) {
             res,
          );
       }
+      return ({
+         status: 200,
+      })
    })
    .then((e) => {
       if(e.status === 400){
@@ -137,10 +177,11 @@ function updateEleccionController (req, res) {
          message: resp.message
       });
    }).catch(err => {
-      console.log(err);
-      return res.status(err.status).send({
-         message: err.message
-      });
+      if(err.status){
+         return res.status(err.status).send({
+            message: err.message
+         });
+      }
    });
 }
 

@@ -152,7 +152,7 @@ const ingresoMasivoController = async (req, res) => {
                 }
             });
 
-            arrayNuevos.map( async (usuario) => {
+            arrayNuevos.forEach( async (usuario) => {
                 try{
                     const wallet = generarBilletera();
                     usuario.estado = true; //---------------CONDICIONADO FALTA
@@ -162,17 +162,12 @@ const ingresoMasivoController = async (req, res) => {
                     }
                     const walletDef = await ingresarBilletera(wallet);
                     usuario.billeteraAddress = walletDef.datos.address;
-
-                    console.log(usuario);
-
                     const result = await ingresarSocio({ ...usuario }, 
                         req.headers['x-real-ip'] || req.connection.remoteAddress);
 
                     if(result.status === 200){
-                        console.log('TODOOOO BIEN')
                         todoBien = true;
                     }else{
-                        console.log("dEERRRORRRRR");
                         todoBien = false;
                     }
                 }catch(err){
@@ -180,15 +175,9 @@ const ingresoMasivoController = async (req, res) => {
                     console.log(err);
                 }
             });
-            if(todoBien){
-                return res.status(200).send({
-                    message: 'Datos ingresados con éxito',
-                })
-            }else{
-                return res.status(400).send({
-                    message: errores,
-                })
-            }
+            return res.status(200).send({
+                message: 'Datos ingresados con éxito',
+            })
         })
 }
 

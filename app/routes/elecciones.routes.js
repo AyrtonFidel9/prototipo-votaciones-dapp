@@ -54,7 +54,8 @@ routerElecciones.route('/update/:idEleccion')
     .put([
         authJwt.verifyToken,
         authJwt.isJGE,
-        validarModificacion
+        validarModificacion,
+        validarHorasHabiles,
     ], (req, res)=>{
         EleccionesController.updateEleccion(req, res);
     });

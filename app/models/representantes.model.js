@@ -1,7 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
-import { validateRepresentante } from '../middleware/index.js';
-import { Billetera } from './billetera.model.js';
+
 
 export const Representantes = sequelize.define('representantes',{
     id: {
@@ -13,7 +12,6 @@ export const Representantes = sequelize.define('representantes',{
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            min: 1,
             notEmpty: {
                 msg: 'No se admiten campos vacíos'
             },
@@ -29,7 +27,6 @@ export const Representantes = sequelize.define('representantes',{
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            min: 1,
             notEmpty: {
                 msg: 'No se admiten campos vacíos'
             },
@@ -45,7 +42,6 @@ export const Representantes = sequelize.define('representantes',{
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-            min: 1,
             notEmpty: {
                 msg: 'No se admiten campos vacíos'
             },

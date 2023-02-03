@@ -50,6 +50,7 @@ routerSocios.route('/')
 routerSocios.route('/update/:idSocio')
     .put([
         authJwt.verifyToken,
+        uploadFile.single('imagen'),
         validateCedula
     ], (req, res) => {
         SociosController.actualizarSocio(req, res);
@@ -77,10 +78,17 @@ routerSocios.route('/innerjoin/cuentas')
 
 routerSocios.route('/carga-masiva')
     .post([
-        uploadFileCSV.single('datos'),
         authJwt.verifyToken,
         authJwt.isAdmin,
+        uploadFileCSV.single('datos'),
     ], (req, res) => {
+        
+        if (req.fileValidationError) {
+            res.status(400).send({
+                message: req.fileValidationError
+            });
+        }
+
         req.body.buffer = req.file.buffer;
         req.body.nombreArchivo = req.file.originalname;
         SociosController.ingresoMasivo(req, res);

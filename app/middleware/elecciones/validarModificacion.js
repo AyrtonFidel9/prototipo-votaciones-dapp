@@ -18,6 +18,15 @@ async function validarModificacion(req, res, next) {
             message:
             "La elección solo puede cambiar al estado de EN CURSO"
         })
+        // console.log(eleccion.dia);
+        // const fecEle = new Date(eleccion.dia).toLocaleDateString('en-CA');
+        const fecHoy = new Date().toLocaleDateString('en-CA');
+        console.log(eleccion.dia, fecHoy);
+        if(eleccion.dia !== fecHoy && estado === 'EN-CURSO') return res.status(400).send({
+            message:
+            "La elección no puede ser modificada al estado de EN CURSO, por la fecha"
+        });
+
     }else if(eleccion.estado === 'EN-CURSO'){
         //toma toda la fecha completa con hora
         if(horaActual >= horaInicial && horaActual <= horaFinal) return res.status(400).send({
@@ -51,14 +60,15 @@ async function validarModificacion(req, res, next) {
                 "La elección no puede ser modificada al estado de EN CURSO , NO INICIADO o EXITOSO"
             });
         }
-    } else {
-        const fecEle = new Date(eleccion.dia);
-        const fecHoy = new Date().toLocaleDateString('en-CA');
-        if(fecEle !== fecHoy && estado === 'EN-CURSO') return res.status(400).send({
-            message:
-            "La elección no puede ser modificada al estado de EN CURSO"
-        });
     }
+    //else {
+    //     const fecEle = new Date(eleccion.dia);
+    //     const fecHoy = new Date().toLocaleDateString('en-CA');
+    //     if(fecEle !== fecHoy && estado === 'EN-CURSO') return res.status(400).send({
+    //         message:
+    //         "La elección no puede ser modificada al estado de EN CURSO"
+    //     });
+    // }
 
     next();
 }

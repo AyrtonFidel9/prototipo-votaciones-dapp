@@ -45,12 +45,12 @@ routerJustificacion.route('/delete/:idJustificacion')
         JustificacionController.deleteJustificacion(req, res);
     });
 
-routerJustificacion.route('/update/:idJustificacion')
-    .put([
-        authJwt.verifyToken,
-        authJwt.isJGEorSocio
-    ], (req, res)=>{
-        JustificacionController.justificacionUpdate(req, res);
-    });
+// routerJustificacion.route('/update/:idJustificacion')
+//     .put([
+//         authJwt.verifyToken,
+//         authJwt.isJGEorSocio
+//     ], (req, res)=>{
+//         JustificacionController.justificacionUpdate(req, res);
+//     });
 
 export default routerJustificacion;

@@ -24,6 +24,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use('/images',express.static(path.join(__dirname, '/public/images/')));
 app.use('/files',express.static(path.join(__dirname, '/public/docs/inscripcion')));
+app.use('/justificacion', express.static(path.join(__dirname, '/public/docs/justificacion')));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(

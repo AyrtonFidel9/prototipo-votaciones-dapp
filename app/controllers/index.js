@@ -8,3 +8,4 @@ export { default as EleccionesController } from './elecciones.controller.js';
 export { default as RepresentantesController } from './representantes.controller.js';
 export { default as VotacionesController } from './votacion.controller.js';
 export { default as InscripcionesController } from './inscripcion.controller.js'
+export { default as JustificacionController } from './justificacion.controller.js'

@@ -1,7 +1,7 @@
 import { Socios } from "../../models/index.js";
 import { registrarCuenta } from "../cuenta/index.js";
 
-// verificar que los campos de cedula, codigo, email y celular no estae duplicados
+// verificar que los campos de cedula, codigo, email y celular no estae duplicados [x]
 export default async function ingresarSocio(
    { nombres,
       apellidos,
@@ -36,7 +36,6 @@ export default async function ingresarSocio(
             ip,
             socio.id,
          );
-
          return {
             status: 200, //OK,
             message: {

@@ -51,3 +51,29 @@ export default async function actualizarSocio (
         })
     }
 }
+
+
+export async function actualizarEstadoSocio (
+    id,
+    estado){
+
+    try{
+        const socio = await Socios.update({
+
+            estado: estado,
+
+        },{
+            where: {id: id}
+        });
+
+        return {
+            status: 200,
+            message: "Datos actualizados con exito",
+        }
+    }catch(err){
+        throw ({
+            status: 400,
+            message: err,
+        })
+    }
+}

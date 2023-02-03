@@ -41,8 +41,8 @@ async function main() {
         // });
 
         // const billetera = await Billetera.create({
-        //     address: sequelize.fn('PGP_SYM_ENCRYPT','0x3A5f1C98a50d13D79C44f7b19dDfbEdBA1E2830C',process.env.SECRET_KEY_DATABASE),
-        //     privateKey: web3.eth.accounts.encrypt('0facd7d25e19f2b343fbd9275937aa892715fa98b6654b0235d44cda7d700875', process.env.SECRET_KEY_WALLET),
+        //     address: sequelize.fn('PGP_SYM_ENCRYPT','0xCBB2481F511b5fdD34680bBf97dAe505A93f1203',process.env.SECRET_KEY_DATABASE),
+        //     privateKey: web3.eth.accounts.encrypt('7195d411338eb8e7b41daf45584a19e6b399c6db1c1d2ada198bdf6cbfad493b', process.env.SECRET_KEY_WALLET),
         // });
 
         // const billetera2 = await Billetera.create({

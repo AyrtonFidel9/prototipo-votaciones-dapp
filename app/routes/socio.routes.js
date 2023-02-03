@@ -1,6 +1,6 @@
 import express from 'express';
 import { SociosController } from '../controllers/index.js';
-import { authJwt } from '../middleware/index.js';
+import { authJwt, uploadFile, uploadFileCSV } from '../middleware/index.js';
 import { validateCedula } from '../middleware/index.js';
 
 const routerSocios = express.Router();
@@ -17,6 +17,7 @@ routerSocios.route('/registrar')
     .post([
         authJwt.verifyToken,
         authJwt.isAdmin,
+        uploadFile.single('imagen'),
         validateCedula,
     ], (req, res) => {
         if (req.fileValidationError) {
@@ -49,6 +50,7 @@ routerSocios.route('/')
 routerSocios.route('/update/:idSocio')
     .put([
         authJwt.verifyToken,
+        uploadFile.single('imagen'),
         validateCedula
     ], (req, res) => {
         SociosController.actualizarSocio(req, res);
@@ -73,5 +75,24 @@ routerSocios.route('/innerjoin/cuentas')
     ],(req, res)=>{
         SociosController.buscarSocioCuenta(req, res);
     });
+
+routerSocios.route('/carga-masiva')
+    .post([
+        authJwt.verifyToken,
+        authJwt.isAdmin,
+        uploadFileCSV.single('datos'),
+    ], (req, res) => {
+        
+        if (req.fileValidationError) {
+            res.status(400).send({
+                message: req.fileValidationError
+            });
+        }
+
+        req.body.buffer = req.file.buffer;
+        req.body.nombreArchivo = req.file.originalname;
+        SociosController.ingresoMasivo(req, res);
+    });
+
 
 export default routerSocios;

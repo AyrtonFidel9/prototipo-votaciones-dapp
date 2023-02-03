@@ -4,23 +4,26 @@ import {
    eleccionesfindAll,
    eleccionfindOne,
    deleteEleccionById,
-   updateEleccion
+   updateEleccion,
+   createRepresentante,
+   generarBilletera,
+   ingresarBilletera,
 } from "../use-cases/index.js";
 import { VotacionesController } from "./index.js";
 
 /**
- * Validar que no haya mas de una eleccion por dia en una agencia
- * Validar que no se pueda modificar la eleccion una vez este iniciada
- * Trigger cambiar de estado la eleccion que ha terminado -
- * Quitar la opcion de eliminar a las elecciones del pasado
- * Validar que la creacion de una eleccion se de en el estado no iniciado
- * Para en CURSO se debe estar enla fecha actual
- * Si esta guardado como EXITOSO solo se puede cambiar a nulidad  e impugnado y viceversa
- * EN CURSO no se acepta modificaciones
- * Si esta EN CURSO, no puede pasar a NO INICIADO
- * Si esta en EXITOSO NO PUEDE CAMBIAR A EN CURSO
- * de EN CURSO solo puede cambiar a NO INICIADO
- * Que la duracion de la eleccion no exceda las 8 horas habiles
+ * Validar que no haya mas de una eleccion por dia en una agencia [X]
+ * Validar que no se pueda modificar la eleccion una vez este iniciada [X] back []front
+ * Trigger cambiar de estado la eleccion que ha terminado - [-] - NO SE HACE
+ * Quitar la opcion de eliminar a las elecciones del pasado [-] desde el FRONT
+ * Validar que la creacion de una eleccion se de en el estado no iniciado [X]
+ * Para en CURSO se debe estar enla fecha actual [X]
+ * Si esta guardado como EXITOSO solo se puede cambiar a nulidad  e impugnado y viceversa [X]
+ * EN CURSO no se acepta modificaciones [X]
+ * Si esta EN CURSO, no puede pasar a NO INICIADO [ X ]
+ * Si esta en EXITOSO NO PUEDE CAMBIAR A EN CURSO [ x ]
+      * de EN CURSO solo puede cambiar a NO INICIADO [ X ]
+ * Que la duracion de la eleccion no exceda las 8 horas habiles [X]
  */
 
 function ingresarEleccionController(req, res) {
@@ -38,13 +41,46 @@ function ingresarEleccionController(req, res) {
       });
    }
 
+   function ingresarDummy(datos) {
+      return new Promise((resolve, reject) => {
+         const ingresar = createRepresentante(datos);;
+         resolve(ingresar);
+      });
+   }
+
+   function ingresarWalletRepresentante(){
+      return new Promise((resolve, reject) => {
+         const wallet = generarBilletera();
+         const wallRep = ingresarBilletera(wallet);
+         resolve(wallRep);
+      });
+   }
+
+
    searchAgencia(req.body.idAgencia)
       .then(agencia => agencia.message.id)
       .then(idAgencia => {
          req.body.idAgencia = idAgencia;
+
          return ingresarEleccion(req.body);
       })
       .then(result => {
+         ingresarWalletRepresentante()
+            .then(wallet => wallet.datos)
+            .then( repWallet =>{
+               const dummy = {
+                  principal: 0,
+                  psuplente: 0,
+                  ssuplente: 0,
+                  billeteraAddress: repWallet.address,
+                  idInscripcion: null,
+                  idElecciones: result.message.id,
+               }
+               return ingresarDummy(dummy);
+            }).then(respo => {
+               console.log(respo);
+            }).catch(err => console.log(err));
+
          return res.status(result.status).send({
             message: result.message,
          });
@@ -78,7 +114,7 @@ function getEleccionController(req, res) {
    const search = eleccionfindOne(idEleccion);
 
    search.then(resp => {
-      res.status(resp.status).send({
+      return res.status(resp.status).send({
          message: resp.message
       });
    }).catch(err => {
@@ -109,34 +145,43 @@ function updateEleccionController (req, res) {
 
    buscarEleccion(req.params.idEleccion)
    .then(eleccion => {
+      
       if(req.body.estado === 'EN-CURSO'){
-         existEleccionToken(
+         return existEleccionToken(
             eleccion.message.id,
             req.body.wallet,
-         ).then(resp=>{
-            if(resp === true){
-               VotacionesController.registrarEleccion(
-                  eleccion.message.id, 
-                  req.body.dia,
-                  req.body.wallet,
-               );
-            }
-         });
-      }
-      return eleccion;
-   })
-   .then(eleccion => {
-      return actualizar(eleccion.message.id, req.body)
+         )
+      }else return false;
    })
    .then(resp=>{
-      res.status(resp.status).send({
+      if(resp === true){
+         return VotacionesController.registrarEleccion(
+            req.params.idEleccion, 
+            req.body.dia,
+            req.body.wallet,
+            res,
+         );
+      }
+      return ({
+         status: 200,
+      })
+   })
+   .then((e) => {
+      if(e.status === 400){
+         throw(e);
+      }
+      return actualizar(req.params.idEleccion, req.body)
+   })
+   .then(resp=>{
+      return res.status(resp.status).send({
          message: resp.message
       });
    }).catch(err => {
-      console.log(err);
-      return res.status(err.status).send({
-         message: err.message
-      });
+      if(err.status){
+         return res.status(err.status).send({
+            message: err.message
+         });
+      }
    });
 }
 
@@ -154,7 +199,7 @@ function deleteEleccionController (req, res) {
    buscarEleccion(req.params.idEleccion)
    .then(eleccion => eliminar(eleccion.message.id))
    .then(resp=>{
-      res.status(resp.status).send({
+      return res.status(resp.status).send({
          message: resp.message
       });
    }).catch(err => {

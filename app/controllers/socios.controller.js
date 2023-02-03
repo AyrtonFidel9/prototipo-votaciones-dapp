@@ -10,7 +10,11 @@ import {
     buscarSocioCuenta,
 } from "../use-cases/socios/index.js";
 import fs from 'fs';
+import csv from 'csv-parser';
+import path from "path";
+import os from 'os';
 import { generarBilletera, ingresarBilletera } from "../use-cases/index.js";
+import { actualizarEstadoSocio } from "../use-cases/socios/actualizarSocio.js";
 
 
 const ingresarSocioController = (req, res) => {
@@ -67,6 +71,116 @@ const ingresarSocioController = (req, res) => {
         })
     });
 }
+
+const leftJoinNotMatching = (array1, array2) => {
+    const result = [];
+    array1.forEach(obj1 => {
+        const obj2 = array2.find(x => parseInt(x.codigo) === parseInt(obj1.dataValues.codigo));
+        if (!obj2) {
+        result.push({ ...obj1 });
+        }
+    });
+    return result;
+};
+
+const rightJoinNotMatching = (array1, array2) => {
+    const result = [];
+    array2.forEach(obj2 => {
+        const obj1 = array1.find(x => parseInt(x.dataValues.codigo) === parseInt(obj2.codigo));
+        if (!obj1) {
+        result.push({ ...obj2 });
+        }
+    });
+    return result;
+};
+
+
+const ingresoMasivoController = async (req, res) => {
+    const { idAgencia, buffer, nombreArchivo } = req.body;
+    const tmpFile = path.join(os.tmpdir(), nombreArchivo);
+    fs.writeFileSync(tmpFile, buffer);
+
+    function searchAgencia(id) {
+        return new Promise((resolve, rej) => {
+            const buscar = buscarAgencia(id);
+            resolve(buscar);
+        });
+    }
+
+    searchAgencia(idAgencia).then( agencia => {
+        return agencia.message.id;
+    }).catch(err=>{
+        return res.status(err.status).send({
+            message: err.message
+        })
+    });
+
+
+    const dbUsuarios = await buscarSocioCuenta();
+    const dbSocios = dbUsuarios.message.filter( item => {
+        return item.dataValues.idAgencia === parseInt(idAgencia) && 
+                item.dataValues.cuentum.dataValues.rol === 'ROLE_SOCIO'
+    })
+
+    const dataArray = [];
+    fs.createReadStream(tmpFile)
+        .pipe(csv())
+        .on('data', (data) => {
+            const cleanedData = {};
+            const usuario = {};
+            Object.entries(data).forEach(([key, value]) => {
+                cleanedData[key] = value.trim();
+                const valores = cleanedData[key].split(';');
+                key.split(';').forEach((item, index) => {
+                    usuario[item] = valores[index];
+                });
+            });            
+            dataArray.push(usuario);
+        }).on('end', () => {
+            let todoBien = false;
+            const errores = [];
+
+            const arrayDeshabilitar = leftJoinNotMatching(dbSocios, dataArray);
+
+            const arrayNuevos = rightJoinNotMatching(dbSocios, dataArray);
+
+            arrayDeshabilitar.map( async (usuario) => {
+                try{
+                    await actualizarEstadoSocio(usuario.dataValues.id, false);
+                }catch (err){
+                    console.log(err);
+                }
+            });
+
+            arrayNuevos.forEach( async (usuario) => {
+                try{
+                    const wallet = generarBilletera();
+                    usuario.estado = true; //---------------CONDICIONADO FALTA
+                    usuario.idAgencia = idAgencia;
+                    if(!usuario.celular){
+                        usuario.celular = null;
+                    }
+                    const walletDef = await ingresarBilletera(wallet);
+                    usuario.billeteraAddress = walletDef.datos.address;
+                    const result = await ingresarSocio({ ...usuario }, 
+                        req.headers['x-real-ip'] || req.connection.remoteAddress);
+
+                    if(result.status === 200){
+                        todoBien = true;
+                    }else{
+                        todoBien = false;
+                    }
+                }catch(err){
+                    errores.push(err);
+                    console.log(err);
+                }
+            });
+            return res.status(200).send({
+                message: 'Datos ingresados con éxito',
+            })
+        })
+}
+
 
 const actualizarSocioController = (req, res) => {
 
@@ -224,4 +338,5 @@ export default Object.freeze({
     existSocioByPhone: existSocioByPhoneController,
     buscarAllSocios: buscarAllSociosController,
     buscarSocioCuenta: buscarSocioCuentaController,
+    ingresoMasivo: ingresoMasivoController,
 });

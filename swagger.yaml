@@ -383,6 +383,28 @@ paths:
           description: Socio agregado correctamente
         '401':
           $ref: '#/components/schemas/Unauthorized'
+  /socios/carga-masiva:
+    post:
+      security:
+        - BearerAuth: []
+      tags:
+        - socios
+      summary: Registrar un socio de forma masiva
+      description: 'Registrar socios masivamente en la base de datos'
+      operationId: CU-050
+      requestBody:
+        description: 'Ingresar socios masivamente'
+        content:
+          multipart/form-data:
+            description: 'Ingresar informacion de carga de datos masiva'
+            required: true
+            schema:
+              $ref: '#/components/schemas/SociosMasivos'
+      responses:
+        '200':
+          description: Socio agregado correctamente
+        '401':
+          $ref: '#/components/schemas/Unauthorized'
   /socios/{idSocio}:
     get:
       security:
@@ -1386,6 +1408,15 @@ components:
         idCliente:
           type: integer
           example: 1
+    SociosMasivos:
+      type: object
+      properties:
+        idAgencia:
+          type: number
+          example: 1
+        datos:
+          type: string
+          format: binary
     Socios:
       type: object
       properties:

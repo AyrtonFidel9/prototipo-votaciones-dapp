@@ -7,4 +7,5 @@ export * from "./representantes.model.js";
 export * from "./notificaciones.model.js";
 export * from "./socios.model.js";
 export * from "./recuperacion.model.js";
+export * from "./justificaciones.model.js";
 

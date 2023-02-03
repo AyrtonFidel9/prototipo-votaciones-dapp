@@ -13,7 +13,6 @@ export default async function ingresarBilletera(
          address: sequelize.fn('PGP_SYM_ENCRYPT',address,process.env.SECRET_KEY_DATABASE),
          privateKey 
       });
-      console.log(wallet);
       return {
          status: 200,
          datos: wallet

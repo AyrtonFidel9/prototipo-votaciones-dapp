@@ -7,3 +7,4 @@ export * from './recovery/index.js';
 export * from './representantes/index.js';
 export * from './socios/index.js';
 export * from './billetera/index.js';
+export * from './justificacion/index.js';

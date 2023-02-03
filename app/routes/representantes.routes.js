@@ -63,7 +63,7 @@ routerRepresentantes.route('/update/:idRepresentante')
         authJwt.isJGE,
         validateRepresentante,
         validateRolRepresentante,
-        validateDisctictRep,
+        validateDisctictRep
     ], (req, res)=>{
         RepresentantesController.updateRepresentante(req, res);
     });

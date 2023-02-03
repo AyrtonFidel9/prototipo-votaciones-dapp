@@ -38,7 +38,7 @@ const validarExistenciaEleccionController = async (id, address) => {
    return (valor.idEleccion == 0);
 }
 
-const registrarEleccionController = async (id, dia, address) => {
+const registrarEleccionController = async (id, dia, address, res) => {
    const wallet = await obtenerAllBilleteras();
 
    const billeteraJGE = wallet.message.filter(r =>
@@ -63,7 +63,11 @@ const registrarEleccionController = async (id, dia, address) => {
       console.log(value);
    } catch (e) {
       console.log(e);
-      return new Error(e);
+      // return res.status(400).send({
+      //    message: "Error al registrar la elección verifique los datos o que existan los recursos de votaciones (ethers)"
+      // });
+      throw({status: 400, 
+         message:"Error al registrar la elección verifique los datos o que existan los recursos de votaciones (ethers)"});
    }
 }
 

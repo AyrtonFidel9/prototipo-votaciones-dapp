@@ -38,7 +38,10 @@ Inscripciones.hasOne(Representantes, {
 })
 
 Representantes.belongsTo(Inscripciones, {
-    foreignKey: 'idInscripcion',
+    foreignKey: {
+        name: 'idInscripcion',
+        allowNull: true,
+    },
     targetKey: 'id'
 })
 

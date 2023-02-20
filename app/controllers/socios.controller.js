@@ -128,14 +128,24 @@ const ingresoMasivoController = async (req, res) => {
         .on('data', (data) => {
             const cleanedData = {};
             const usuario = {};
-            Object.entries(data).forEach(([key, value]) => {
+            Object.entries(data).forEach(([rawK, value]) => {
+                const key = rawK.trim();
                 cleanedData[key] = value.trim();
                 const valores = cleanedData[key].split(';');
                 key.split(';').forEach((item, index) => {
                     usuario[item] = valores[index];
                 });
             });            
-            dataArray.push(usuario);
+            const usuario_clean = {
+                nombres: usuario.NOMBRE,
+                apellidos: usuario.APELLIDO1 +" "+ usuario.APELLIDO2,
+                cedula: usuario.NRO_IDENTIFICACION,
+                codigo: usuario.CODIGO_SOCIO,
+                celular: usuario.CELULAR,
+                email: usuario.EMAIL,
+            }
+            dataArray.push(usuario_clean);
+            console.log(dataArray);
         }).on('end', () => {
             let todoBien = false;
             const errores = [];

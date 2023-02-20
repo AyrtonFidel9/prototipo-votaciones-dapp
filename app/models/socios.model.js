@@ -86,14 +86,8 @@ export const Socios = sequelize.define('socios',{
     },
     email: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
-            notEmpty: {
-                msg: 'No se admiten campos vacíos'
-            },
-            notNull: {
-                msg: 'Por favor, ingrese el email'
-            },
             isEmail: {
                 msg: 'Los datos del campo email no corresponden a un correo electrónico'
             }
@@ -106,14 +100,8 @@ export const Socios = sequelize.define('socios',{
     celular: {
         type: DataTypes.STRING,
         defaultValue: '0999999999',
-        allowNull: false,
+        allowNull: true,
         validate: {
-            notEmpty: {
-                msg: 'No se admiten campos vacíos'
-            },
-            notNull: {
-                msg: 'Por favor, ingrese el email'
-            },
             isNumeric: {
                 msg: 'Solo se admiten números'
             },

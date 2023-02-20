@@ -13,7 +13,15 @@ async function validarModificacion(req, res, next) {
     const horaFinal = fecha.setHours(fecha.getHours() + eleccion.duracion);
     const horaActual = (new Date()).getTime();
 
+    
     if(eleccion.estado === 'NO-INICIADO'){
+        if(estado === 'NO-INICIADO') {
+            next();
+            return;
+        }
+
+        console.log("LLEGO HASTA AQUI");
+
         if(estado !== 'EN-CURSO') return res.status(400).send({
             message:
             "La elección solo puede cambiar al estado de EN CURSO"
@@ -23,6 +31,16 @@ async function validarModificacion(req, res, next) {
         const fecHoy = new Date().toLocaleDateString('en-CA');
         console.log(eleccion.dia, fecHoy);
         if(eleccion.dia !== fecHoy && estado === 'EN-CURSO') return res.status(400).send({
+            message:
+            "La elección no puede ser modificada al estado de EN CURSO, por la fecha"
+        });
+
+        if(horaActual < horaInicial && estado === 'EN-CURSO') return res.status(400).send({
+            message:
+            "La elección no puede ser modificada al estado de EN CURSO, por la fecha"
+        });
+
+        if(horaActual > horaFinal && estado === 'EN-CURSO') return res.status(400).send({
             message:
             "La elección no puede ser modificada al estado de EN CURSO, por la fecha"
         });

@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import { obtenerAllBilleteras } from "../use-cases/index.js";
 dotenv.config();
 
-const web3 = new Web3(`${process.env.URL_TESTNET}/${process.env.INFURA_API_KEY}`);
+const web3 = new Web3(`${process.env.URL_MAINNET}`);
 const VoteToken = JSON.parse(fs.readFileSync(
    new URL('../../build/contracts/VoteToken.json',
       import.meta.url)
@@ -20,15 +20,6 @@ const getGasAmount = async (fromAddress, toAddress, amount, data) => {
       data: data,
    });
    return gasAmount;
-}
-
-const emitirVotoController = async (req, res) => {
-   console.log(req.body);
-   const valor = await voteToken.methods.elecciones(2).call({
-      from: '0x61634F5036737de8f15d36d7A476D21B52A43538'
-   });
-   console.log(valor);
-   res.send(voteToken);
 }
 
 const validarExistenciaEleccionController = async (id, address) => {
@@ -300,7 +291,6 @@ const validarSufragioVotanteController = async (req, res) => {
 }
 
 export default Object.freeze({
-   emitirVoto: emitirVotoController,
    registrarEleccion: registrarEleccionController,
    validarExistenciaEleccion: validarExistenciaEleccionController,
    enviarToken: enviarTokenController,

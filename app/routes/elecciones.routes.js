@@ -3,6 +3,7 @@ import { EleccionesController } from '../controllers/index.js';
 import { 
     authJwt, 
     validarElecciones, 
+    validarEliminacion, 
     validarHorasHabiles, 
     validarModificacion 
 } from '../middleware/index.js';
@@ -45,7 +46,8 @@ routerElecciones.route('/')
 routerElecciones.route('/delete/:idEleccion')
     .delete([
         authJwt.verifyToken,
-        authJwt.isJGE
+        authJwt.isJGE,
+        validarEliminacion,
     ], (req, res)=>{
         EleccionesController.deleteEleccion(req, res);
     });

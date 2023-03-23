@@ -30,11 +30,6 @@ async function validarModificacion(req, res, next) {
         // const fecEle = new Date(eleccion.dia).toLocaleDateString('en-CA');
         const fecHoy = new Date().toLocaleDateString('en-CA');
         console.log(eleccion.dia, fecHoy);
-        if(eleccion.dia !== fecHoy && estado === 'EN-CURSO') return res.status(400).send({
-            message:
-            "La elección no puede ser modificada al estado de EN CURSO, por la fecha"
-        });
-
         if(horaActual < horaInicial && estado === 'EN-CURSO') return res.status(400).send({
             message:
             "La elección no puede ser modificada al estado de EN CURSO, por la fecha"

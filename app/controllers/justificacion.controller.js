@@ -38,7 +38,7 @@ function ingresarJustificacionController(req, res) {
         .then(socio =>{
             const us = socio.message.dataValues;
             req.body.idSocio = us.id;
-            searchEleccion(req.body.idEleccion)
+            searchEleccion(req.body.idElecciones)
             .then(() =>{})
             .catch(err =>{
                 return err.message;

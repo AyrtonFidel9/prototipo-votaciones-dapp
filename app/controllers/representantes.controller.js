@@ -5,8 +5,7 @@ import {
    deleteRepresentanteById,
    updateRepresentante,
    eleccionfindOne,
-   generarBilletera,
-   ingresarBilletera,
+
    inscripcionFindOne
 } from "../use-cases/index.js";
 
@@ -32,24 +31,12 @@ function ingresarRepresentantesController(req, res) {
       });
    }
 
-   function ingresarWalletRepresentante(){
-      return new Promise((resolve, reject) => {
-         const wallet = generarBilletera();
-         const wallRep = ingresarBilletera(wallet);
-         resolve(wallRep);
-      });
-   }
 
    searchInscripcion(req.body.idInscripcion)
    .then(() => searchEleccion(req.body.idElecciones))
    .then(eleccion => eleccion.message.id)
    .then(idEleccion => {
       req.body.idEleccion = idEleccion;
-      return ingresarWalletRepresentante();
-   })
-   .then(wallet => wallet.datos)
-   .then( repWallet =>{
-      req.body.billeteraAddress = repWallet.address;
       return ingresarRepresentante(req.body);
    })
    .then(result => {

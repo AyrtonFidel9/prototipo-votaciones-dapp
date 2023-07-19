@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
+import { Votos } from './votos.model.js'; 
 
 
 export const Representantes = sequelize.define('representantes',{
@@ -53,7 +54,16 @@ export const Representantes = sequelize.define('representantes',{
             },
         },
     },
-    ethCantVot: {
-        type: DataTypes.SMALLINT
-    }
 });
+
+Representantes.hasMany(Votos, {
+    foreignKey: 'idRepresentante',
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+});
+
+Votos.belongsTo(Representantes,{
+    foreignKey: 'idRepresentante',
+    targetKey: 'id',
+})

@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
-import { Billetera } from './billetera.model.js';
+import { Votos } from './votos.model.js';
 import { Cuenta } from './cuenta.model.js';
 import { Inscripciones } from './inscripcion.model.js';
 import { Justificacion } from './justificacion.model.js';
@@ -165,9 +165,14 @@ Inscripciones.belongsTo(Socios, {
     targetKey: 'id',
 })
 
-Billetera.hasOne(Socios,{
+Socios.hasMany(Votos,{
+    foreignKey: 'idSocio',
+    sourceKey: 'id',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
 });
 
-Socios.belongsTo(Billetera);
+Votos.belongsTo(Socios,{
+    foreignKey: 'idSocio',
+    sourceKey: 'id',
+});

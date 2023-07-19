@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "repository": "git@github.com:AyrtonFidel9/prototipo-votaciones-dapp.git",
-  "author": "Edwin Manzano <edwinmanzanoquinzo@gmail.com>",
+  "author": "Ayrton Avalos <ayrtonfidel9@gmail.com>",
   "type": "module",
   "license": "MIT",
   "dependencies": {

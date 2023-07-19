@@ -1,4 +1,4 @@
-import { Justificacion } from '../../models/index.js';
+import { Justificacion } from "../../models/index.js";
 
 export const justificacionCreate = async ({
   nombre,
@@ -6,27 +6,26 @@ export const justificacionCreate = async ({
   documento,
   idSocio,
   estado,
-  idEleccion,
+  idElecciones,
 }) => {
-    // Validate request
-    try{
-      const justificaciones = await Justificacion.create({
-        nombre,
-        fecha,
-        documento,
-        estado,
-        idSocio,
-        idEleccion,
-      });
-      return({
-        status: 200,
-        message: justificaciones.dataValues,
-      })
-
-    } catch(e){
-      throw ({
-        status: 400,
-        message: e,
-      })
-    }
-  };
+  // Validate request
+  try {
+    const justificaciones = await Justificacion.create({
+      nombre,
+      fecha,
+      documento,
+      estado,
+      idSocio,
+      idElecciones,
+    });
+    return {
+      status: 200,
+      message: justificaciones.dataValues,
+    };
+  } catch (e) {
+    throw {
+      status: 400,
+      message: e,
+    };
+  }
+};

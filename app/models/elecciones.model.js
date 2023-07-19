@@ -2,6 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
 import { Inscripciones } from './inscripcion.model.js';
 import { Representantes } from './representantes.model.js';
+import { Votos } from "./votos.model.js";
 
 export const Elecciones = sequelize.define('elecciones',{
     id: {
@@ -68,6 +69,18 @@ Elecciones.hasMany(Representantes, {
     onUpdate: 'CASCADE',
 });
 
+Elecciones.hasMany(Votos, {
+    foreignKey: 'idElecciones',
+    sourceKey: 'id',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+});
+
+Votos.belongsTo(Elecciones,{
+    foreignKey: 'idElecciones',
+    targetKey: 'id',
+})
+
 Representantes.belongsTo(Elecciones, {
     foreignKey: 'idElecciones',
     targetKey: 'id',
@@ -79,7 +92,6 @@ Elecciones.hasMany(Inscripciones, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
 })
-
 
 
 Inscripciones.belongsTo(Elecciones,{

@@ -1,15 +1,12 @@
 import { create } from "../use-cases/elecciones/index.js";
 import {
-   buscarAgencia,
-   eleccionesfindAll,
-   eleccionfindOne,
-   deleteEleccionById,
-   updateEleccion,
-   createRepresentante,
-   generarBilletera,
-   ingresarBilletera,
+  buscarAgencia,
+  eleccionesfindAll,
+  eleccionfindOne,
+  deleteEleccionById,
+  updateEleccion,
+  createRepresentante,
 } from "../use-cases/index.js";
-import { VotacionesController } from "./index.js";
 
 /**
  * Validar que no haya mas de una eleccion por dia en una agencia [X]
@@ -22,198 +19,159 @@ import { VotacionesController } from "./index.js";
  * EN CURSO no se acepta modificaciones [X]
  * Si esta EN CURSO, no puede pasar a NO INICIADO [ X ]
  * Si esta en EXITOSO NO PUEDE CAMBIAR A EN CURSO [ x ]
-      * de EN CURSO solo puede cambiar a NO INICIADO [ X ]
+ * de EN CURSO solo puede cambiar a NO INICIADO [ X ]
  * Que la duracion de la eleccion no exceda las 8 horas habiles [X]
  */
 
 function ingresarEleccionController(req, res) {
-   function searchAgencia(idAgencia) {
-      return new Promise((resolve, reject) => {
-         const buscar = buscarAgencia(idAgencia);
-         resolve(buscar);
+  function searchAgencia(idAgencia) {
+    return new Promise((resolve, reject) => {
+      const buscar = buscarAgencia(idAgencia);
+      resolve(buscar);
+    });
+  }
+
+  function ingresarEleccion(datos) {
+    return new Promise((resolve, reject) => {
+      const ingresar = create(datos);
+      resolve(ingresar);
+    });
+  }
+
+  function ingresarDummy(datos) {
+    return new Promise((resolve, reject) => {
+      const ingresar = createRepresentante(datos);
+      resolve(ingresar);
+    });
+  }
+
+  searchAgencia(req.body.idAgencia)
+    .then((agencia) => agencia.message.id)
+    .then((idAgencia) => {
+      req.body.idAgencia = idAgencia;
+
+      return ingresarEleccion(req.body);
+    })
+    .then((result) => {
+      const dummy = {
+        principal: 0,
+        psuplente: 0,
+        ssuplente: 0,
+        idInscripcion: null,
+        idElecciones: result.message.id,
+      };
+
+      ingresarDummy(dummy);
+
+      return res.status(result.status).send({
+        message: result.message,
       });
-   }
-
-   function ingresarEleccion(datos) {
-      return new Promise((resolve, reject) => {
-         const ingresar = create(datos);
-         resolve(ingresar);
+    })
+    .catch((err) => {
+      return res.status(err.status).send({
+        message: err.message,
       });
-   }
-
-   function ingresarDummy(datos) {
-      return new Promise((resolve, reject) => {
-         const ingresar = createRepresentante(datos);;
-         resolve(ingresar);
-      });
-   }
-
-   function ingresarWalletRepresentante(){
-      return new Promise((resolve, reject) => {
-         const wallet = generarBilletera();
-         const wallRep = ingresarBilletera(wallet);
-         resolve(wallRep);
-      });
-   }
-
-
-   searchAgencia(req.body.idAgencia)
-      .then(agencia => agencia.message.id)
-      .then(idAgencia => {
-         req.body.idAgencia = idAgencia;
-
-         return ingresarEleccion(req.body);
-      })
-      .then(result => {
-         ingresarWalletRepresentante()
-            .then(wallet => wallet.datos)
-            .then( repWallet =>{
-               const dummy = {
-                  principal: 0,
-                  psuplente: 0,
-                  ssuplente: 0,
-                  billeteraAddress: repWallet.address,
-                  idInscripcion: null,
-                  idElecciones: result.message.id,
-               }
-               return ingresarDummy(dummy);
-            }).then(respo => {
-               console.log(respo);
-            }).catch(err => console.log(err));
-
-         return res.status(result.status).send({
-            message: result.message,
-         });
-      })
-      .catch(err => {
-         return res.status(err.status).send({
-            message: err.message
-         })
-      });
+    });
 }
 
 function getAllEleccionesController(req, res) {
-   const buscar = eleccionesfindAll();
+  const buscar = eleccionesfindAll();
 
-   buscar.then(eleccion => {
+  buscar
+    .then((eleccion) => {
       if (eleccion.status === 200)
-         return res.status(eleccion.status).send({
-            message: eleccion.message
-         });
-   }).catch(err => {
+        return res.status(eleccion.status).send({
+          message: eleccion.message,
+        });
+    })
+    .catch((err) => {
       console.log(err);
       return res.status(err.status).send({
-         message: err.message
+        message: err.message,
       });
-   });
+    });
 }
 
 function getEleccionController(req, res) {
-   const { idEleccion } = req.params;
+  const { idEleccion } = req.params;
 
-   const search = eleccionfindOne(idEleccion);
+  const search = eleccionfindOne(idEleccion);
 
-   search.then(resp => {
+  search
+    .then((resp) => {
       return res.status(resp.status).send({
-         message: resp.message
+        message: resp.message,
       });
-   }).catch(err => {
+    })
+    .catch((err) => {
       return res.status(err.status).send({
-         message: err.message
+        message: err.message,
       });
-   });
+    });
 }
 
-function updateEleccionController (req, res) {
-   const buscarEleccion = (id) => new Promise((resolve, reject)=>{
+function updateEleccionController(req, res) {
+  const buscarEleccion = (id) =>
+    new Promise((resolve, reject) => {
       const search = eleccionfindOne(id);
       resolve(search);
-   });
+    });
 
-   const actualizar = (id, datos) => new Promise((resolve, reject)=>{
+  const actualizarEleccion = (id, datos) =>
+    new Promise((resolve, reject) => {
       const up = updateEleccion(id, datos);
       resolve(up);
-   });
+    });
 
-   const existEleccionToken = (id, address) => new Promise((resolve, reject)=>{
-      const proc = VotacionesController.validarExistenciaEleccion(
-         id,
-         address
-      );
-      resolve(proc);
-   })
-
-   buscarEleccion(req.params.idEleccion)
-   .then(eleccion => {
-      
-      if(req.body.estado === 'EN-CURSO'){
-         return existEleccionToken(
-            eleccion.message.id,
-            req.body.wallet,
-         )
-      }else return false;
-   })
-   .then(resp=>{
-      if(resp === true){
-         return VotacionesController.registrarEleccion(
-            req.params.idEleccion, 
-            req.body.dia,
-            req.body.wallet,
-            res,
-         );
-      }
-      return ({
-         status: 200,
-      })
-   })
-   .then((e) => {
-      if(e.status === 400){
-         throw(e);
-      }
-      return actualizar(req.params.idEleccion, req.body)
-   })
-   .then(resp=>{
-      return res.status(resp.status).send({
-         message: resp.message
+  buscarEleccion(req.params.idEleccion)
+    .then((e) => e.message)
+    .then((eleccion) => actualizarEleccion(eleccion.id, req.body))
+    .then((resp) => {
+      return res.send({
+        message: resp.message,
       });
-   }).catch(err => {
-      if(err.status){
-         return res.status(err.status).send({
-            message: err.message
-         });
+    })
+    .catch((err) => {
+      if (err.status) {
+        return res.status(err.status).send({
+          message: err.message,
+        });
       }
-   });
+    });
 }
 
-function deleteEleccionController (req, res) {
-   const eliminar = (id) => new Promise((resolve, reject)=>{
+function deleteEleccionController(req, res) {
+  const eliminar = (id) =>
+    new Promise((resolve, reject) => {
       const elim = deleteEleccionById(id);
       resolve(elim);
-   });
+    });
 
-   const buscarEleccion = (id) => new Promise((resolve, reject)=>{
+  const buscarEleccion = (id) =>
+    new Promise((resolve, reject) => {
       const search = eleccionfindOne(id);
       resolve(search);
-   });
+    });
 
-   buscarEleccion(req.params.idEleccion)
-   .then(eleccion => eliminar(eleccion.message.id))
-   .then(resp=>{
+  buscarEleccion(req.params.idEleccion)
+    .then((eleccion) => eliminar(eleccion.message.id))
+    .then((resp) => {
       return res.status(resp.status).send({
-         message: resp.message
+        message: resp.message,
       });
-   }).catch(err => {
+    })
+    .catch((err) => {
       console.log(err);
       return res.status(err.status).send({
-         message: err.message
+        message: err.message,
       });
-   });
+    });
 }
 
 export default Object.freeze({
-   ingresarElecciones: ingresarEleccionController,
-   getAllElecciones: getAllEleccionesController,
-   getEleccion: getEleccionController,
-   updateEleccion: updateEleccionController,
-   deleteEleccion: deleteEleccionController,
+  ingresarElecciones: ingresarEleccionController,
+  getAllElecciones: getAllEleccionesController,
+  getEleccion: getEleccionController,
+  updateEleccion: updateEleccionController,
+  deleteEleccion: deleteEleccionController,
 });

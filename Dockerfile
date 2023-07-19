@@ -8,6 +8,14 @@ WORKDIR /usr/src/app
 # where available (npm@5+) and yarn.lock because we are using yarn
 COPY package*.json yarn.lock ./
 
+
+ENV DATABASE_USER=postgres
+ENV DATABASE_PASSWORD=postgres
+ENV DATABASE_URL=localhost
+ENV DATABASE_NAME=vote-coac
+ENV SECRET_KEY_DATABASE=
+ENV SECRET_KEY_PASSWORD=key-caycne-189321
+
 RUN apk add --no-cache git
 
 # Run yarn without generating a yarn.lock file

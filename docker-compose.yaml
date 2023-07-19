@@ -1,0 +1,57 @@
+version: "3.7"
+
+networks:
+  test:
+    name: votaciones-net
+  votaciones-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.0.0/16
+          gateway: 10.10.0.1
+
+services:
+  postgres:
+    container_name: postgres-db-votaciones
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: vote-coac
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      votaciones-net:
+        ipv4_address: 10.10.0.5
+
+  pgadmin:
+    container_name: pgadmin4-votaciones
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    ports:
+      - "70:80"
+    depends_on:
+      - postgres
+    networks:
+      votaciones-net:
+        ipv4_address: 10.10.0.6
+
+  api-votaciones:
+    container_name: api-votaciones
+    image: node-api-votaciones
+    environment:
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_URL: 10.10.0.5
+      DATABASE_NAME: vote-coac
+      SECRET_KEY_PASSWORD: key-caycne-189321
+    ports:
+      - "80:8080"
+    depends_on:
+      - postgres
+    networks:
+      votaciones-net:
+        ipv4_address: 10.10.0.7

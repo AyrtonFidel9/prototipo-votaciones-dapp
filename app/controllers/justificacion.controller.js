@@ -94,6 +94,11 @@ function getJustificacionController(req, res) {
 }
 
 function justificacionUpdateController(req, res) {
+  console.log(req.body);
+  /* return res.status(400).send({
+    message: "ERROR ESPERADO",
+  }); */
+
   const buscarJustificacion = (id) =>
     new Promise((resolve, reject) => {
       const search = justificacionFindOne(id);

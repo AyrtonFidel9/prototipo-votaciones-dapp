@@ -39,17 +39,8 @@ const representanteFindOne = async (id) => {
         "principal",
         "psuplente",
         "ssuplente",
-        "ethCantVot",
         "createdAt",
         "updatedAt",
-        [
-          sequelize.fn(
-            "PGP_SYM_DECRYPT",
-            sequelize.cast(sequelize.col("billeteraAddress"), "bytea"),
-            process.env.SECRET_KEY_DATABASE
-          ),
-          "billeteraAddress",
-        ],
         "idInscripcion",
         "idElecciones",
       ],
